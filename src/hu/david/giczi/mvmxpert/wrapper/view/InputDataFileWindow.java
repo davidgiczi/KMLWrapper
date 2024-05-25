@@ -19,7 +19,7 @@ public class InputDataFileWindow {
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
     private final String[] EOV_DATA_TYPE = {
-            "Formátum megadása",
+            "Formátum választása",
             "Y,X,H",
             "Y,X",
             "Y X H",
@@ -33,7 +33,7 @@ public class InputDataFileWindow {
             "X;Y;H",
             "X;Y"};
     private final String[] WGS_DATA_TYPE = {
-            "Formátum megadása",
+            "Formátum választása",
             "Fi,Lambda,h",
             "Fi,Lambda",
             "Fi Lambda h",
@@ -136,7 +136,7 @@ public class InputDataFileWindow {
         eovRadioBtn.setFont(plainFont);
         eovRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         eovRadioBtn.setSelected(true);
-        eovRadioBtn.setBorder(new EmptyBorder(10,100,10,100));
+        eovRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         JRadioButton wgsRadioBtn = new JRadioButton("WGS koordináták");
         wgsRadioBtn.addActionListener(e -> {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(WGS_DATA_TYPE);
@@ -144,12 +144,23 @@ public class InputDataFileWindow {
         });
         wgsRadioBtn.setFont(plainFont);
         wgsRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        wgsRadioBtn.setBorder(new EmptyBorder(10,100,10,100));
+        wgsRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
+        JRadioButton listRadioBtn = new JRadioButton("AutoCad lista");
+        listRadioBtn.addActionListener( e ->{
+            String[] cadList = {"AutoCad lista koordináták"};
+            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
+            dataTypeComboBox.setModel(model);
+        });
+        listRadioBtn.setFont(plainFont);
+        listRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        listRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         ButtonGroup radioBtnGroup = new ButtonGroup();
         radioBtnGroup.add(eovRadioBtn);
         radioBtnGroup.add(wgsRadioBtn);
+        radioBtnGroup.add(listRadioBtn);
         panel.add(eovRadioBtn);
         panel.add(wgsRadioBtn);
+        panel.add(listRadioBtn);
         inputFileOptionPanel.add(panel);
     }
 
