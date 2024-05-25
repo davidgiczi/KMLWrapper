@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="7f0e9da0-0259-4c5b-90bb-59a4c4df55b8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/KMLWrapper.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/app/KMLWrapperApp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/controller/KMLWrapperController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/view/InputDataFileWindow.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/view/ManuallyInputDataWindow.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/view/MessagePane.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2gwsZ60LNNFB2ceyGGmp2YrYrbl" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/User/IdeaProjects/KMLWrapper/resources/logo",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.42413792",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\User\IdeaProjects\KMLWrapper\resources\logo" />
+      <recent name="C:\Users\User\IdeaProjects\KMLWrapper\src\hu\david\giczi\wrapper\app" />
+      <recent name="C:\Users\User\IdeaProjects\KMLWrapper\src\hu\david\giczi\wrapper\view" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\User\IdeaProjects\KMLWrapper\resources\logo" />
+      <recent name="C:\Users\User\IdeaProjects\KMLWrapper" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="KMLWrapper" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="hu.david.giczi.mvmxpert.wrapper.app.KMLWrapperApp" />
+      <module name="KMLWrapper" />
+      <selectedOptions>
+        <option name="environmentVariables" visible="false" />
+      </selectedOptions>
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../PCCDisplayer/src/main/resources" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <selectedOptions>
+        <option name="environmentVariables" visible="false" />
+      </selectedOptions>
+      <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\User\Documents\apps\javafx-sdk-18.0.2\lib:out/production&quot; --add-modules javafx.controls,javafx.fxml" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../PCCDisplayer/src/main/resources" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JarApplication">
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Java Scratch">
+      <shortenClasspath name="NONE" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7f0e9da0-0259-4c5b-90bb-59a4c4df55b8" name="Changes" comment="" />
+      <created>1716620027861</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1716620027861</updated>
+    </task>
+    <servers />
+  </component>
+</project>
