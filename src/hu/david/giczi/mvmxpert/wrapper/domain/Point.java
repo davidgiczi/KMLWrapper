@@ -8,9 +8,15 @@ public class Point {
     private double x_IUGG67;
     private double y_IUGG67;
     private double z_IUGG67;
+    private double fi_IUGG67;
+    private double lambda_IUGG67;
+    private double h_IUGG67;
     private double x_WGS84;
     private double y_WGS84;
     private double z_WGS84;
+    private double fi_WGS84;
+    private double lambda_WGS84;
+    private double h_WGS84;
 
     public double getY_EOV() {
         return y_EOV;
@@ -82,5 +88,53 @@ public class Point {
 
     public void setZ_WGS84(double z_WGS84) {
         this.z_WGS84 = z_WGS84;
+    }
+
+    public double getFi_IUGG67() {
+        return fi_IUGG67;
+    }
+
+    public void setFi_IUGG67(double fi_IUGG67) {
+        this.fi_IUGG67 = fi_IUGG67;
+    }
+
+    public double getLambda_IUGG67() {
+        return lambda_IUGG67;
+    }
+
+    public void setLambda_IUGG67(double lambda_IUGG67) {
+        this.lambda_IUGG67 = lambda_IUGG67;
+    }
+
+    public double getH_IUGG67() {
+        return h_IUGG67;
+    }
+
+    public void setH_IUGG67(double h_IUGG67) {
+        this.h_IUGG67 = h_IUGG67;
+    }
+
+    public double getFi_WGS84() {
+        return fi_WGS84;
+    }
+
+    public void setFi_WGS84(double fi_WGS84) {
+        this.fi_WGS84 = fi_WGS84;
+    }
+
+    public double getLambda_WGS84() {
+        return lambda_WGS84;
+    }
+
+    public void setLambda_WGS84(double lambda_WGS84) {
+        this.lambda_WGS84 = lambda_WGS84;
+    }
+
+    public double getH_WGS84() {
+        return h_WGS84;
+    }
+
+    public void setH_WGS84(double h_WGS84) {
+        this.h_WGS84 = h_WGS84;
     }
 }
