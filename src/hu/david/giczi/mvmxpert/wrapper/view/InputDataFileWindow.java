@@ -5,14 +5,9 @@ import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.UndoableEditListener;
-import javax.swing.text.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
+import java.util.Objects;
 
 public class InputDataFileWindow {
 
@@ -20,41 +15,43 @@ public class InputDataFileWindow {
     private final KMLWrapperController controller;
     private JPanel inputFileOptionPanel;
     private JPanel outputFileOptionPanel;
+    private JPanel saveOutputFileOptionPanel;
+    private JTextField saveFileNameField;
     private JComboBox<String> inputDataTypeComboBox;
     private JComboBox<String> outputDataTypeComboBox;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
     private final String[] EOV_DATA_TYPE = {
             "Formátum választása",
-            "Y,X,H",
-            "Y,X",
-            "Y X H",
-            "Y X",
-            "Y;X;H",
-            "Y;X",
-            "X,Y,H",
-            "X,Y",
-            "X Y H",
-            "X Y",
-            "X;Y;H",
-            "X;Y"};
+            "EOV (Y,X,H)",
+            "EOV (Y,X)",
+            "EOV (Y X H)",
+            "EOV (Y X)",
+            "EOV (Y;X;H)",
+            "EOV (Y;X)",
+            "EOV (X,Y,H)",
+            "EOV (X,Y)",
+            "EOV (X Y H)",
+            "EOV (X Y)",
+            "EOV (X;Y;H)",
+            "EOV (X;Y)"};
     private final String[] WGS_DATA_TYPE = {
             "Formátum választása",
-            "Fi,Lambda,h",
-            "Fi,Lambda",
-            "Fi Lambda h",
-            "Fi Lambda",
-            "Fi;Lambda;h",
-            "Fi;Lambda",
-            "Lambda,Fi,h",
-            "Lambda,Fi",
-            "Lambda Fi h",
-            "Lambda Fi",
-            "Lambda;Fi;h",
-            "Lambda;Fi",
-            "X,Y,Z",
-            "X Y Z",
-            "X;Y;Z"};
+            "WGS84 (Fi,Lambda,h)",
+            "WGS84 (Fi,Lambda)",
+            "WGS84 (Fi Lambda h)",
+            "WGS84 (Fi Lambda)",
+            "WGS84 (Fi;Lambda;h)",
+            "WGS84 (Fi;Lambda)",
+            "WGS84 (Lambda,Fi,h)",
+            "WGS84 (Lambda,Fi)",
+            "WGS84 (Lambda Fi h)",
+            "WGS84 (Lambda Fi)",
+            "WGS84 (Lambda;Fi;h)",
+            "WGS84 (Lambda;Fi)",
+            "WGS84 (X,Y,Z)",
+            "WGS84 (X Y Z)",
+            "WGS84 (X;Y;Z)"};
     private final String[] KML_DATA_TYPE = {
             "Adattípus választása",
             "Pont",
@@ -65,9 +62,11 @@ public class InputDataFileWindow {
     private final String[] TXT_DATA_TYPE = {
             "Adattípus választása",
             "Beolvasott pontok",
-            "Közös pontok: EOV",
-            "Közös pontok: Fi,Lambda,h",
-            "Közös pontok: X,Y,Z",
+            "Közös pontok: EOV (Y, X, H)",
+            "Közös pontok: IUGG67 (X, Y, Z)",
+            "Közös pontok: IUGG67 (Fi, Lambda, h)",
+            "Közös pontok: WGS84 (X, Y, Z)",
+            "Közös pontok: WGS84 (Fi, Lambda, h)",
             "Transzformáció paraméterei",
             "Maradék ellentmondások"};
 
@@ -92,6 +91,7 @@ public class InputDataFileWindow {
         addMenu();
         addInputFileOptionPanel();
         addOutputFileOptionPanel();
+        addSaveOutputFileOptionPanel();
         jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         jFrame.setLayout(new GridLayout(3, 1));
         jFrame.setSize(1000, 750);
@@ -100,9 +100,39 @@ public class InputDataFileWindow {
         jFrame.setVisible(true);
     }
 
+
     private void addLogo(){
         jFrame.setIconImage(Toolkit.getDefaultToolkit()
                 .getImage(getClass().getResource("/logo/MVM.jpg")));
+    }
+    private void addInputFileOptionPanel(){
+        inputFileOptionPanel = new JPanel();
+        inputFileOptionPanel.setLayout(new GridLayout(4, 1));
+        addTitleForInputFileOptionPanel();
+        addRadioButtonForInputFileOptionPanel();
+        addComboBoxForInputFileOptionPanel();
+        addBrowseButtonForInputFileOptionPanel();
+        jFrame.add(inputFileOptionPanel);
+    }
+
+    private void addOutputFileOptionPanel(){
+        outputFileOptionPanel = new JPanel();
+        outputFileOptionPanel.setLayout(new GridLayout(4, 1));
+        addTitleForOutputFileOptionPanel();
+        addPointNumberDataForOutputFile();
+        addRadioButtonForOutputFileOptionPanel();
+        addComboBoxForOutputFileOptionPanel();
+        jFrame.add(outputFileOptionPanel);
+    }
+
+    private void addSaveOutputFileOptionPanel() {
+        saveOutputFileOptionPanel = new JPanel();
+        saveOutputFileOptionPanel.setLayout(new GridLayout(4, 1));
+        addTitleForOutputFileName();
+        addFileNameForOutputFile();
+        addSaveButtonForOutputFile();
+        addShowButtonForData();
+        jFrame.add(saveOutputFileOptionPanel);
     }
     private void addMenu(){
         JMenuBar jMenuBar = new JMenuBar();
@@ -202,23 +232,12 @@ public class InputDataFileWindow {
 
     private void addBrowseButtonForInputFileOptionPanel(){
         JPanel panel = new JPanel();
-        JButton browseBtn = new JButton("Tallózás");
+        JButton browseBtn = new JButton("Fájl megnyitása");
         browseBtn.setFont(boldFont);
         browseBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(browseBtn);
         inputFileOptionPanel.add(panel);
     }
-
-    private void addInputFileOptionPanel(){
-        inputFileOptionPanel = new JPanel();
-        inputFileOptionPanel.setLayout(new GridLayout(4, 1));
-        addTitleForInputFileOptionPanel();
-        addRadioButtonForInputFileOptionPanel();
-        addComboBoxForInputFileOptionPanel();
-        addBrowseButtonForInputFileOptionPanel();
-        jFrame.add(inputFileOptionPanel);
-    }
-
 
     private void addTitleForOutputFileOptionPanel(){
         JPanel panel = new JPanel();
@@ -229,36 +248,138 @@ public class InputDataFileWindow {
         outputFileOptionPanel.add(panel);
     }
 
-    private void addOutputFileOptionPanel(){
-    outputFileOptionPanel = new JPanel();
-    outputFileOptionPanel.setLayout(new GridLayout(4, 1));
-    addTitleForOutputFileOptionPanel();
-    addPointNumberDataForOutputFile();
-    addRadioButtonForOutputFileOptionPanel();
-    addComboBoxForOutputFileOptionPanel();
-    jFrame.add(outputFileOptionPanel);
-    }
 
     private void addPointNumberDataForOutputFile(){
         JPanel panel = new JPanel();
         JTextField pointPreIdField = new JTextField();
+        pointPreIdField.setText("Pont prefix");
+        pointPreIdField.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if( "Pont prefix".equals(pointPreIdField.getText()) ){
+                    pointPreIdField.setText(null);
+                }
+                else if( pointPreIdField.getText().length() == 0 ){
+                    pointPreIdField.setText("Pont prefix");
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if( pointPreIdField.getText().length() == 0 ){
+                    pointPreIdField.setText("Pont prefix");
+                }
+            }
+        });
         pointPreIdField.setFont(plainFont);
         pointPreIdField.setBackground(new Color(249, 249, 249));
         pointPreIdField.setForeground(Color.LIGHT_GRAY);
         pointPreIdField.setHorizontalAlignment(SwingConstants.CENTER);
         pointPreIdField.setPreferredSize(new Dimension(110, 35));
+        pointPreIdField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JTextField pointIdField = new JTextField();
+        pointIdField.setText("Pontszám");
+        pointIdField.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if( "Pontszám".equals(pointIdField.getText()) ){
+                    pointIdField.setText(null);
+                }
+                else if( pointIdField.getText().length() == 0 ){
+                    pointIdField.setText("Pontszám");
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if( "Pontszám".equals(pointIdField.getText()) ){
+                    return;
+                }
+                try {
+                    Integer.parseInt(pointIdField.getText());
+                }catch (NumberFormatException n){
+                    pointIdField.setText("Pontszám");
+                }
+
+            }
+        });
         pointIdField.setFont(plainFont);
         pointIdField.setBackground(new Color(249, 249, 249));
         pointIdField.setForeground(Color.LIGHT_GRAY);
         pointIdField.setHorizontalAlignment(SwingConstants.CENTER);
         pointIdField.setPreferredSize(new Dimension(110, 35));
+        pointIdField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JTextField pointPostIdField = new JTextField();
+        pointPostIdField.setText("Pont postfix");
+        pointPostIdField.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if( "Pont postfix".equals(pointPostIdField.getText()) ){
+                    pointPostIdField.setText(null);
+                }
+                else if( pointPostIdField.getText().length() == 0 ){
+                    pointPostIdField.setText("Pont postfix");
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if( pointPostIdField.getText().length() == 0 ){
+                    pointPostIdField.setText("Pont postfix");
+                }
+            }
+        });
         pointPostIdField.setFont(plainFont);
         pointPostIdField.setBackground(new Color(249, 249, 249));
         pointPostIdField.setForeground(Color.LIGHT_GRAY);
         pointPostIdField.setHorizontalAlignment(SwingConstants.CENTER);
         pointPostIdField.setPreferredSize(new Dimension(110, 35));
+        pointPostIdField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(pointPreIdField);
         panel.add(pointIdField);
         panel.add(pointPostIdField);
@@ -300,11 +421,94 @@ public class InputDataFileWindow {
         outputDataTypeComboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
         outputDataTypeComboBox.setFont(new Font("Roboto", Font.PLAIN, 20));
         outputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
+        outputDataTypeComboBox.addItemListener(e -> createFileNameForSaveOutputFile());
         DefaultListCellRenderer renderer = new DefaultListCellRenderer();
         renderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
         outputDataTypeComboBox.setRenderer(renderer);
         panel.add(outputDataTypeComboBox);
         outputFileOptionPanel.add(panel);
+    }
+
+    private void addTitleForOutputFileName(){
+        JPanel panel = new JPanel();
+        JLabel contentTitleLabel = new JLabel("Fájlnév megadása");
+        contentTitleLabel.setFont(boldFont);
+        contentTitleLabel.setBorder(new EmptyBorder(10,0,0,0));
+        panel.add(contentTitleLabel);
+        saveOutputFileOptionPanel.add(panel);
+    }
+
+    private void addFileNameForOutputFile(){
+        JPanel panel = new JPanel();
+        saveFileNameField = new JTextField();
+        saveFileNameField.setFont(plainFont);
+        saveFileNameField.setBackground(new Color(249, 249, 249));
+        saveFileNameField.setHorizontalAlignment(SwingConstants.CENTER);
+        saveFileNameField.setPreferredSize(new Dimension(600, 35));
+        saveFileNameField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(saveFileNameField);
+        saveOutputFileOptionPanel.add(panel);
+    }
+
+    private void addSaveButtonForOutputFile(){
+        JPanel panel = new JPanel();
+        JButton saveBtn = new JButton("Fájl mentése");
+        saveBtn.setFont(boldFont);
+        saveBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(saveBtn);
+        saveOutputFileOptionPanel.add(panel);
+    }
+
+    private void addShowButtonForData(){
+        JPanel panel = new JPanel();
+        JButton showBtn = new JButton("Adatok megtekintése");
+        showBtn.setFont(boldFont);
+        showBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(showBtn);
+        saveOutputFileOptionPanel.add(panel);
+    }
+
+    private void createFileNameForSaveOutputFile(){
+        String selectedOption = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
+       if( KML_DATA_TYPE[1].equals(selectedOption) ){
+           saveFileNameField.setText("_pont.kml");
+       }
+       else if( KML_DATA_TYPE[2].equals(selectedOption) ){
+            saveFileNameField.setText("_vonal.kml");
+        }
+       else if( KML_DATA_TYPE[3].equals(selectedOption) ){
+            saveFileNameField.setText("_kerulet.kml");
+        }
+       else if( KML_DATA_TYPE[4].equals(selectedOption) ){
+            saveFileNameField.setText("_vonal+pontok.kml");
+        }
+       else if( KML_DATA_TYPE[5].equals(selectedOption) ){
+            saveFileNameField.setText("_kerulet+pontok.kml");
+        }
+       else if( TXT_DATA_TYPE[1].equals(selectedOption)){
+           saveFileNameField.setText("_pontok.txt");
+       }
+       else if( TXT_DATA_TYPE[2].equals(selectedOption)){
+           saveFileNameField.setText("_kozos-pontok_EOV.txt");
+       }
+       else if( TXT_DATA_TYPE[3].equals(selectedOption)){
+           saveFileNameField.setText("_kozos-pontok_IUGG67_XYZ.txt");
+       }
+       else if( TXT_DATA_TYPE[4].equals(selectedOption)){
+           saveFileNameField.setText("_kozos-pontok_IUGG67_foldrajzi.txt");
+       }
+       else if( TXT_DATA_TYPE[5].equals(selectedOption)){
+           saveFileNameField.setText("_kozos-pontok_WGS84_XYZ.txt");
+       }
+       else if( TXT_DATA_TYPE[6].equals(selectedOption)){
+           saveFileNameField.setText("_kozos-pontok_WGS84_foldrajzi.txt");
+       }
+       else if( TXT_DATA_TYPE[7].equals(selectedOption)){
+           saveFileNameField.setText("_transzform_parameter.txt");
+       }
+       else if( TXT_DATA_TYPE[8].equals(selectedOption)){
+           saveFileNameField.setText("_transzform_kozephiba.txt");
+       }
     }
 
 }
