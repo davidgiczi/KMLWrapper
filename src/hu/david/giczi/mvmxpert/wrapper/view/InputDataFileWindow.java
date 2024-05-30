@@ -388,28 +388,42 @@ public class InputDataFileWindow {
     }
     private void addRadioButtonForOutputFileOptionPanel(){
         JPanel panel = new JPanel();
-        JRadioButton kmlRadioBtn = new JRadioButton("KML file");
+        JRadioButton kmlRadioBtn = new JRadioButton("kml fájl");
         kmlRadioBtn.addActionListener(e -> {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(KML_DATA_TYPE);
             outputDataTypeComboBox.setModel(model);
+            saveFileNameField.setText(null);
         });
         kmlRadioBtn.setFont(plainFont);
         kmlRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         kmlRadioBtn.setSelected(true);
         kmlRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
-        JRadioButton txtRadioBtn = new JRadioButton("txt file");
+        JRadioButton txtRadioBtn = new JRadioButton("txt fájl");
         txtRadioBtn.addActionListener(e -> {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(TXT_DATA_TYPE);
             outputDataTypeComboBox.setModel(model);
+            saveFileNameField.setText(null);
         });
         txtRadioBtn.setFont(plainFont);
         txtRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         txtRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
+        JRadioButton scrRadioBtn = new JRadioButton("scr fájl");
+        scrRadioBtn.addActionListener( e ->{
+            String[] cadList = {"AutoCad scr fájl (EOV Y, X, h)"};
+            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
+            outputDataTypeComboBox.setModel(model);
+            saveFileNameField.setText(".scr");
+        });
+        scrRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
+        scrRadioBtn.setFont(plainFont);
+        scrRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         ButtonGroup radioBtnGroup = new ButtonGroup();
         radioBtnGroup.add(kmlRadioBtn);
         radioBtnGroup.add(txtRadioBtn);
+        radioBtnGroup.add(scrRadioBtn);
         panel.add(kmlRadioBtn);
         panel.add(txtRadioBtn);
+        panel.add(scrRadioBtn);
         outputFileOptionPanel.add(panel);
     }
 
@@ -441,7 +455,7 @@ public class InputDataFileWindow {
     private void addFileNameForOutputFile(){
         JPanel panel = new JPanel();
         saveFileNameField = new JTextField();
-        saveFileNameField.setFont(plainFont);
+        saveFileNameField.setFont(boldFont);
         saveFileNameField.setBackground(new Color(249, 249, 249));
         saveFileNameField.setHorizontalAlignment(SwingConstants.CENTER);
         saveFileNameField.setPreferredSize(new Dimension(600, 35));
@@ -480,16 +494,16 @@ public class InputDataFileWindow {
             saveFileNameField.setText("_kerulet.kml");
         }
        else if( KML_DATA_TYPE[4].equals(selectedOption) ){
-            saveFileNameField.setText("_vonal+pontok.kml");
+            saveFileNameField.setText("_vonal_pontok.kml");
         }
        else if( KML_DATA_TYPE[5].equals(selectedOption) ){
-            saveFileNameField.setText("_kerulet+pontok.kml");
+            saveFileNameField.setText("_kerulet_pontok.kml");
         }
        else if( TXT_DATA_TYPE[1].equals(selectedOption)){
            saveFileNameField.setText("_pontok.txt");
        }
        else if( TXT_DATA_TYPE[2].equals(selectedOption)){
-           saveFileNameField.setText("_kozos-pontok_EOV.txt");
+           saveFileNameField.setText("_kozos_pontok_EOV.txt");
        }
        else if( TXT_DATA_TYPE[3].equals(selectedOption)){
            saveFileNameField.setText("_kozos-pontok_IUGG67_XYZ.txt");

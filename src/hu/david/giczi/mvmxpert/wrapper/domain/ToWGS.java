@@ -77,11 +77,11 @@ public class ToWGS {
 
         double p = Math.sqrt(Math.pow(X_WGS, 2) + Math.pow(Y_WGS, 2));
         double theta = Math.atan(Z_WGS * a / (p * b));
-        FI_WGS84 = Math.toDegrees(Math.atan( (Z_WGS + Math.pow(e_, 2) * b * Math.pow(Math.sin(theta), 3)) /
-                (p - Math.pow(e, 2) * a * Math.pow(Math.cos(theta), 3)) ));
-        LAMBDA_WGS84 = Math.toDegrees(Math.atan(Y_WGS / X_WGS));
-        double N = a / Math.sqrt(1 - Math.pow(e, 2) * Math.pow(Math.sin(Math.toRadians(FI_WGS84)), 2));
-        H_WGS84 = p / Math.cos(Math.toRadians(FI_WGS84)) - N;
+        FI_WGS84 = Math.atan( (Z_WGS + Math.pow(e_, 2) * b * Math.pow(Math.sin(theta), 3)) /
+                (p - Math.pow(e, 2) * a * Math.pow(Math.cos(theta), 3)) );
+        LAMBDA_WGS84 = Math.atan(Y_WGS / X_WGS);
+        double N = a / Math.sqrt(1 - Math.pow(e, 2) * Math.pow(Math.sin(FI_WGS84), 2));
+        H_WGS84 = p / Math.cos(FI_WGS84) - N;
     }
 
     private void runMatrixProcess() {

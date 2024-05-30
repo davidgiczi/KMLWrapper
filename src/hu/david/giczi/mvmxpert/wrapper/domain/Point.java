@@ -2,9 +2,11 @@ package hu.david.giczi.mvmxpert.wrapper.domain;
 
 public class Point {
 
+
+    private String pointId;
     private double y_EOV;
     private double x_EOV;
-    private double z_EOV;
+    private double h_EOV;
     private double x_IUGG67;
     private double y_IUGG67;
     private double z_IUGG67;
@@ -17,6 +19,15 @@ public class Point {
     private double fi_WGS84;
     private double lambda_WGS84;
     private double h_WGS84;
+
+
+    public String getPointId() {
+        return pointId;
+    }
+
+    public void setPointId(String pointId) {
+        this.pointId = pointId;
+    }
 
     public double getY_EOV() {
         return y_EOV;
@@ -34,12 +45,12 @@ public class Point {
         this.x_EOV = x_EOV;
     }
 
-    public double getZ_EOV() {
-        return z_EOV;
+    public double getH_EOV() {
+        return h_EOV;
     }
 
-    public void setZ_EOV(double z_EOV) {
-        this.z_EOV = z_EOV;
+    public void setH_EOV(double h_EOV) {
+        this.h_EOV = h_EOV;
     }
 
     public double getX_IUGG67() {
@@ -137,4 +148,5 @@ public class Point {
     public void setH_WGS84(double h_WGS84) {
         this.h_WGS84 = h_WGS84;
     }
+
 }
