@@ -3,25 +3,41 @@ package hu.david.giczi.mvmxpert.wrapper.service;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class TransformationProcess {
 
-    public Point[] FOR_TRANSFORMATION_POINTS = new Point[5];
+    public List<Point> EOV_TO_WGS_REFERENCE_POINTS = Arrays.asList(null, null, null, null, null);
+    public List<Point> WGS_TO_EOV_REFERENCE_POINTS = Arrays.asList(null, null, null, null, null);
+    private ToEOV toEOV;
+    private ToWGS toWGS;
+
+    public TransformationProcess() {
+    }
+
+    public void collectReferencePoints(){
+        Point avePointForEOV = getAveragePointForEOV();
+        if( avePointForEOV.getY_EOV() > 0 && avePointForEOV.getX_EOV() > 0){
+            List<Point> sortedPoints = sortEOVReferencePointsByAsc();
+
+        }
+        Point avePointForWGS = getAveragePointForWGS();
+        if( avePointForWGS.getX_WGS84() > 0 && avePointForWGS.getY_WGS84() > 0 && avePointForWGS.getZ_WGS84() > 0){
+            List<Point> sortedPoints = sortWGSReferencePointsByAsc();
+
+        }
+    }
 
 
-
-    public List<Point> sortEOVReferencePointsByAsc(){
+    private List<Point> sortEOVReferencePointsByAsc(){
         List<Point> sortedPoints = new ArrayList<>(KMLWrapperController.REFERENCE_POINTS);
         Point avePointForEOV = getAveragePointForEOV();
         for (int i = 0; i < sortedPoints.size() - 1; i++) {
             for (int j = i + 1; j < sortedPoints.size(); j++) {
-                    if (avePointForEOV.getY_EOV() != 0.0 &&
-                        avePointForEOV.getX_EOV() != 0.0 &&
-                        sortedPoints.get(i).getDistanceForEOV(avePointForEOV) >
+                    if (sortedPoints.get(i).getDistanceForEOV(avePointForEOV) >
                                 sortedPoints.get(j).getDistanceForEOV(avePointForEOV)) {
                     Collections.swap(sortedPoints, i, j);
                 }
@@ -43,15 +59,12 @@ public class TransformationProcess {
         return avePoint;
     }
 
-    public List<Point> sortWGSReferencePointsByAsc(){
+    private List<Point> sortWGSReferencePointsByAsc(){
         List<Point> sortedPoints = new ArrayList<>(KMLWrapperController.REFERENCE_POINTS);
         Point avePointForWGS = getAveragePointForWGS();
         for (int i = 0; i < sortedPoints.size() - 1; i++) {
             for (int j = i + 1; j < sortedPoints.size(); j++) {
-                    if (avePointForWGS.getX_WGS84() != 0.0 &&
-                        avePointForWGS.getY_WGS84() != 0.0 &&
-                        avePointForWGS.getZ_WGS84() != 0.0 &&
-                        sortedPoints.get(i).getDistanceForWGS(avePointForWGS) >
+                    if (sortedPoints.get(i).getDistanceForWGS(avePointForWGS) >
                                 sortedPoints.get(j).getDistanceForWGS(avePointForWGS)) {
                     Collections.swap(sortedPoints, i, j);
                 }

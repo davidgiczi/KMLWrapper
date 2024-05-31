@@ -2,6 +2,8 @@ package hu.david.giczi.mvmxpert.wrapper.domain;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 
+import java.util.Objects;
+
 public class Point {
 
     private String pointId;
@@ -156,6 +158,19 @@ public class Point {
     public double getDistanceForWGS(Point point){
         return Math.sqrt(Math.pow(this.x_WGS84 - point.x_WGS84, 2) +
                 Math.pow(this.y_WGS84 - point.y_WGS84, 2) +  Math.pow(this.z_WGS84 - point.z_WGS84, 2));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Point point = (Point) o;
+        return Objects.equals(pointId, point.pointId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pointId);
     }
 
     @Override
