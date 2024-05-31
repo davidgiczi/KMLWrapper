@@ -22,12 +22,18 @@ public class TransformationProcess {
         Point avePointForEOV = getAveragePointForEOV();
         if( avePointForEOV.getY_EOV() > 0 && avePointForEOV.getX_EOV() > 0){
             List<Point> sortedPoints = sortEOVReferencePointsByAsc();
+            EOV_TO_WGS_REFERENCE_POINTS.set(0, sortedPoints.get(0));
+            for (int i = 1; i < sortedPoints.size(); i++) {
 
+            }
         }
         Point avePointForWGS = getAveragePointForWGS();
         if( avePointForWGS.getX_WGS84() > 0 && avePointForWGS.getY_WGS84() > 0 && avePointForWGS.getZ_WGS84() > 0){
             List<Point> sortedPoints = sortWGSReferencePointsByAsc();
+            WGS_TO_EOV_REFERENCE_POINTS.set(0, sortedPoints.get(0));
+            for (int i = 1; i < sortedPoints.size(); i++) {
 
+            }
         }
     }
 
