@@ -3,7 +3,6 @@ package hu.david.giczi.mvmxpert.wrapper.controller;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.view.InputDataFileWindow;
 import hu.david.giczi.mvmxpert.wrapper.view.ManuallyInputDataWindow;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,15 +13,17 @@ public class KMLWrapperController {
     public InputDataFileWindow inputDataFileWindow;
     public ManuallyInputDataWindow manuallyInputDataWindow;
     public static List<Point> REFERENCE_POINTS;
+    public static List<Point> INPUT_POINTS;
 
     public KMLWrapperController() {
         this.inputDataFileWindow = new InputDataFileWindow(this);
+        INPUT_POINTS = new ArrayList<>();
         getReferencePoints();
     }
 
 
     private void getReferencePoints() {
-        List<String> pointsData = getReferencePointsData();
+        List<String> pointsData = getPointsData("points/common_points.txt");
         REFERENCE_POINTS = new ArrayList<>();
         for (String rowData : pointsData) {
             String[] pointData = rowData.split(",");
@@ -38,9 +39,9 @@ public class KMLWrapperController {
         }
     }
 
-    private List<String> getReferencePointsData() {
+    private List<String> getPointsData(String filePath) {
         List<String> pointsData = new ArrayList<>();
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream("points/common_points.txt");
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream(filePath);
         BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)))) {
         String row;
         while ((row = br.readLine()) != null){

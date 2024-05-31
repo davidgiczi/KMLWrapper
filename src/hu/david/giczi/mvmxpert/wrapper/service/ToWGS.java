@@ -1,4 +1,6 @@
-package hu.david.giczi.mvmxpert.wrapper.domain;
+package hu.david.giczi.mvmxpert.wrapper.service;
+
+import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 
 import java.util.List;
 
