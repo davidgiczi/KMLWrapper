@@ -21,22 +21,87 @@ public class TransformationProcess {
     public void collectReferencePoints(){
         Point avePointForEOV = getAveragePointForEOV();
         if( avePointForEOV.getY_EOV() > 0 && avePointForEOV.getX_EOV() > 0){
-            List<Point> sortedPoints = sortEOVReferencePointsByAsc();
-            EOV_TO_WGS_REFERENCE_POINTS.set(0, sortedPoints.get(0));
-            for (int i = 1; i < sortedPoints.size(); i++) {
-
-            }
+            collectReferencePointsForEOV();
         }
         Point avePointForWGS = getAveragePointForWGS();
         if( avePointForWGS.getX_WGS84() > 0 && avePointForWGS.getY_WGS84() > 0 && avePointForWGS.getZ_WGS84() > 0){
-            List<Point> sortedPoints = sortWGSReferencePointsByAsc();
-            WGS_TO_EOV_REFERENCE_POINTS.set(0, sortedPoints.get(0));
-            for (int i = 1; i < sortedPoints.size(); i++) {
+            collectReferencePointsForWGS();
+        }
+    }
 
+    private void collectReferencePointsForEOV(){
+        Point avePointForEOV = getAveragePointForEOV();
+        List<Point> sortedPoints = sortEOVReferencePointsByAsc();
+        EOV_TO_WGS_REFERENCE_POINTS.set(0, sortedPoints.get(0));
+        for (int i = 1; i < sortedPoints.size(); i++) {
+            if( EOV_TO_WGS_REFERENCE_POINTS.get(1) == null &&
+                    avePointForEOV.getY_EOV() > sortedPoints.get(i).getY_EOV() &&
+                    avePointForEOV.getX_EOV() < sortedPoints.get(i).getX_EOV()){
+                    EOV_TO_WGS_REFERENCE_POINTS.set(1, sortedPoints.get(i));
+            }
+            else if( EOV_TO_WGS_REFERENCE_POINTS.get(2) == null &&
+                    avePointForEOV.getY_EOV() < sortedPoints.get(i).getY_EOV() &&
+                    avePointForEOV.getX_EOV() < sortedPoints.get(i).getX_EOV()){
+                    EOV_TO_WGS_REFERENCE_POINTS.set(2, sortedPoints.get(i));
+            }
+            else if( EOV_TO_WGS_REFERENCE_POINTS.get(3) == null &&
+                    avePointForEOV.getY_EOV() < sortedPoints.get(i).getY_EOV() &&
+                    avePointForEOV.getX_EOV() > sortedPoints.get(i).getX_EOV()){
+                    EOV_TO_WGS_REFERENCE_POINTS.set(3, sortedPoints.get(i));
+            }
+            else if( EOV_TO_WGS_REFERENCE_POINTS.get(4) == null &&
+                    avePointForEOV.getY_EOV() > sortedPoints.get(i).getY_EOV() &&
+                    avePointForEOV.getX_EOV() > sortedPoints.get(i).getX_EOV()){
+                    EOV_TO_WGS_REFERENCE_POINTS.set(4, sortedPoints.get(i));
+            }
+        }
+        for (Point sortedPoint : sortedPoints) {
+            for (int j = 0; j < EOV_TO_WGS_REFERENCE_POINTS.size(); j++) {
+                if (EOV_TO_WGS_REFERENCE_POINTS.get(j) == null) {
+                    if (!EOV_TO_WGS_REFERENCE_POINTS.contains(sortedPoint)) {
+                        EOV_TO_WGS_REFERENCE_POINTS.set(j, sortedPoint);
+                    }
+                }
             }
         }
     }
 
+    private void collectReferencePointsForWGS(){
+        Point avePointForWGS = getAveragePointForWGS();
+        List<Point> sortedPoints = sortWGSReferencePointsByAsc();
+        WGS_TO_EOV_REFERENCE_POINTS.set(0, sortedPoints.get(0));
+        for (int i = 1; i < sortedPoints.size(); i++) {
+            if( WGS_TO_EOV_REFERENCE_POINTS.get(1) == null &&
+                    avePointForWGS.getX_WGS84() > sortedPoints.get(i).getX_WGS84() &&
+                    avePointForWGS.getY_WGS84() < sortedPoints.get(i).getY_WGS84()){
+                WGS_TO_EOV_REFERENCE_POINTS.set(1, sortedPoints.get(i));
+            }
+            else if( WGS_TO_EOV_REFERENCE_POINTS.get(2) == null &&
+                    avePointForWGS.getX_WGS84() < sortedPoints.get(i).getX_WGS84() &&
+                    avePointForWGS.getY_WGS84() < sortedPoints.get(i).getY_WGS84()){
+                WGS_TO_EOV_REFERENCE_POINTS.set(2, sortedPoints.get(i));
+            }
+            else if( WGS_TO_EOV_REFERENCE_POINTS.get(3) == null &&
+                    avePointForWGS.getX_WGS84() < sortedPoints.get(i).getX_WGS84() &&
+                    avePointForWGS.getY_WGS84() > sortedPoints.get(i).getY_WGS84()){
+                WGS_TO_EOV_REFERENCE_POINTS.set(3, sortedPoints.get(i));
+            }
+            else if( WGS_TO_EOV_REFERENCE_POINTS.get(4) == null &&
+                    avePointForWGS.getX_WGS84() > sortedPoints.get(i).getX_WGS84() &&
+                    avePointForWGS.getY_WGS84() > sortedPoints.get(i).getY_WGS84()){
+                WGS_TO_EOV_REFERENCE_POINTS.set(4, sortedPoints.get(i));
+            }
+        }
+        for (Point sortedPoint : sortedPoints) {
+            for (int j = 0; j < WGS_TO_EOV_REFERENCE_POINTS.size(); j++) {
+                if (WGS_TO_EOV_REFERENCE_POINTS.get(j) == null) {
+                    if (!WGS_TO_EOV_REFERENCE_POINTS.contains(sortedPoint)) {
+                        WGS_TO_EOV_REFERENCE_POINTS.set(j, sortedPoint);
+                    }
+                }
+            }
+        }
+    }
 
     private List<Point> sortEOVReferencePointsByAsc(){
         List<Point> sortedPoints = new ArrayList<>(KMLWrapperController.REFERENCE_POINTS);
