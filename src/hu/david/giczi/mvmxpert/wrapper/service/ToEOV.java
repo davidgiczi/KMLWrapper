@@ -2,6 +2,7 @@ package hu.david.giczi.mvmxpert.wrapper.service;
 
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ToEOV {
@@ -23,6 +24,9 @@ public class ToEOV {
     public static double Y_EOV;
     public static double Z_EOV;
     public static List<Point> COMMON_POINTS;
+
+    public ToEOV() {
+    }
 
     public ToEOV(double X_WGS84, double Y_WGS84, double Z_WGS84) {
         createMatrixA();
@@ -93,17 +97,44 @@ public class ToEOV {
         transformIUGG67CoordinatesForEOV(Fi_IUGG67, Lambda_IUGG67, h_IUGG67);
     }
 
+    public static List<Double> getXYZCoordinatesForIUGG67(double Y_EOV, double X_EOV, double Z_EOV){
+        double sphereFi_ = 2 * Math.atan( Math.pow(Math.E, (X_EOV - 200000) / (R * m0))) - Math.PI / 2;
+        double sphereLambda_ = (Y_EOV - 650000) / (R * m0);
+        double sphereFi = Math.asin(Math.sin(sphereFi_) * Math.cos(Math.toRadians(fi_0)) +
+                Math.cos(sphereFi_) * Math.sin(Math.toRadians(fi_0) * Math.cos(sphereLambda_)));
+        double sphereLambda = Math.asin(Math.cos(sphereFi_) * Math.sin(sphereLambda_) / Math.cos(sphereFi));
+        double FI = iterateFi(sphereFi);
+        double LAMBDA = Math.toRadians(lambda_0) + sphereLambda / n;
+        double N = a / Math.sqrt(1 - Math.pow(e, 2) * Math.pow(Math.sin(FI), 2));
+        double X = (N + Z_EOV) * Math.cos(FI) * Math.cos(LAMBDA);
+        double Y = (N + Z_EOV) * Math.cos(FI) * Math.sin(LAMBDA);
+        double Z = ((1 - Math.pow(e, 2)) * N + Z_EOV) * Math.sin(FI);
+        return Arrays.asList(X, Y, Z);
+    }
+
+    private static double iterateFi(double preFi){
+        double sphereFi = preFi;
+        double Fi = preFi;
+        for (int i = 0; i < 4; i++) {
+            preFi =  2 * Math.atan(Math.pow(
+                    Math.tan(Math.PI / 4 + sphereFi / 2) /
+                            (k * Math.pow((1 - e * Math.sin(Fi)) /
+                                    (1 + e * Math.sin(Fi)), n * e / 2)),
+                    1 / n) ) - Math.PI / 2;
+            Fi = preFi;
+        }
+        return Fi;
+    }
+
     private void transformIUGG67CoordinatesForEOV(double Fi_IUGG67, double Lambda_IUGG67, double h_IUGG67){
         double sphereFi = 2 * Math.atan(k * Math.pow(Math.tan(Math.PI / 4  + Fi_IUGG67 / 2.0), n) *
                Math.pow( (1 - e * Math.sin(Fi_IUGG67)) / (1 + e * Math.sin(Fi_IUGG67)), n * e / 2.0))
          - Math.PI / 2;
-        double sphereLambda = n * (Lambda_IUGG67 - lambda_0);
+        double sphereLambda = n * (Lambda_IUGG67 - Math.toRadians(lambda_0));
         double fi_ = Math.asin(
-                Math.sin(sphereFi) * Math.cos(fi_0) - Math.cos(sphereFi) * Math.sin(fi_0) *
+                Math.sin(sphereFi) * Math.cos(Math.toRadians(fi_0)) - Math.cos(sphereFi) * Math.sin(Math.toRadians(fi_0)) *
                                 Math.cos(sphereLambda) );
-        double lambda_ = Math.toDegrees(
-                Math.asin(Math.cos(sphereFi)  * Math.sin(sphereLambda) / Math.cos(fi_)
-                ));
+        double lambda_ = Math.asin(Math.cos(sphereFi)  * Math.sin(sphereLambda) / Math.cos(fi_));
         X_EOV = R * m0 * Math.log(Math.tan(Math.PI / 4 + fi_ / 2)) + 200000;
         Y_EOV =  R * m0 * lambda_ + 650000;
         Z_EOV = h_IUGG67;

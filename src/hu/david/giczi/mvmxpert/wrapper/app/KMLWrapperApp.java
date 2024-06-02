@@ -1,6 +1,4 @@
 package hu.david.giczi.mvmxpert.wrapper.app;
-
-
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.service.TransformationProcess;
@@ -9,11 +7,10 @@ public class KMLWrapperApp {
     public static void main(String[] args) {
         new KMLWrapperController();
         Point point = new Point();
-        point.setY_EOV(870000d);
-        point.setX_EOV(350000d);
+        point.setX_WGS84(4081882.463);
+        point.setY_WGS84(1410011.144);
+        point.setZ_WGS84(4678199.471);
         KMLWrapperController.INPUT_POINTS.add(point);
-        TransformationProcess tr = new TransformationProcess();
-        tr.collectReferencePoints();
-        tr.EOV_TO_WGS_REFERENCE_POINTS.forEach(System.out::println);
+        new TransformationProcess();
     }
 }

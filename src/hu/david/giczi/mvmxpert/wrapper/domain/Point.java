@@ -1,7 +1,9 @@
 package hu.david.giczi.mvmxpert.wrapper.domain;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.service.ToEOV;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Point {
@@ -60,24 +62,14 @@ public class Point {
         return x_IUGG67;
     }
 
-    public void setX_IUGG67(Double x_IUGG67) {
-        this.x_IUGG67 = x_IUGG67;
-    }
 
     public Double getY_IUGG67() {
         return y_IUGG67;
     }
 
-    public void setY_IUGG67(Double y_IUGG67) {
-        this.y_IUGG67 = y_IUGG67;
-    }
 
     public Double getZ_IUGG67() {
         return z_IUGG67;
-    }
-
-    public void setZ_IUGG67(Double z_IUGG67) {
-        this.z_IUGG67 = z_IUGG67;
     }
 
     public Double getX_WGS84() {
@@ -159,6 +151,15 @@ public class Point {
         return Math.sqrt(Math.pow(this.x_WGS84 - point.x_WGS84, 2) +
                 Math.pow(this.y_WGS84 - point.y_WGS84, 2) +  Math.pow(this.z_WGS84 - point.z_WGS84, 2));
     }
+    public void convertEOVCoordinatesForXYZForIUGG67(){
+        if( y_EOV == null || x_EOV == null || h_EOV == null ){
+            return;
+        }
+        List<Double> xyzForIUGG67 = ToEOV.getXYZCoordinatesForIUGG67(y_EOV, x_EOV, h_EOV);
+        this.x_IUGG67 = xyzForIUGG67.get(0);
+        this.y_IUGG67 = xyzForIUGG67.get(1);
+        this.z_IUGG67 = xyzForIUGG67.get(2);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -178,7 +179,9 @@ public class Point {
         return "Point{" +
                 "pointId='" + pointId + '\'' +
                 ", y_EOV=" + y_EOV +
-                ", x_EOV=" + x_EOV + ", distance=" + getDistanceForEOV(KMLWrapperController.INPUT_POINTS.get(0)) +
+                ", x_EOV=" + x_EOV +
+                ", h_EOV=" + h_EOV +
+                ", distance=" + getDistanceForWGS(KMLWrapperController.INPUT_POINTS.get(0)) +
                 '}';
     }
 }

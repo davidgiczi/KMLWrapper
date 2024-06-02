@@ -16,7 +16,7 @@ public class KMLWrapperController {
     public static List<Point> INPUT_POINTS;
 
     public KMLWrapperController() {
-        this.inputDataFileWindow = new InputDataFileWindow(this);
+        //this.inputDataFileWindow = new InputDataFileWindow(this);
         INPUT_POINTS = new ArrayList<>();
         getReferencePoints();
     }
@@ -35,6 +35,7 @@ public class KMLWrapperController {
             point.setY_EOV(Double.parseDouble(pointData[4]));
             point.setX_EOV(Double.parseDouble(pointData[5]));
             point.setH_EOV(Double.parseDouble(pointData[6]));
+            point.convertEOVCoordinatesForXYZForIUGG67();
             REFERENCE_POINTS.add(point);
         }
     }

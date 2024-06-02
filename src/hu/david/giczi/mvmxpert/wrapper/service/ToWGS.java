@@ -16,6 +16,9 @@ public class ToWGS {
     public static double FI_WGS84;
     public static double LAMBDA_WGS84;
     public static double H_WGS84;
+    public static double X_WGS;
+    public static double Y_WGS;
+    public static double Z_WGS;
     public static List<Point> COMMON_POINTS;
 
     public ToWGS(double X_IUGG67, double Y_IUGG67, double Z_IUGG67) {
@@ -73,9 +76,9 @@ public class ToWGS {
         double kRxRyRz_12 = kRxRy_10 * Rz[0][2] + kRxRy_11 * Rz[1][2] + kRxRy_12 * Rz[2][2];
         double kRxRyRz_22 = kRxRy_20 * Rz[0][2] + kRxRy_21 * Rz[1][2] + kRxRy_22 * Rz[2][2];
 
-        double X_WGS = deltaX + kRxRyRz_00 * X_IUGG67 + kRxRyRz_01 * Y_IUGG67 + kRxRyRz_02 * Z_IUGG67;
-        double Y_WGS = deltaY + kRxRyRz_10 * X_IUGG67 + kRxRyRz_11 *  Y_IUGG67 + kRxRyRz_12 * Z_IUGG67;
-        double Z_WGS = deltaZ + kRxRyRz_20 * X_IUGG67 + kRxRyRz_21 * Y_IUGG67 + kRxRyRz_22 * Z_IUGG67;
+        X_WGS = deltaX + kRxRyRz_00 * X_IUGG67 + kRxRyRz_01 * Y_IUGG67 + kRxRyRz_02 * Z_IUGG67;
+        Y_WGS = deltaY + kRxRyRz_10 * X_IUGG67 + kRxRyRz_11 *  Y_IUGG67 + kRxRyRz_12 * Z_IUGG67;
+        Z_WGS = deltaZ + kRxRyRz_20 * X_IUGG67 + kRxRyRz_21 * Y_IUGG67 + kRxRyRz_22 * Z_IUGG67;
 
         double p = Math.sqrt(Math.pow(X_WGS, 2) + Math.pow(Y_WGS, 2));
         double theta = Math.atan(Z_WGS * a / (p * b));

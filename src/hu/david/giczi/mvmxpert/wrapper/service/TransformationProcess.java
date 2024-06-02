@@ -16,9 +16,18 @@ public class TransformationProcess {
     private ToWGS toWGS;
 
     public TransformationProcess() {
+        collectReferencePoints();
+        WGS_TO_EOV_REFERENCE_POINTS.forEach(System.out::println);
+        ToEOV.setCommonPoints(WGS_TO_EOV_REFERENCE_POINTS);
+        toEOV = new ToEOV(KMLWrapperController.INPUT_POINTS.get(0).getX_WGS84(),
+                                KMLWrapperController.INPUT_POINTS.get(0).getY_WGS84(),
+                                KMLWrapperController.INPUT_POINTS.get(0).getZ_WGS84());
+        System.out.println(ToEOV.Y_EOV);
+        System.out.println(ToEOV.X_EOV);
+        System.out.println(ToEOV.Z_EOV);
     }
 
-    public void collectReferencePoints(){
+    private void collectReferencePoints(){
         Point avePointForEOV = getAveragePointForEOV();
         if( avePointForEOV.getY_EOV() > 0 && avePointForEOV.getX_EOV() > 0){
             collectReferencePointsForEOV();
