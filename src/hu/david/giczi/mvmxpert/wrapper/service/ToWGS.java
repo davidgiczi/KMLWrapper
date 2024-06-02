@@ -10,8 +10,8 @@ public class ToWGS {
     private static final double b = 6356752.314;
     public static final double e = Math.sqrt((Math.pow(a, 2) - Math.pow(b, 2)) / Math.pow(a, 2));
     private static final double e_ = Math.sqrt((Math.pow(a, 2) - Math.pow(b, 2)) / Math.pow(b, 2));
-    private final double[][] MATRIX_A = new double[15][7];
-    private final double[][] MATRIX_l = new double[15][1];
+    private final double[][] MATRIX_A = new double[24][7];
+    private final double[][] MATRIX_l = new double[24][1];
     private double[][] PARAM_FOR_WGS;
     public static double FI_WGS84;
     public static double LAMBDA_WGS84;
@@ -91,7 +91,7 @@ public class ToWGS {
 
     private void runMatrixProcess() {
         //A transposed
-        double[][] At = new double[7][15];
+        double[][] At = new double[7][24];
         for (int i = 0; i < MATRIX_A.length; i++) {
             for (int j = 0; j < MATRIX_A[i].length; j++) {
                 At[j][i] = MATRIX_A[i][j];
@@ -238,6 +238,78 @@ public class ToWGS {
         MATRIX_A[14][4] = - 1 * COMMON_POINTS.get(4).getY_IUGG67();
         MATRIX_A[14][5] = COMMON_POINTS.get(4).getX_IUGG67();
         MATRIX_A[14][6] = 0.0;
+
+        MATRIX_A[15][0] = 1.0;
+        MATRIX_A[15][1] = 0.0;
+        MATRIX_A[15][2] = 0.0;
+        MATRIX_A[15][3] = COMMON_POINTS.get(5).getX_IUGG67();
+        MATRIX_A[15][4] = 0.0;
+        MATRIX_A[15][5] = - 1 * COMMON_POINTS.get(5).getZ_IUGG67();
+        MATRIX_A[15][6] = COMMON_POINTS.get(5).getY_IUGG67();
+
+        MATRIX_A[16][0] = 0.0;
+        MATRIX_A[16][1] = 1.0;
+        MATRIX_A[16][2] = 0.0;
+        MATRIX_A[16][3] = COMMON_POINTS.get(5).getY_IUGG67();
+        MATRIX_A[16][4] = COMMON_POINTS.get(5).getZ_IUGG67();
+        MATRIX_A[16][5] = 0.0;
+        MATRIX_A[16][6] = - 1 * COMMON_POINTS.get(5).getX_IUGG67();
+
+        MATRIX_A[17][0] = 0.0;
+        MATRIX_A[17][1] = 0.0;
+        MATRIX_A[17][2] = 1.0;
+        MATRIX_A[17][3] = COMMON_POINTS.get(5).getZ_IUGG67();
+        MATRIX_A[17][4] = - 1 * COMMON_POINTS.get(5).getY_IUGG67();
+        MATRIX_A[17][5] = COMMON_POINTS.get(5).getX_IUGG67();
+        MATRIX_A[17][6] = 0.0;
+
+        MATRIX_A[18][0] = 1.0;
+        MATRIX_A[18][1] = 0.0;
+        MATRIX_A[18][2] = 0.0;
+        MATRIX_A[18][3] = COMMON_POINTS.get(6).getX_IUGG67();
+        MATRIX_A[18][4] = 0.0;
+        MATRIX_A[18][5] = - 1 * COMMON_POINTS.get(6).getZ_IUGG67();
+        MATRIX_A[18][6] = COMMON_POINTS.get(6).getY_IUGG67();
+
+        MATRIX_A[19][0] = 0.0;
+        MATRIX_A[19][1] = 1.0;
+        MATRIX_A[19][2] = 0.0;
+        MATRIX_A[19][3] = COMMON_POINTS.get(6).getY_IUGG67();
+        MATRIX_A[19][4] = COMMON_POINTS.get(6).getZ_IUGG67();
+        MATRIX_A[19][5] = 0.0;
+        MATRIX_A[19][6] = - 1 * COMMON_POINTS.get(6).getX_IUGG67();
+
+        MATRIX_A[20][0] = 0.0;
+        MATRIX_A[20][1] = 0.0;
+        MATRIX_A[20][2] = 1.0;
+        MATRIX_A[20][3] = COMMON_POINTS.get(6).getZ_IUGG67();
+        MATRIX_A[20][4] = - 1 * COMMON_POINTS.get(6).getY_IUGG67();
+        MATRIX_A[20][5] = COMMON_POINTS.get(6).getX_IUGG67();
+        MATRIX_A[20][6] = 0.0;
+
+        MATRIX_A[21][0] = 1.0;
+        MATRIX_A[21][1] = 0.0;
+        MATRIX_A[21][2] = 0.0;
+        MATRIX_A[21][3] = COMMON_POINTS.get(7).getX_IUGG67();
+        MATRIX_A[21][4] = 0.0;
+        MATRIX_A[21][5] = - 1 * COMMON_POINTS.get(7).getZ_IUGG67();
+        MATRIX_A[21][6] = COMMON_POINTS.get(7).getY_IUGG67();
+
+        MATRIX_A[22][0] = 0.0;
+        MATRIX_A[22][1] = 1.0;
+        MATRIX_A[22][2] = 0.0;
+        MATRIX_A[22][3] = COMMON_POINTS.get(7).getY_IUGG67();
+        MATRIX_A[22][4] = COMMON_POINTS.get(7).getZ_IUGG67();
+        MATRIX_A[22][5] = 0.0;
+        MATRIX_A[22][6] = - 1 * COMMON_POINTS.get(7).getX_IUGG67();
+
+        MATRIX_A[23][0] = 0.0;
+        MATRIX_A[23][1] = 0.0;
+        MATRIX_A[23][2] = 1.0;
+        MATRIX_A[23][3] = COMMON_POINTS.get(7).getZ_IUGG67();
+        MATRIX_A[23][4] = - 1 * COMMON_POINTS.get(7).getY_IUGG67();
+        MATRIX_A[23][5] = COMMON_POINTS.get(7).getX_IUGG67();
+        MATRIX_A[23][6] = 0.0;
     }
 
     private void createMatrix_l(){
@@ -256,6 +328,15 @@ public class ToWGS {
         MATRIX_l[12][0] = COMMON_POINTS.get(4).getX_WGS84();
         MATRIX_l[13][0] = COMMON_POINTS.get(4).getY_WGS84();
         MATRIX_l[14][0] = COMMON_POINTS.get(4).getZ_WGS84();
+        MATRIX_l[15][0] = COMMON_POINTS.get(5).getX_WGS84();
+        MATRIX_l[16][0] = COMMON_POINTS.get(5).getY_WGS84();
+        MATRIX_l[17][0] = COMMON_POINTS.get(5).getZ_WGS84();
+        MATRIX_l[18][0] = COMMON_POINTS.get(6).getX_WGS84();
+        MATRIX_l[19][0] = COMMON_POINTS.get(6).getY_WGS84();
+        MATRIX_l[20][0] = COMMON_POINTS.get(6).getZ_WGS84();
+        MATRIX_l[21][0] = COMMON_POINTS.get(7).getX_WGS84();
+        MATRIX_l[22][0] = COMMON_POINTS.get(7).getY_WGS84();
+        MATRIX_l[23][0] = COMMON_POINTS.get(7).getZ_WGS84();
     }
 
 }

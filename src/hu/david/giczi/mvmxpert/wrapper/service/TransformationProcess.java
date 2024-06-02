@@ -10,21 +10,13 @@ import java.util.List;
 
 public class TransformationProcess {
 
-    public List<Point> EOV_TO_WGS_REFERENCE_POINTS = Arrays.asList(null, null, null, null, null);
-    public List<Point> WGS_TO_EOV_REFERENCE_POINTS = Arrays.asList(null, null, null, null, null);
-    private ToEOV toEOV;
-    private ToWGS toWGS;
+    public List<Point> EOV_TO_WGS_REFERENCE_POINTS = Arrays.asList(null, null, null, null, null, null, null, null);
+    public List<Point> WGS_TO_EOV_REFERENCE_POINTS = Arrays.asList(null, null, null, null, null, null, null, null);
+    public ToEOV toEOV;
+    public ToWGS toWGS;
 
     public TransformationProcess() {
         collectReferencePoints();
-        WGS_TO_EOV_REFERENCE_POINTS.forEach(System.out::println);
-        ToEOV.setCommonPoints(WGS_TO_EOV_REFERENCE_POINTS);
-        toEOV = new ToEOV(KMLWrapperController.INPUT_POINTS.get(0).getX_WGS84(),
-                                KMLWrapperController.INPUT_POINTS.get(0).getY_WGS84(),
-                                KMLWrapperController.INPUT_POINTS.get(0).getZ_WGS84());
-        System.out.println(ToEOV.Y_EOV);
-        System.out.println(ToEOV.X_EOV);
-        System.out.println(ToEOV.Z_EOV);
     }
 
     private void collectReferencePoints(){

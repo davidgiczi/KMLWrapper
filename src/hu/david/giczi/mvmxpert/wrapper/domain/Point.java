@@ -174,14 +174,5 @@ public class Point {
         return Objects.hash(pointId);
     }
 
-    @Override
-    public String toString() {
-        return "Point{" +
-                "pointId='" + pointId + '\'' +
-                ", y_EOV=" + y_EOV +
-                ", x_EOV=" + x_EOV +
-                ", h_EOV=" + h_EOV +
-                ", distance=" + getDistanceForWGS(KMLWrapperController.INPUT_POINTS.get(0)) +
-                '}';
-    }
+
 }
