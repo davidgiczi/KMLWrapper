@@ -7,10 +7,9 @@
     <list default="true" id="7f0e9da0-0259-4c5b-90bb-59a4c4df55b8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/app/KMLWrapperApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/app/KMLWrapperApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/controller/KMLWrapperController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/controller/KMLWrapperController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/domain/Point.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/domain/Point.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/service/ToEOV.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/service/ToEOV.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/service/ToWGS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/service/ToWGS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/service/TransformationProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/service/TransformationProcess.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

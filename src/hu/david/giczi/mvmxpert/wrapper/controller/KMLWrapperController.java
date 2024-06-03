@@ -1,6 +1,7 @@
 package hu.david.giczi.mvmxpert.wrapper.controller;
 
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
+import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
 import hu.david.giczi.mvmxpert.wrapper.view.InputDataFileWindow;
 import hu.david.giczi.mvmxpert.wrapper.view.ManuallyInputDataWindow;
 import java.io.*;
@@ -18,40 +19,15 @@ public class KMLWrapperController {
     public KMLWrapperController() {
         //this.inputDataFileWindow = new InputDataFileWindow(this);
         INPUT_POINTS = new ArrayList<>();
-        getReferencePoints();
+        FileProcess.getReferencePoints();
     }
 
-
-    private void getReferencePoints() {
-        List<String> pointsData = getPointsData("points/common_points.txt");
-        REFERENCE_POINTS = new ArrayList<>();
-        for (String rowData : pointsData) {
-            String[] pointData = rowData.split(",");
-            Point point = new Point();
-            point.setPointId(pointData[0]);
-            point.setX_WGS84(Double.parseDouble(pointData[1]));
-            point.setY_WGS84(Double.parseDouble(pointData[2]));
-            point.setZ_WGS84(Double.parseDouble(pointData[3]));
-            point.setY_EOV(Double.parseDouble(pointData[4]));
-            point.setX_EOV(Double.parseDouble(pointData[5]));
-            point.setH_EOV(Double.parseDouble(pointData[6]));
-            point.convertEOVCoordinatesForXYZForIUGG67();
-            REFERENCE_POINTS.add(point);
-        }
+    public static String convertAngleMinSecFormat(double data){
+        int angle = (int) data;
+        int min = (int) ((data - angle) * 60);
+        double sec = ((int) (10000 * ((data - angle) * 3600 - min * 60))) / 10000.0;
+        return angle + "°" + (9 < min ? min : "0" + min) + "'" + (9 < sec ? sec : "0" + sec) + "\"";
     }
 
-    private List<String> getPointsData(String filePath) {
-        List<String> pointsData = new ArrayList<>();
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream(filePath);
-        BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)))) {
-        String row;
-        while ((row = br.readLine()) != null){
-            pointsData.add(row);
-        }
-}
-       catch (IOException ignored){
-       }
-        return pointsData;
-    }
 
 }

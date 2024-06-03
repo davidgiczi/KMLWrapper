@@ -1,5 +1,6 @@
 package hu.david.giczi.mvmxpert.wrapper.service;
 
+import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 
 import java.util.Arrays;
@@ -15,18 +16,16 @@ public class ToEOV {
     private static final double k = 1.003110007693;
     public static final double n = 1.000719704936;
     private static final double m0 = 0.99993;
-    private static final double fi_0 = 47.0 + 6.0 / 60.0;
+    private static final double fi_0 = 47 + 6 / 60.0;
     private static final double lambda_0 = 19.0 + 2.0 / 60.0 + 54.8584 / 3600.0;
     private final double[][] MATRIX_A = new double[24][7];
     private final double[][] MATRIX_l = new double[24][1];
-    private double[][] PARAM_FOR_EOV;
+    public double[][] PARAM_FOR_EOV;
     public static double X_EOV;
     public static double Y_EOV;
     public static double H_EOV;
     public static List<Point> COMMON_POINTS;
 
-    public ToEOV() {
-    }
 
     public ToEOV(double X_WGS84, double Y_WGS84, double Z_WGS84) {
         createMatrixA();
@@ -97,18 +96,18 @@ public class ToEOV {
         transformIUGG67CoordinatesForEOV(Fi_IUGG67, Lambda_IUGG67, h_IUGG67);
     }
 
-    public static List<Double> getXYZCoordinatesForIUGG67(double Y_EOV, double X_EOV, double Z_EOV){
+    public static List<Double> getXYZCoordinatesForIUGG67(double Y_EOV, double X_EOV, double H_EOV){
         double sphereFi_ = 2 * Math.atan( Math.pow(Math.E, (X_EOV - 200000) / (R * m0))) - Math.PI / 2;
         double sphereLambda_ = (Y_EOV - 650000) / (R * m0);
         double sphereFi = Math.asin(Math.sin(sphereFi_) * Math.cos(Math.toRadians(fi_0)) +
-                Math.cos(sphereFi_) * Math.sin(Math.toRadians(fi_0) * Math.cos(sphereLambda_)));
+                Math.cos(sphereFi_) * Math.sin(Math.toRadians(fi_0)) * Math.cos(sphereLambda_));
         double sphereLambda = Math.asin(Math.cos(sphereFi_) * Math.sin(sphereLambda_) / Math.cos(sphereFi));
         double FI = iterateFi(sphereFi);
         double LAMBDA = Math.toRadians(lambda_0) + sphereLambda / n;
         double N = a / Math.sqrt(1 - Math.pow(e, 2) * Math.pow(Math.sin(FI), 2));
-        double X = (N + Z_EOV) * Math.cos(FI) * Math.cos(LAMBDA);
-        double Y = (N + Z_EOV) * Math.cos(FI) * Math.sin(LAMBDA);
-        double Z = ((1 - Math.pow(e, 2)) * N + Z_EOV) * Math.sin(FI);
+        double X = (N + H_EOV) * Math.cos(FI) * Math.cos(LAMBDA);
+        double Y = (N + H_EOV) * Math.cos(FI) * Math.sin(LAMBDA);
+        double Z = ((1 - Math.pow(e, 2)) * N + H_EOV) * Math.sin(FI);
         return Arrays.asList(X, Y, Z);
     }
 
