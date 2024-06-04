@@ -17,7 +17,7 @@ public class KMLWrapperController {
     public static List<Point> INPUT_POINTS;
 
     public KMLWrapperController() {
-        //this.inputDataFileWindow = new InputDataFileWindow(this);
+        this.inputDataFileWindow = new InputDataFileWindow(this);
         INPUT_POINTS = new ArrayList<>();
         FileProcess.getReferencePoints();
     }

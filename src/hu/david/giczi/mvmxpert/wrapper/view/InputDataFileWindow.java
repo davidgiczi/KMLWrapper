@@ -188,7 +188,7 @@ public class InputDataFileWindow {
         eovRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         eovRadioBtn.setSelected(true);
         eovRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
-        JRadioButton wgsRadioBtn = new JRadioButton("WGS koordináták");
+        JRadioButton wgsRadioBtn = new JRadioButton("WGS84 koordináták");
         wgsRadioBtn.addActionListener(e -> {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(WGS_DATA_TYPE);
             inputDataTypeComboBox.setModel(model);

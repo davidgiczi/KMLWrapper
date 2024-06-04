@@ -3,17 +3,29 @@ package hu.david.giczi.mvmxpert.wrapper.view;
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Objects;
 
 public class ManuallyInputDataWindow {
     public JFrame jFrame;
     private final KMLWrapperController controller;
+    private JPanel inputDataPanel;
+    private JPanel inputDataFormatPanel;
+    private JComboBox<String> inputDataTypeComboBox;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
+
+    private final String[] INPUT_DATA_TYPE = {
+            "Bemeneti adattípus választása",
+            "EOV (Y,X,H)",
+            "WGS84 (decimális)",
+            "WGS84 (fok,perc,mperc)",
+            "WGS84 (X,Y,Z)"};
 
     public ManuallyInputDataWindow(KMLWrapperController controller) {
         this.controller = controller;
@@ -26,24 +38,126 @@ public class ManuallyInputDataWindow {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                if( MessagePane.getYesNoOptionMessage("A program bezárása",
-                        "Kilép a programból?", jFrame) == 0 ){
-                    System.exit(0);
-                }
+                jFrame.setVisible(false);
+               controller.inputDataFileWindow.jFrame.setVisible(true);
             }
         });
         addLogo();
         addMenu();
+        addInputFileOptionPanel();
+        addComboBoxForInputDataPanel();
+        inputDataFormatPanel = new JPanel();
+        inputDataPanel.add(inputDataFormatPanel);
+        addDataButton();
         jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        jFrame.setSize(1000, 750);
+        jFrame.setSize(1000, 250);
         jFrame.setLocationRelativeTo(null);
         jFrame.setResizable(false);
         jFrame.setVisible(true);
     }
 
+    private void addInputFileOptionPanel(){
+        inputDataPanel = new JPanel();
+        inputDataPanel.setLayout(new GridLayout(4, 1));
+        addTitleForInputDataOptionPanel();
+        jFrame.add(inputDataPanel);
+    }
+
+    private void addTitleForInputDataOptionPanel() {
+        JPanel panel = new JPanel();
+        JLabel contentTitleLabel = new JLabel("Bemeneti adatok típusának megadása");
+        contentTitleLabel.setFont(boldFont);
+        contentTitleLabel.setBorder(new EmptyBorder(10,0,0,0));
+        panel.add(contentTitleLabel);
+        inputDataPanel.add(panel);
+    }
+
+    private void addComboBoxForInputDataPanel(){
+        JPanel panel = new JPanel();
+        inputDataTypeComboBox = new JComboBox<>(INPUT_DATA_TYPE);
+        inputDataTypeComboBox.addItemListener(e ->{addInputDataFormatPanel();});
+        inputDataTypeComboBox.setPreferredSize(new Dimension(400, 35));
+        inputDataTypeComboBox.setBackground(new Color(249, 249, 249));
+        inputDataTypeComboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        inputDataTypeComboBox.setFont(new Font("Roboto", Font.PLAIN, 20));
+        inputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
+        DefaultListCellRenderer renderer = new DefaultListCellRenderer();
+        renderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
+        inputDataTypeComboBox.setRenderer(renderer);
+        panel.add(inputDataTypeComboBox);
+        inputDataPanel.add(panel);
+    }
+
+    private void addInputDataFormatPanel(){
+        String selectedItem = Objects.requireNonNull(inputDataTypeComboBox.getSelectedItem()).toString();
+        inputDataPanel.remove(inputDataFormatPanel);
+        if( selectedItem.equals(INPUT_DATA_TYPE[1])){
+            inputDataFormatPanel = getInputPanelForEOVData();
+        }
+        else{
+            inputDataFormatPanel = new JPanel();
+        }
+        inputDataPanel.add(inputDataFormatPanel);
+    }
+
+    private JPanel getInputPanelForEOVData(){
+        JPanel panel = new JPanel();
+        JLabel yLabel = new JLabel("Y:");
+        yLabel.setFont(boldFont);
+        panel.add(yLabel);
+        JTextField yField = new JTextField();
+        yField.setFont(boldFont);
+        yField.setBackground(new Color(249, 249, 249));
+        yField.setHorizontalAlignment(SwingConstants.CENTER);
+        yField.setPreferredSize(new Dimension(150, 35));
+        yField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(yField);
+        JLabel xLabel = new JLabel("X:");
+        xLabel.setFont(boldFont);
+        panel.add(xLabel);
+        JTextField xField = new JTextField();
+        xField.setFont(boldFont);
+        xField.setBackground(new Color(249, 249, 249));
+        xField.setHorizontalAlignment(SwingConstants.CENTER);
+        xField.setPreferredSize(new Dimension(150, 35));
+        xField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(xField);
+        JLabel hLabel = new JLabel("H:");
+        hLabel.setFont(boldFont);
+        panel.add(hLabel);
+        JTextField hField = new JTextField();
+        hField.setFont(boldFont);
+        hField.setBackground(new Color(249, 249, 249));
+        hField.setHorizontalAlignment(SwingConstants.CENTER);
+        hField.setPreferredSize(new Dimension(150, 35));
+        hField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(hField);
+        return panel;
+    }
+
+    private void getInputPanelForWGSDecimalFormat(){
+        JPanel panel = new JPanel();
+    }
+    private void getInputPanelForWGSAngleSecMinFormat(){
+        JPanel panel = new JPanel();
+    }
+
+    private void getInputPanelForWGSXYZFormat(){
+        JPanel panel = new JPanel();
+    }
+
+    private void addDataButton(){
+        JPanel panel = new JPanel();
+        JButton addBtn = new JButton("Hozzáad");
+        addBtn.setFont(boldFont);
+        addBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(addBtn);
+        inputDataPanel.add(panel);
+    }
+
     private void addLogo(){
         jFrame.setIconImage(Toolkit.getDefaultToolkit()
-                .getImage(getClass().getResource("")));
+                .getImage(getClass().getResource("/logo/MVM.jpg")));
     }
     private void addMenu(){
         JMenuBar jMenuBar = new JMenuBar();
