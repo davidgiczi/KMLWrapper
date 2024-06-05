@@ -15,7 +15,6 @@ public class ManuallyInputDataWindow {
     public JFrame jFrame;
     private final KMLWrapperController controller;
     private JPanel inputDataPanel;
-    private JPanel inputDataFormatPanel;
     private JComboBox<String> inputDataTypeComboBox;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
@@ -29,10 +28,10 @@ public class ManuallyInputDataWindow {
 
     public ManuallyInputDataWindow(KMLWrapperController controller) {
         this.controller = controller;
-        createWindow();
+        createWindow(INPUT_DATA_TYPE[0]);
     }
 
-    private void createWindow(){
+    private void createWindow(String selectedItem){
         jFrame = new JFrame("Kézi adatbevitel");
         jFrame.addWindowListener(new WindowAdapter() {
             @Override
@@ -42,13 +41,7 @@ public class ManuallyInputDataWindow {
                controller.inputDataFileWindow.jFrame.setVisible(true);
             }
         });
-        addLogo();
-        addMenu();
-        addInputFileOptionPanel();
-        addComboBoxForInputDataPanel();
-        inputDataFormatPanel = new JPanel();
-        inputDataPanel.add(inputDataFormatPanel);
-        addDataButton();
+        addInputFileOptionPanel(selectedItem);
         jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         jFrame.setSize(1000, 250);
         jFrame.setLocationRelativeTo(null);
@@ -56,10 +49,29 @@ public class ManuallyInputDataWindow {
         jFrame.setVisible(true);
     }
 
-    private void addInputFileOptionPanel(){
+    private void addInputFileOptionPanel(String selectedItem){
         inputDataPanel = new JPanel();
         inputDataPanel.setLayout(new GridLayout(4, 1));
+        addLogo();
+        addMenu();
         addTitleForInputDataOptionPanel();
+        addComboBoxForInputDataPanel(selectedItem);
+        if( selectedItem.equals(INPUT_DATA_TYPE[0])) {
+            inputDataPanel.add(new JPanel());
+        }
+        else if (selectedItem.equals(INPUT_DATA_TYPE[1])){
+            getInputDataPanelForEOVData();
+        }
+        else if (selectedItem.equals(INPUT_DATA_TYPE[2])){
+            getInputDataPanelForWGSDecimalFormat();
+        }
+        else if (selectedItem.equals(INPUT_DATA_TYPE[3])){
+            getInputDataPanelForWGSAngleSecMinFormat();
+        }
+        else if (selectedItem.equals(INPUT_DATA_TYPE[4])){
+            getInputDataPanelForWGSXYZFormat();
+        }
+        addDataButton();
         jFrame.add(inputDataPanel);
     }
 
@@ -72,10 +84,13 @@ public class ManuallyInputDataWindow {
         inputDataPanel.add(panel);
     }
 
-    private void addComboBoxForInputDataPanel(){
+    private void addComboBoxForInputDataPanel(String selectedItem){
         JPanel panel = new JPanel();
         inputDataTypeComboBox = new JComboBox<>(INPUT_DATA_TYPE);
-        inputDataTypeComboBox.addItemListener(e ->{addInputDataFormatPanel();});
+        if( selectedItem != null ){
+            inputDataTypeComboBox.setSelectedItem(selectedItem);
+        }
+        inputDataTypeComboBox.addItemListener(e ->{reCreateWindow();});
         inputDataTypeComboBox.setPreferredSize(new Dimension(400, 35));
         inputDataTypeComboBox.setBackground(new Color(249, 249, 249));
         inputDataTypeComboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -88,19 +103,13 @@ public class ManuallyInputDataWindow {
         inputDataPanel.add(panel);
     }
 
-    private void addInputDataFormatPanel(){
+    private void reCreateWindow(){
+        jFrame.setVisible(false);
         String selectedItem = Objects.requireNonNull(inputDataTypeComboBox.getSelectedItem()).toString();
-        inputDataPanel.remove(inputDataFormatPanel);
-        if( selectedItem.equals(INPUT_DATA_TYPE[1])){
-            inputDataFormatPanel = getInputPanelForEOVData();
-        }
-        else{
-            inputDataFormatPanel = new JPanel();
-        }
-        inputDataPanel.add(inputDataFormatPanel);
+        createWindow(selectedItem);
     }
 
-    private JPanel getInputPanelForEOVData(){
+    private void getInputDataPanelForEOVData(){
         JPanel panel = new JPanel();
         JLabel yLabel = new JLabel("Y:");
         yLabel.setFont(boldFont);
@@ -132,18 +141,21 @@ public class ManuallyInputDataWindow {
         hField.setPreferredSize(new Dimension(150, 35));
         hField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(hField);
-        return panel;
+        inputDataPanel.add(panel);
     }
 
-    private void getInputPanelForWGSDecimalFormat(){
+    private void getInputDataPanelForWGSDecimalFormat(){
         JPanel panel = new JPanel();
+        inputDataPanel.add(panel);
     }
-    private void getInputPanelForWGSAngleSecMinFormat(){
+    private void getInputDataPanelForWGSAngleSecMinFormat(){
         JPanel panel = new JPanel();
+        inputDataPanel.add(panel);
     }
 
-    private void getInputPanelForWGSXYZFormat(){
+    private void getInputDataPanelForWGSXYZFormat(){
         JPanel panel = new JPanel();
+        inputDataPanel.add(panel);
     }
 
     private void addDataButton(){
