@@ -37,18 +37,18 @@ public class InputDataFileWindow {
             "EOV (X;Y)"};
     private final String[] WGS_DATA_TYPE = {
             "Formátum választása",
-            "WGS84 (Fi,Lambda,h)",
-            "WGS84 (Fi,Lambda)",
-            "WGS84 (Fi Lambda h)",
-            "WGS84 (Fi Lambda)",
-            "WGS84 (Fi;Lambda;h)",
-            "WGS84 (Fi;Lambda)",
-            "WGS84 (Lambda,Fi,h)",
-            "WGS84 (Lambda,Fi)",
-            "WGS84 (Lambda Fi h)",
-            "WGS84 (Lambda Fi)",
-            "WGS84 (Lambda;Fi;h)",
-            "WGS84 (Lambda;Fi)",
+            "WGS84 (Szélesség,Hosszúság,Magasság)",
+            "WGS84 (Szélesség,Hosszúság)",
+            "WGS84 Szélesség Hosszúság Magasság)",
+            "WGS84 (Szélesség Hosszúság)",
+            "WGS84 (Szélesség;Hosszúság;Magasság)",
+            "WGS84 (Szélesség;Hosszúság)",
+            "WGS84 (Hosszúság,Szélesség,Magasság)",
+            "WGS84 (Hosszúság,Szélesség)",
+            "WGS84 (Hosszúság Szélesség Magasság)",
+            "WGS84 (Hosszúság Szélesség)",
+            "WGS84 (Hosszúság;Szélesség;Magasság)",
+            "WGS84 (Hosszúság;Szélesség)",
             "WGS84 (X,Y,Z)",
             "WGS84 (X Y Z)",
             "WGS84 (X;Y;Z)"};
@@ -64,11 +64,13 @@ public class InputDataFileWindow {
             "Beolvasott pontok",
             "Közös pontok: EOV (Y, X, H)",
             "Közös pontok: IUGG67 (X, Y, Z)",
-            "Közös pontok: IUGG67 (Fi, Lambda, h)",
+            "Közös pontok: IUGG67 (Szélesség, Hosszúság, Magasság)",
             "Közös pontok: WGS84 (X, Y, Z)",
-            "Közös pontok: WGS84 (Fi, Lambda, h)",
-            "Transzformáció paraméterei",
-            "Maradék ellentmondások"};
+            "Közös pontok: WGS84 (Szélesség, Hosszúság, Magasság)",
+            "Transzformáció paraméterei (EOV-WGS)",
+            "Transzformáció paraméterei (WGS-EOV)",
+            "Maradék ellentmondások EOV rendszerben",
+            "Maradék ellentmondások WGS rendszerben"};
 
     public InputDataFileWindow(KMLWrapperController controller) {
         this.controller = controller;
@@ -293,15 +295,15 @@ public class InputDataFileWindow {
         pointPreIdField.setPreferredSize(new Dimension(110, 35));
         pointPreIdField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JTextField pointIdField = new JTextField();
-        pointIdField.setText("Pontszám");
+        pointIdField.setText("Kezd?pont száma (1)");
         pointIdField.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if( "Pontszám".equals(pointIdField.getText()) ){
+                if( "Kezd?pont száma (1)".equals(pointIdField.getText()) ){
                     pointIdField.setText(null);
                 }
                 else if( pointIdField.getText().length() == 0 ){
-                    pointIdField.setText("Pontszám");
+                    pointIdField.setText("Kezd?pont száma (1)");
                 }
             }
 
@@ -322,13 +324,13 @@ public class InputDataFileWindow {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                if( "Pontszám".equals(pointIdField.getText()) ){
+                if( "Kezd?pont száma (1)".equals(pointIdField.getText()) ){
                     return;
                 }
                 try {
                     Integer.parseInt(pointIdField.getText());
                 }catch (NumberFormatException n){
-                    pointIdField.setText("Pontszám");
+                    pointIdField.setText("Kezd?pont száma (1)");
                 }
 
             }
@@ -412,7 +414,7 @@ public class InputDataFileWindow {
             String[] cadList = {"AutoCad scr fájl (EOV Y, X, h)"};
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
             outputDataTypeComboBox.setModel(model);
-            saveFileNameField.setText(".scr");
+            saveFileNameField.setText("pontok.scr");
         });
         scrRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         scrRadioBtn.setFont(plainFont);
@@ -430,7 +432,7 @@ public class InputDataFileWindow {
     private void addComboBoxForOutputFileOptionPanel(){
         JPanel panel = new JPanel();
         outputDataTypeComboBox = new JComboBox<>(KML_DATA_TYPE);
-        outputDataTypeComboBox.setPreferredSize(new Dimension(400, 35));
+        outputDataTypeComboBox.setPreferredSize(new Dimension(600, 35));
         outputDataTypeComboBox.setBackground(new Color(249, 249, 249));
         outputDataTypeComboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
         outputDataTypeComboBox.setFont(new Font("Roboto", Font.PLAIN, 20));
@@ -518,10 +520,16 @@ public class InputDataFileWindow {
            saveFileNameField.setText("_kozos-pontok_WGS84_foldrajzi.txt");
        }
        else if( TXT_DATA_TYPE[7].equals(selectedOption)){
-           saveFileNameField.setText("_transzform_parameter.txt");
+           saveFileNameField.setText("_EOV-WGS_tr_params.txt");
        }
        else if( TXT_DATA_TYPE[8].equals(selectedOption)){
-           saveFileNameField.setText("_transzform_kozephiba.txt");
+           saveFileNameField.setText("_WGS-EOV_tr_params.txt");
+       }
+       else if( TXT_DATA_TYPE[9].equals(selectedOption)){
+           saveFileNameField.setText("_EOV-kozephibak.txt");
+       }
+       else if( TXT_DATA_TYPE[10].equals(selectedOption)){
+           saveFileNameField.setText("_WGS-kozephibak.txt");
        }
     }
 

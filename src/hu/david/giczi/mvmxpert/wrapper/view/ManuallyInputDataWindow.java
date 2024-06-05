@@ -146,6 +146,36 @@ public class ManuallyInputDataWindow {
 
     private void getInputDataPanelForWGSDecimalFormat(){
         JPanel panel = new JPanel();
+        JLabel fiLabel = new JLabel("Szélesség:");
+        fiLabel.setFont(boldFont);
+        panel.add(fiLabel);
+        JTextField fiField = new JTextField();
+        fiField.setFont(boldFont);
+        fiField.setBackground(new Color(249, 249, 249));
+        fiField.setHorizontalAlignment(SwingConstants.CENTER);
+        fiField.setPreferredSize(new Dimension(150, 35));
+        fiField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(fiField);
+        JLabel lambdaLabel = new JLabel("Hosszúság:");
+        lambdaLabel.setFont(boldFont);
+        panel.add(lambdaLabel);
+        JTextField lambdaField = new JTextField();
+        lambdaField.setFont(boldFont);
+        lambdaField.setBackground(new Color(249, 249, 249));
+        lambdaField.setHorizontalAlignment(SwingConstants.CENTER);
+        lambdaField.setPreferredSize(new Dimension(150, 35));
+        lambdaField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(lambdaField);
+        JLabel hLabel = new JLabel("h:");
+        hLabel.setFont(boldFont);
+        panel.add(hLabel);
+        JTextField hField = new JTextField();
+        hField.setFont(boldFont);
+        hField.setBackground(new Color(249, 249, 249));
+        hField.setHorizontalAlignment(SwingConstants.CENTER);
+        hField.setPreferredSize(new Dimension(150, 35));
+        hField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(hField);
         inputDataPanel.add(panel);
     }
     private void getInputDataPanelForWGSAngleSecMinFormat(){
@@ -155,6 +185,36 @@ public class ManuallyInputDataWindow {
 
     private void getInputDataPanelForWGSXYZFormat(){
         JPanel panel = new JPanel();
+        JLabel xLabel = new JLabel("X:");
+        xLabel.setFont(boldFont);
+        panel.add(xLabel);
+        JTextField xField = new JTextField();
+        xField.setFont(boldFont);
+        xField.setBackground(new Color(249, 249, 249));
+        xField.setHorizontalAlignment(SwingConstants.CENTER);
+        xField.setPreferredSize(new Dimension(150, 35));
+        xField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(xField);
+        JLabel yLabel = new JLabel("Y:");
+        yLabel.setFont(boldFont);
+        panel.add(yLabel);
+        JTextField yField = new JTextField();
+        yField.setFont(boldFont);
+        yField.setBackground(new Color(249, 249, 249));
+        yField.setHorizontalAlignment(SwingConstants.CENTER);
+        yField.setPreferredSize(new Dimension(150, 35));
+        yField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(yField);
+        JLabel zLabel = new JLabel("Z:");
+        zLabel.setFont(boldFont);
+        panel.add(zLabel);
+        JTextField zField = new JTextField();
+        zField.setFont(boldFont);
+        zField.setBackground(new Color(249, 249, 249));
+        zField.setHorizontalAlignment(SwingConstants.CENTER);
+        zField.setPreferredSize(new Dimension(150, 35));
+        zField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(zField);
         inputDataPanel.add(panel);
     }
 
