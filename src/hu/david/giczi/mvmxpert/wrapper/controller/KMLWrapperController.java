@@ -14,6 +14,7 @@ public class KMLWrapperController {
     public ManuallyInputDataWindow manuallyInputDataWindow;
     public static List<Point> REFERENCE_POINTS;
     public static List<Point> INPUT_POINTS;
+    public static String FILE_PATH;
 
     public KMLWrapperController() {
         this.inputDataFileWindow = new InputDataFileWindow(this);
@@ -24,7 +25,7 @@ public class KMLWrapperController {
     public static String convertAngleMinSecFormat(double data){
         int angle = (int) data;
         int min = (int) ((data - angle) * 60);
-        double sec = ((int) (10000 * ((data - angle) * 3600 - min * 60))) / 10000.0;
+        double sec = ((int) (100000 * ((data - angle) * 3600 - min * 60))) / 100000.0;
         return angle + "°" + (9 < min ? min : "0" + min) + "'" + (9 < sec ? sec : "0" + sec) + "\"";
     }
 
