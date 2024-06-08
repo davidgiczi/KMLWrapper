@@ -5,8 +5,6 @@ import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Objects;
@@ -90,7 +88,7 @@ public class ManuallyInputDataWindow {
         if( selectedItem != null ){
             inputDataTypeComboBox.setSelectedItem(selectedItem);
         }
-        inputDataTypeComboBox.addItemListener(e ->{reCreateWindow();});
+        inputDataTypeComboBox.addItemListener(e -> reCreateWindow());
         inputDataTypeComboBox.setPreferredSize(new Dimension(400, 35));
         inputDataTypeComboBox.setBackground(new Color(249, 249, 249));
         inputDataTypeComboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -180,6 +178,78 @@ public class ManuallyInputDataWindow {
     }
     private void getInputDataPanelForWGSAngleSecMinFormat(){
         JPanel panel = new JPanel();
+        JLabel fiLabel = new JLabel("Szélesség:");
+        fiLabel.setFont(boldFont);
+        panel.add(fiLabel);
+        JTextField fiAngleField = new JTextField();
+        fiAngleField.setText("fok");
+        fiAngleField.setFont(plainFont);
+        fiAngleField.setBackground(new Color(249, 249, 249));
+        fiAngleField.setHorizontalAlignment(SwingConstants.CENTER);
+        fiAngleField.setPreferredSize(new Dimension(100, 35));
+        fiAngleField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        fiAngleField.setForeground(Color.LIGHT_GRAY);
+        panel.add(fiAngleField);
+        JTextField fiMinField = new JTextField();
+        fiMinField.setText("perc");
+        fiMinField.setFont(plainFont);
+        fiMinField.setBackground(new Color(249, 249, 249));
+        fiMinField.setHorizontalAlignment(SwingConstants.CENTER);
+        fiMinField.setPreferredSize(new Dimension(100, 35));
+        fiMinField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        fiMinField.setForeground(Color.LIGHT_GRAY);
+        panel.add(fiMinField);
+        JTextField fiSecField = new JTextField();
+        fiSecField.setText("másodperc");
+        fiSecField.setFont(plainFont);
+        fiSecField.setBackground(new Color(249, 249, 249));
+        fiSecField.setHorizontalAlignment(SwingConstants.CENTER);
+        fiSecField.setPreferredSize(new Dimension(100, 35));
+        fiSecField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        fiSecField.setForeground(Color.LIGHT_GRAY);
+        panel.add(fiSecField);
+
+        JLabel lambdaLabel = new JLabel("Hosszúság:");
+        lambdaLabel.setFont(boldFont);
+        panel.add(lambdaLabel);
+        JTextField lambdaAngleField = new JTextField();
+        lambdaAngleField.setText("fok");
+        lambdaAngleField.setFont(plainFont);
+        lambdaAngleField.setBackground(new Color(249, 249, 249));
+        lambdaAngleField.setHorizontalAlignment(SwingConstants.CENTER);
+        lambdaAngleField.setPreferredSize(new Dimension(100, 35));
+        lambdaAngleField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        lambdaAngleField.setForeground(Color.LIGHT_GRAY);
+        panel.add(lambdaAngleField);
+        JTextField lambdaMinField = new JTextField();
+        lambdaMinField.setText("perc");
+        lambdaMinField.setFont(plainFont);
+        lambdaMinField.setBackground(new Color(249, 249, 249));
+        lambdaMinField.setHorizontalAlignment(SwingConstants.CENTER);
+        lambdaMinField.setPreferredSize(new Dimension(100, 35));
+        lambdaMinField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        lambdaMinField.setForeground(Color.LIGHT_GRAY);
+        panel.add(lambdaMinField);
+        JTextField lambdaSecField = new JTextField();
+        lambdaSecField.setText("másodperc");
+        lambdaSecField.setFont(plainFont);
+        lambdaSecField.setBackground(new Color(249, 249, 249));
+        lambdaSecField.setHorizontalAlignment(SwingConstants.CENTER);
+        lambdaSecField.setPreferredSize(new Dimension(100, 35));
+        lambdaSecField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        lambdaSecField.setForeground(Color.LIGHT_GRAY);
+        panel.add(lambdaSecField);
+
+        JLabel hLabel = new JLabel("h:");
+        hLabel.setFont(boldFont);
+        panel.add(hLabel);
+        JTextField hField = new JTextField();
+        hField.setFont(boldFont);
+        hField.setBackground(new Color(249, 249, 249));
+        hField.setHorizontalAlignment(SwingConstants.CENTER);
+        hField.setPreferredSize(new Dimension(100, 35));
+        hField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(hField);
         inputDataPanel.add(panel);
     }
 
@@ -237,23 +307,17 @@ public class ManuallyInputDataWindow {
         optionMenu.setFont(boldFont);
         optionMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem inputDataFileMenuItem = new JMenuItem("Adatok fájlból beolvasása");
-        inputDataFileMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                jFrame.setVisible(false);
-                controller.inputDataFileWindow.jFrame.setVisible(true);
-            }
+        inputDataFileMenuItem.addActionListener(e -> {
+            jFrame.setVisible(false);
+            controller.inputDataFileWindow.jFrame.setVisible(true);
         });
         inputDataFileMenuItem.setFont(plainFont);
         inputDataFileMenuItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem exitProgramMenuItem = new JMenuItem("Kilépés a programból");
-        exitProgramMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if( MessagePane.getYesNoOptionMessage("A program bezárása",
-                        "Kilép a programból?", jFrame) == 0 ){
-                    System.exit(0);
-                }
+        exitProgramMenuItem.addActionListener(e -> {
+            if( MessagePane.getYesNoOptionMessage("A program bezárása",
+                    "Kilép a programból?", jFrame) == 0 ){
+                System.exit(0);
             }
         });
         exitProgramMenuItem.setFont(plainFont);

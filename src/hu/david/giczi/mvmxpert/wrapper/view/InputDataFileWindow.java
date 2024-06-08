@@ -39,7 +39,7 @@ public class InputDataFileWindow {
             "Formátum választása",
             "WGS84 (Szélesség,Hosszúság,Magasság)",
             "WGS84 (Szélesség,Hosszúság)",
-            "WGS84 Szélesség Hosszúság Magasság)",
+            "WGS84 (Szélesség Hosszúság Magasság)",
             "WGS84 (Szélesség Hosszúság)",
             "WGS84 (Szélesség;Hosszúság;Magasság)",
             "WGS84 (Szélesség;Hosszúság)",
@@ -220,7 +220,7 @@ public class InputDataFileWindow {
     private void addComboBoxForInputFileOptionPanel(){
         JPanel panel = new JPanel();
         inputDataTypeComboBox = new JComboBox<>(EOV_DATA_TYPE);
-        inputDataTypeComboBox.setPreferredSize(new Dimension(400, 35));
+        inputDataTypeComboBox.setPreferredSize(new Dimension(600, 35));
         inputDataTypeComboBox.setBackground(new Color(249, 249, 249));
         inputDataTypeComboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
         inputDataTypeComboBox.setFont(new Font("Roboto", Font.PLAIN, 20));
@@ -295,15 +295,15 @@ public class InputDataFileWindow {
         pointPreIdField.setPreferredSize(new Dimension(110, 35));
         pointPreIdField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JTextField pointIdField = new JTextField();
-        pointIdField.setText("Kezd?pont száma (1)");
+        pointIdField.setText("Pontszám (1)");
         pointIdField.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if( "Kezd?pont száma (1)".equals(pointIdField.getText()) ){
+                if( "Pontszám (1)".equals(pointIdField.getText()) ){
                     pointIdField.setText(null);
                 }
                 else if( pointIdField.getText().length() == 0 ){
-                    pointIdField.setText("Kezd?pont száma (1)");
+                    pointIdField.setText("Pontszám (1)");
                 }
             }
 
@@ -324,13 +324,13 @@ public class InputDataFileWindow {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                if( "Kezd?pont száma (1)".equals(pointIdField.getText()) ){
+                if( "Pontszám (1)".equals(pointIdField.getText()) ){
                     return;
                 }
                 try {
                     Integer.parseInt(pointIdField.getText());
                 }catch (NumberFormatException n){
-                    pointIdField.setText("Kezd?pont száma (1)");
+                    pointIdField.setText("Pontszám (1)");
                 }
 
             }
@@ -411,7 +411,7 @@ public class InputDataFileWindow {
         txtRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         JRadioButton scrRadioBtn = new JRadioButton("scr fájl");
         scrRadioBtn.addActionListener( e ->{
-            String[] cadList = {"AutoCad scr fájl (EOV Y, X, h)"};
+            String[] cadList = {"AutoCad scr fájl (EOV Y, X, H)"};
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
             outputDataTypeComboBox.setModel(model);
             saveFileNameField.setText("pontok.scr");

@@ -4,10 +4,9 @@ import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
 import hu.david.giczi.mvmxpert.wrapper.view.InputDataFileWindow;
 import hu.david.giczi.mvmxpert.wrapper.view.ManuallyInputDataWindow;
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
 
 public class KMLWrapperController {
 
