@@ -17,11 +17,11 @@ public class InputDataFileWindow {
     private JPanel outputFileOptionPanel;
     private JPanel saveOutputFileOptionPanel;
     private JTextField saveFileNameField;
-    private JComboBox<String> inputDataTypeComboBox;
+    public JComboBox<String> inputDataTypeComboBox;
     private JComboBox<String> outputDataTypeComboBox;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
-    private final String[] EOV_DATA_TYPE = {
+    public final String[] EOV_DATA_TYPE = {
             "Formátum választása",
             "EOV (Y,X,H)",
             "EOV (Y,X)",
@@ -75,6 +75,10 @@ public class InputDataFileWindow {
     public InputDataFileWindow(KMLWrapperController controller) {
         this.controller = controller;
         createWindow();
+    }
+
+    public void setInputDataFileWindowTitle(String title){
+        jFrame.setTitle(title);
     }
 
     private void createWindow(){
@@ -235,6 +239,7 @@ public class InputDataFileWindow {
     private void addBrowseButtonForInputFileOptionPanel(){
         JPanel panel = new JPanel();
         JButton browseBtn = new JButton("Fájl megnyitása");
+        browseBtn.addActionListener(e -> controller.openInputDataFile());
         browseBtn.setFont(boldFont);
         browseBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(browseBtn);

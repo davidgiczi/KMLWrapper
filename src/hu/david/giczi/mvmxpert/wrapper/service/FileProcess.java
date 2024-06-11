@@ -3,18 +3,62 @@ package hu.david.giczi.mvmxpert.wrapper.service;
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileSystemView;
+import java.awt.*;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class FileProcess {
 
+    public static String FILE_NAME;
+    public static String FOLDER_PATH;
+    private List<String> inputDataList;
+
+    public void openInputDataFile() {
+        JFileChooser jfc = new JFileChooser(){
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected JDialog createDialog( Component parent ) throws HeadlessException {
+                JDialog dialog = super.createDialog( parent );
+                dialog.setLocationRelativeTo(null);
+                dialog.setIconImage(
+                        new ImageIcon(Objects.requireNonNull(
+                                this.getClass().getResource("/logo/MVM.jpg"))).getImage() );
+                return dialog;
+            }
+        };
+        jfc.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().toLowerCase().endsWith(".txt");
+            }
+
+            @Override
+            public String getDescription() {
+                return "*.txt";
+            }
+        });
+        jfc.setCurrentDirectory(FOLDER_PATH == null ?
+                FileSystemView.getFileSystemView().getHomeDirectory() : new File(FOLDER_PATH));
+        jfc.setDialogTitle("Adat fájl megnyitása");
+        int returnValue = jfc.showOpenDialog(null);
+        if(returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = jfc.getSelectedFile();
+            FILE_NAME = selectedFile.getName();
+            FOLDER_PATH = selectedFile.getParent();
+            openInputFile();
+        }
+    }
+
     public static void getReferencePoints() {
-        List<String> pointsData = getPointsData("points/common_points.txt");
+        List<String> pointsData = getPointsData();
         KMLWrapperController.REFERENCE_POINTS = new ArrayList<>();
         for (String rowData : pointsData) {
             String[] pointData = rowData.split(",");
@@ -31,9 +75,9 @@ public class FileProcess {
         }
     }
 
-    private static List<String> getPointsData(String filePath) {
+    private static List<String> getPointsData() {
         List<String> pointsData = new ArrayList<>();
-        try (InputStream is = FileProcess.class.getClassLoader().getResourceAsStream(filePath);
+        try (InputStream is = FileProcess.class.getClassLoader().getResourceAsStream("points/common_points.txt");
              BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)))) {
             String row;
             while ((row = br.readLine()) != null){
@@ -44,4 +88,24 @@ public class FileProcess {
         }
         return pointsData;
     }
+
+    public void openInputFile(){
+        this.inputDataList = new ArrayList<>();
+        File file = new File(FOLDER_PATH + "/" + FILE_NAME);
+        try (FileInputStream fis = new FileInputStream(file);
+             InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+             BufferedReader reader = new BufferedReader(isr)
+        ) {
+
+            String line;
+            while ( (line = reader.readLine()) != null) {
+                inputDataList.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
+
+
+
