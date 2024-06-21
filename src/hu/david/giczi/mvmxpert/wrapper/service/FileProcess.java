@@ -55,6 +55,9 @@ public class FileProcess {
             FOLDER_PATH = selectedFile.getParent();
             openInputFile();
         }
+        else {
+            FILE_NAME = null;
+        }
     }
 
     public static void getReferencePoints() {

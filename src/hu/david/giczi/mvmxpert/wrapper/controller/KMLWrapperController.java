@@ -2,6 +2,7 @@ package hu.david.giczi.mvmxpert.wrapper.controller;
 
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
+import hu.david.giczi.mvmxpert.wrapper.service.Validation;
 import hu.david.giczi.mvmxpert.wrapper.view.InputDataFileWindow;
 import hu.david.giczi.mvmxpert.wrapper.view.ManuallyInputDataWindow;
 import hu.david.giczi.mvmxpert.wrapper.view.MessagePane;
@@ -14,6 +15,7 @@ public class KMLWrapperController {
 
     public InputDataFileWindow inputDataFileWindow;
     public ManuallyInputDataWindow manuallyInputDataWindow;
+    public Validation validation;
     public FileProcess fileProcess;
     public static List<Point> REFERENCE_POINTS;
     public static List<Point> INPUT_POINTS;
@@ -33,6 +35,9 @@ public class KMLWrapperController {
             return;
         }
         fileProcess.openInputDataFile();
+        if( FileProcess.FILE_NAME == null ){
+            return;
+        }
         validationInputData();
         inputDataFileWindow.setInputDataFileWindowTitle(FileProcess.FILE_NAME +
                 " - " + "A beolvasott pontok száma: " + INPUT_POINTS.size() + " db");
@@ -48,6 +53,5 @@ public class KMLWrapperController {
         double sec = ((int) (100000 * ((data - angle) * 3600 - min * 60))) / 100000.0;
         return angle + "°" + (9 < min ? min : "0" + min) + "'" + (9 < sec ? sec : "0" + sec) + "\"";
     }
-
 
 }

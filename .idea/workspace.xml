@@ -8,7 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/controller/KMLWrapperController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/controller/KMLWrapperController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/service/FileProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/service/FileProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/view/InputDataFileWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/view/InputDataFileWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/service/Validation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/service/Validation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +19,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
