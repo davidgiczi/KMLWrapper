@@ -24,31 +24,19 @@ public class InputDataFileWindow {
     public final String[] EOV_DATA_TYPE = {
             "Formátum választása",
             "EOV (Y,X,H)",
-            "EOV (Y,X)",
             "EOV (Y X H)",
-            "EOV (Y X)",
             "EOV (Y;X;H)",
-            "EOV (Y;X)",
             "EOV (X,Y,H)",
-            "EOV (X,Y)",
             "EOV (X Y H)",
-            "EOV (X Y)",
-            "EOV (X;Y;H)",
-            "EOV (X;Y)"};
+            "EOV (X;Y;H)"};
     private final String[] WGS_DATA_TYPE = {
             "Formátum választása",
             "WGS84 (Szélesség,Hosszúság,Magasság)",
-            "WGS84 (Szélesség,Hosszúság)",
             "WGS84 (Szélesség Hosszúság Magasság)",
-            "WGS84 (Szélesség Hosszúság)",
             "WGS84 (Szélesség;Hosszúság;Magasság)",
-            "WGS84 (Szélesség;Hosszúság)",
             "WGS84 (Hosszúság,Szélesség,Magasság)",
-            "WGS84 (Hosszúság,Szélesség)",
             "WGS84 (Hosszúság Szélesség Magasság)",
-            "WGS84 (Hosszúság Szélesség)",
             "WGS84 (Hosszúság;Szélesség;Magasság)",
-            "WGS84 (Hosszúság;Szélesség)",
             "WGS84 (X,Y,Z)",
             "WGS84 (X Y Z)",
             "WGS84 (X;Y;Z)"};
@@ -154,6 +142,7 @@ public class InputDataFileWindow {
             else {
                 controller.manuallyInputDataWindow.jFrame.setVisible(true);
             }
+            controller.manuallyInputDataWindow.jFrame.setTitle(controller.getWindowTitle());
         });
         manuallyInputMenuItem.setFont(plainFont);
         manuallyInputMenuItem.setCursor(new Cursor(Cursor.HAND_CURSOR));

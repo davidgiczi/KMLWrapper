@@ -17,7 +17,7 @@ public class FileProcess {
 
     public static String FILE_NAME;
     public static String FOLDER_PATH;
-    private List<String> inputDataList;
+    public static List<String> INPUT_DATA_LIST;
 
     public void openInputDataFile() {
         JFileChooser jfc = new JFileChooser(){
@@ -93,7 +93,7 @@ public class FileProcess {
     }
 
     public void openInputFile(){
-        this.inputDataList = new ArrayList<>();
+        INPUT_DATA_LIST = new ArrayList<>();
         File file = new File(FOLDER_PATH + "/" + FILE_NAME);
         try (FileInputStream fis = new FileInputStream(file);
              InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
@@ -102,7 +102,7 @@ public class FileProcess {
 
             String line;
             while ( (line = reader.readLine()) != null) {
-                inputDataList.add(line);
+                INPUT_DATA_LIST.add(line);
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -177,13 +177,9 @@ public class Point {
     @Override
     public String toString() {
         return "Point{" +
-                "pointId='" + pointId + '\'' +
-                ", x_WGS84=" + x_WGS84 +
+                "x_WGS84=" + x_WGS84 +
                 ", y_WGS84=" + y_WGS84 +
                 ", z_WGS84=" + z_WGS84 +
-                ", y_EOV=" + y_EOV +
-                ", x_EOV=" + x_EOV +
-                ", h_EOV=" + h_EOV +
                 '}';
     }
 }

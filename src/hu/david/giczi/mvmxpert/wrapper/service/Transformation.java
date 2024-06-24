@@ -8,14 +8,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class TransformationProcess {
+public class Transformation {
 
     public List<Point> EOV_TO_WGS_REFERENCE_POINTS = Arrays.asList(null, null, null, null, null, null, null, null);
     public List<Point> WGS_TO_EOV_REFERENCE_POINTS = Arrays.asList(null, null, null, null, null, null, null, null);
     public ToEOV toEOV;
     public ToWGS toWGS;
 
-    public TransformationProcess() {
+    public Transformation() {
         collectReferencePoints();
     }
 
