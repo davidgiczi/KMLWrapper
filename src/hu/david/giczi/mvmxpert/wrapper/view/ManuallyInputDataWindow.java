@@ -14,6 +14,22 @@ public class ManuallyInputDataWindow {
     private final KMLWrapperController controller;
     private JPanel inputDataPanel;
     private JComboBox<String> inputDataTypeComboBox;
+    public JTextField y_EOV_field;
+    public JTextField x_EOV_field;
+    public JTextField h_EOV_field;
+    public  JTextField fi_WGS84_field;
+    public JTextField lambda_WGS84_field;
+    public JTextField h_WGS84_field;
+    public JTextField fiAngleField;
+    public JTextField fiMinField;
+    public JTextField fiSecField;
+    public JTextField lambdaAngleField;
+    public JTextField lambdaMinField;
+    public JTextField lambdaSecField;
+    public JTextField h_angle_min_sec_WGS84_field;
+    public JTextField x_WGS84_field;
+    public JTextField y_WGS84_field;
+    public JTextField z_WGS84_field;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
 
@@ -30,7 +46,7 @@ public class ManuallyInputDataWindow {
     }
 
     private void createWindow(String selectedItem){
-        jFrame = new JFrame("Kézi adatbevitel");
+        jFrame = new JFrame(controller.getWindowTitle());
         jFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -112,33 +128,33 @@ public class ManuallyInputDataWindow {
         JLabel yLabel = new JLabel("Y:");
         yLabel.setFont(boldFont);
         panel.add(yLabel);
-        JTextField yField = new JTextField();
-        yField.setFont(boldFont);
-        yField.setBackground(new Color(249, 249, 249));
-        yField.setHorizontalAlignment(SwingConstants.CENTER);
-        yField.setPreferredSize(new Dimension(150, 35));
-        yField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panel.add(yField);
+        y_EOV_field = new JTextField();
+        y_EOV_field.setFont(boldFont);
+        y_EOV_field.setBackground(new Color(249, 249, 249));
+        y_EOV_field.setHorizontalAlignment(SwingConstants.CENTER);
+        y_EOV_field.setPreferredSize(new Dimension(150, 35));
+        y_EOV_field.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(y_EOV_field);
         JLabel xLabel = new JLabel("X:");
         xLabel.setFont(boldFont);
         panel.add(xLabel);
-        JTextField xField = new JTextField();
-        xField.setFont(boldFont);
-        xField.setBackground(new Color(249, 249, 249));
-        xField.setHorizontalAlignment(SwingConstants.CENTER);
-        xField.setPreferredSize(new Dimension(150, 35));
-        xField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panel.add(xField);
+        x_EOV_field = new JTextField();
+        x_EOV_field.setFont(boldFont);
+        x_EOV_field.setBackground(new Color(249, 249, 249));
+        x_EOV_field.setHorizontalAlignment(SwingConstants.CENTER);
+        x_EOV_field.setPreferredSize(new Dimension(150, 35));
+        x_EOV_field.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(x_EOV_field);
         JLabel hLabel = new JLabel("H:");
         hLabel.setFont(boldFont);
         panel.add(hLabel);
-        JTextField hField = new JTextField();
-        hField.setFont(boldFont);
-        hField.setBackground(new Color(249, 249, 249));
-        hField.setHorizontalAlignment(SwingConstants.CENTER);
-        hField.setPreferredSize(new Dimension(150, 35));
-        hField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panel.add(hField);
+        h_EOV_field = new JTextField();
+        h_EOV_field.setFont(boldFont);
+        h_EOV_field.setBackground(new Color(249, 249, 249));
+        h_EOV_field.setHorizontalAlignment(SwingConstants.CENTER);
+        h_EOV_field.setPreferredSize(new Dimension(150, 35));
+        h_EOV_field.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(h_EOV_field);
         inputDataPanel.add(panel);
     }
 
@@ -147,33 +163,33 @@ public class ManuallyInputDataWindow {
         JLabel fiLabel = new JLabel("Szélesség:");
         fiLabel.setFont(boldFont);
         panel.add(fiLabel);
-        JTextField fiField = new JTextField();
-        fiField.setFont(boldFont);
-        fiField.setBackground(new Color(249, 249, 249));
-        fiField.setHorizontalAlignment(SwingConstants.CENTER);
-        fiField.setPreferredSize(new Dimension(150, 35));
-        fiField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panel.add(fiField);
+        fi_WGS84_field = new JTextField();
+        fi_WGS84_field.setFont(boldFont);
+        fi_WGS84_field.setBackground(new Color(249, 249, 249));
+        fi_WGS84_field.setHorizontalAlignment(SwingConstants.CENTER);
+        fi_WGS84_field.setPreferredSize(new Dimension(150, 35));
+        fi_WGS84_field.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(fi_WGS84_field);
         JLabel lambdaLabel = new JLabel("Hosszúság:");
         lambdaLabel.setFont(boldFont);
         panel.add(lambdaLabel);
-        JTextField lambdaField = new JTextField();
-        lambdaField.setFont(boldFont);
-        lambdaField.setBackground(new Color(249, 249, 249));
-        lambdaField.setHorizontalAlignment(SwingConstants.CENTER);
-        lambdaField.setPreferredSize(new Dimension(150, 35));
-        lambdaField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panel.add(lambdaField);
+        lambda_WGS84_field = new JTextField();
+        lambda_WGS84_field.setFont(boldFont);
+        lambda_WGS84_field.setBackground(new Color(249, 249, 249));
+        lambda_WGS84_field.setHorizontalAlignment(SwingConstants.CENTER);
+        lambda_WGS84_field.setPreferredSize(new Dimension(150, 35));
+        lambda_WGS84_field.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(lambda_WGS84_field);
         JLabel hLabel = new JLabel("h:");
         hLabel.setFont(boldFont);
         panel.add(hLabel);
-        JTextField hField = new JTextField();
-        hField.setFont(boldFont);
-        hField.setBackground(new Color(249, 249, 249));
-        hField.setHorizontalAlignment(SwingConstants.CENTER);
-        hField.setPreferredSize(new Dimension(150, 35));
-        hField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panel.add(hField);
+        h_WGS84_field = new JTextField();
+        h_WGS84_field.setFont(boldFont);
+        h_WGS84_field.setBackground(new Color(249, 249, 249));
+        h_WGS84_field.setHorizontalAlignment(SwingConstants.CENTER);
+        h_WGS84_field.setPreferredSize(new Dimension(150, 35));
+        h_WGS84_field.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(h_WGS84_field);
         inputDataPanel.add(panel);
     }
     private void getInputDataPanelForWGSAngleSecMinFormat(){
@@ -181,7 +197,7 @@ public class ManuallyInputDataWindow {
         JLabel fiLabel = new JLabel("Szélesség:");
         fiLabel.setFont(boldFont);
         panel.add(fiLabel);
-        JTextField fiAngleField = new JTextField();
+        fiAngleField = new JTextField();
         fiAngleField.setText("fok");
         fiAngleField.setFont(plainFont);
         fiAngleField.setBackground(new Color(249, 249, 249));
@@ -190,7 +206,7 @@ public class ManuallyInputDataWindow {
         fiAngleField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         fiAngleField.setForeground(Color.LIGHT_GRAY);
         panel.add(fiAngleField);
-        JTextField fiMinField = new JTextField();
+        fiMinField = new JTextField();
         fiMinField.setText("perc");
         fiMinField.setFont(plainFont);
         fiMinField.setBackground(new Color(249, 249, 249));
@@ -199,7 +215,7 @@ public class ManuallyInputDataWindow {
         fiMinField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         fiMinField.setForeground(Color.LIGHT_GRAY);
         panel.add(fiMinField);
-        JTextField fiSecField = new JTextField();
+        fiSecField = new JTextField();
         fiSecField.setText("másodperc");
         fiSecField.setFont(plainFont);
         fiSecField.setBackground(new Color(249, 249, 249));
@@ -208,11 +224,10 @@ public class ManuallyInputDataWindow {
         fiSecField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         fiSecField.setForeground(Color.LIGHT_GRAY);
         panel.add(fiSecField);
-
         JLabel lambdaLabel = new JLabel("Hosszúság:");
         lambdaLabel.setFont(boldFont);
         panel.add(lambdaLabel);
-        JTextField lambdaAngleField = new JTextField();
+        lambdaAngleField = new JTextField();
         lambdaAngleField.setText("fok");
         lambdaAngleField.setFont(plainFont);
         lambdaAngleField.setBackground(new Color(249, 249, 249));
@@ -221,7 +236,7 @@ public class ManuallyInputDataWindow {
         lambdaAngleField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         lambdaAngleField.setForeground(Color.LIGHT_GRAY);
         panel.add(lambdaAngleField);
-        JTextField lambdaMinField = new JTextField();
+        lambdaMinField = new JTextField();
         lambdaMinField.setText("perc");
         lambdaMinField.setFont(plainFont);
         lambdaMinField.setBackground(new Color(249, 249, 249));
@@ -230,7 +245,7 @@ public class ManuallyInputDataWindow {
         lambdaMinField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         lambdaMinField.setForeground(Color.LIGHT_GRAY);
         panel.add(lambdaMinField);
-        JTextField lambdaSecField = new JTextField();
+        lambdaSecField = new JTextField();
         lambdaSecField.setText("másodperc");
         lambdaSecField.setFont(plainFont);
         lambdaSecField.setBackground(new Color(249, 249, 249));
@@ -239,17 +254,16 @@ public class ManuallyInputDataWindow {
         lambdaSecField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         lambdaSecField.setForeground(Color.LIGHT_GRAY);
         panel.add(lambdaSecField);
-
         JLabel hLabel = new JLabel("h:");
         hLabel.setFont(boldFont);
         panel.add(hLabel);
-        JTextField hField = new JTextField();
-        hField.setFont(boldFont);
-        hField.setBackground(new Color(249, 249, 249));
-        hField.setHorizontalAlignment(SwingConstants.CENTER);
-        hField.setPreferredSize(new Dimension(100, 35));
-        hField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panel.add(hField);
+        h_angle_min_sec_WGS84_field = new JTextField();
+        h_angle_min_sec_WGS84_field.setFont(boldFont);
+        h_angle_min_sec_WGS84_field.setBackground(new Color(249, 249, 249));
+        h_angle_min_sec_WGS84_field.setHorizontalAlignment(SwingConstants.CENTER);
+        h_angle_min_sec_WGS84_field.setPreferredSize(new Dimension(100, 35));
+        h_angle_min_sec_WGS84_field.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(h_angle_min_sec_WGS84_field);
         inputDataPanel.add(panel);
     }
 
@@ -258,39 +272,40 @@ public class ManuallyInputDataWindow {
         JLabel xLabel = new JLabel("X:");
         xLabel.setFont(boldFont);
         panel.add(xLabel);
-        JTextField xField = new JTextField();
-        xField.setFont(boldFont);
-        xField.setBackground(new Color(249, 249, 249));
-        xField.setHorizontalAlignment(SwingConstants.CENTER);
-        xField.setPreferredSize(new Dimension(150, 35));
-        xField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panel.add(xField);
+        x_WGS84_field = new JTextField();
+        x_WGS84_field.setFont(boldFont);
+        x_WGS84_field.setBackground(new Color(249, 249, 249));
+        x_WGS84_field.setHorizontalAlignment(SwingConstants.CENTER);
+        x_WGS84_field.setPreferredSize(new Dimension(150, 35));
+        x_WGS84_field.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(x_WGS84_field);
         JLabel yLabel = new JLabel("Y:");
         yLabel.setFont(boldFont);
         panel.add(yLabel);
-        JTextField yField = new JTextField();
-        yField.setFont(boldFont);
-        yField.setBackground(new Color(249, 249, 249));
-        yField.setHorizontalAlignment(SwingConstants.CENTER);
-        yField.setPreferredSize(new Dimension(150, 35));
-        yField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panel.add(yField);
+        y_WGS84_field = new JTextField();
+        y_WGS84_field.setFont(boldFont);
+        y_WGS84_field.setBackground(new Color(249, 249, 249));
+        y_WGS84_field.setHorizontalAlignment(SwingConstants.CENTER);
+        y_WGS84_field.setPreferredSize(new Dimension(150, 35));
+        y_WGS84_field.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(y_WGS84_field);
         JLabel zLabel = new JLabel("Z:");
         zLabel.setFont(boldFont);
         panel.add(zLabel);
-        JTextField zField = new JTextField();
-        zField.setFont(boldFont);
-        zField.setBackground(new Color(249, 249, 249));
-        zField.setHorizontalAlignment(SwingConstants.CENTER);
-        zField.setPreferredSize(new Dimension(150, 35));
-        zField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panel.add(zField);
+        z_WGS84_field = new JTextField();
+        z_WGS84_field.setFont(boldFont);
+        z_WGS84_field.setBackground(new Color(249, 249, 249));
+        z_WGS84_field.setHorizontalAlignment(SwingConstants.CENTER);
+        z_WGS84_field.setPreferredSize(new Dimension(150, 35));
+        z_WGS84_field.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(z_WGS84_field);
         inputDataPanel.add(panel);
     }
 
     private void addDataButton(){
         JPanel panel = new JPanel();
         JButton addBtn = new JButton("Hozzáad");
+        addBtn.addActionListener(a ->{});
         addBtn.setFont(boldFont);
         addBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(addBtn);

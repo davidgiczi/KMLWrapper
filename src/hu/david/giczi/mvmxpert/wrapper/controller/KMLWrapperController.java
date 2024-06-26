@@ -58,6 +58,42 @@ public class KMLWrapperController {
         }
     }
 
+    public void validationManuallyInputDataForEOV(){
+        try{
+            Validation.isValidManuallyInputDataForEOV(manuallyInputDataWindow.y_EOV_field.getText(),
+                    manuallyInputDataWindow.x_EOV_field.getText(), manuallyInputDataWindow.h_EOV_field.getText());
+        } catch (InvalidPreferencesFormatException e){
+            MessagePane.getInfoMessage("Hibás EOV koordináta", e.getMessage(), inputDataFileWindow.jFrame);
+        }
+    }
+    public void validationManuallyInputDataForWGS84DecimalFormat(){
+        try{
+            Validation.isValidManuallyInputDataForWGS84DecimalFormat(manuallyInputDataWindow.fi_WGS84_field.getText(),
+                    manuallyInputDataWindow.lambda_WGS84_field.getText(), manuallyInputDataWindow.h_WGS84_field.getText());
+        } catch (InvalidPreferencesFormatException e){
+            MessagePane.getInfoMessage("Hibás WGS84 földrajzi koordináta", e.getMessage(), inputDataFileWindow.jFrame);
+        }
+    }
+    public void validationManuallyInputDataForWGS84AngleMinSecFormat(){
+        try{
+            Validation.isValidManuallyInputDataForWGS84AngleMinSecFormat(manuallyInputDataWindow.fiAngleField.getText(),
+                    manuallyInputDataWindow.fiMinField.getText(), manuallyInputDataWindow.fiSecField.getText(),
+                    manuallyInputDataWindow.lambdaAngleField.getText(), manuallyInputDataWindow.lambdaMinField.getText(),
+                    manuallyInputDataWindow.lambdaSecField.getText(),
+                    manuallyInputDataWindow.h_angle_min_sec_WGS84_field.getText());
+        } catch (InvalidPreferencesFormatException e){
+            MessagePane.getInfoMessage("Hibás WGS84 földrajzi koordináta", e.getMessage(), inputDataFileWindow.jFrame);
+        }
+    }
+    public void validationManuallyInputDataForWGS84XYZFormat(){
+        try{
+            Validation.isValidManuallyInputDataForWGS84XYZFormat(manuallyInputDataWindow.x_WGS84_field.getText(),
+                    manuallyInputDataWindow.y_WGS84_field.getText(), manuallyInputDataWindow.z_WGS84_field.getText());
+        } catch (InvalidPreferencesFormatException e){
+            MessagePane.getInfoMessage("Hibás WGS84 térbeli koordináta", e.getMessage(), inputDataFileWindow.jFrame);
+        }
+    }
+
     public static String convertAngleMinSecFormat(double data){
         int angle = (int) data;
         int min = (int) ((data - angle) * 60);
