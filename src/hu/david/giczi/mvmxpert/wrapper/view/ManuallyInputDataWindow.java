@@ -14,12 +14,15 @@ public class ManuallyInputDataWindow {
     private final KMLWrapperController controller;
     private JPanel inputDataPanel;
     private JComboBox<String> inputDataTypeComboBox;
+    public JTextField pointIdFieldForEOV;
     public JTextField y_EOV_field;
     public JTextField x_EOV_field;
     public JTextField h_EOV_field;
+    public JTextField pointIdFieldForWGS84DecimalFormat;
     public  JTextField fi_WGS84_field;
     public JTextField lambda_WGS84_field;
     public JTextField h_WGS84_field;
+    public JTextField pointIdFieldForWGS84AngleMinSecFormat;
     public JTextField fiAngleField;
     public JTextField fiMinField;
     public JTextField fiSecField;
@@ -27,6 +30,7 @@ public class ManuallyInputDataWindow {
     public JTextField lambdaMinField;
     public JTextField lambdaSecField;
     public JTextField h_angle_min_sec_WGS84_field;
+    public JTextField pointIdFieldForWGS84XYZFormat;
     public JTextField x_WGS84_field;
     public JTextField y_WGS84_field;
     public JTextField z_WGS84_field;
@@ -56,6 +60,12 @@ public class ManuallyInputDataWindow {
             }
         });
         addInputFileOptionPanel(selectedItem);
+        if( INPUT_DATA_TYPE[0].equals(selectedItem) ) {
+            inputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
+        }
+        else {
+            inputDataTypeComboBox.setForeground(Color.BLACK);
+        }
         jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         jFrame.setSize(1000, 250);
         jFrame.setLocationRelativeTo(null);
@@ -125,6 +135,16 @@ public class ManuallyInputDataWindow {
 
     private void getInputDataPanelForEOVData(){
         JPanel panel = new JPanel();
+        JLabel pointIDLabel = new JLabel("Pontszám");
+        pointIDLabel.setFont(boldFont);
+        panel.add(pointIDLabel);
+        pointIdFieldForEOV = new JTextField();
+        pointIdFieldForEOV.setFont(boldFont);
+        pointIdFieldForEOV.setBackground(new Color(249, 249, 249));
+        pointIdFieldForEOV.setHorizontalAlignment(SwingConstants.CENTER);
+        pointIdFieldForEOV.setPreferredSize(new Dimension(150, 35));
+        pointIdFieldForEOV.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(pointIdFieldForEOV);
         JLabel yLabel = new JLabel("Y:");
         yLabel.setFont(boldFont);
         panel.add(yLabel);
@@ -160,6 +180,16 @@ public class ManuallyInputDataWindow {
 
     private void getInputDataPanelForWGSDecimalFormat(){
         JPanel panel = new JPanel();
+        JLabel pointIDLabel = new JLabel("Pontszám");
+        pointIDLabel.setFont(boldFont);
+        panel.add(pointIDLabel);
+        pointIdFieldForWGS84DecimalFormat = new JTextField();
+        pointIdFieldForWGS84DecimalFormat.setFont(boldFont);
+        pointIdFieldForWGS84DecimalFormat.setBackground(new Color(249, 249, 249));
+        pointIdFieldForWGS84DecimalFormat.setHorizontalAlignment(SwingConstants.CENTER);
+        pointIdFieldForWGS84DecimalFormat.setPreferredSize(new Dimension(150, 35));
+        pointIdFieldForWGS84DecimalFormat.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(pointIdFieldForWGS84DecimalFormat);
         JLabel fiLabel = new JLabel("Szélesség:");
         fiLabel.setFont(boldFont);
         panel.add(fiLabel);
@@ -194,6 +224,15 @@ public class ManuallyInputDataWindow {
     }
     private void getInputDataPanelForWGSAngleSecMinFormat(){
         JPanel panel = new JPanel();
+        pointIdFieldForWGS84AngleMinSecFormat = new JTextField();
+        pointIdFieldForWGS84AngleMinSecFormat.setText("Pontszám");
+        pointIdFieldForWGS84AngleMinSecFormat.setFont(plainFont);
+        pointIdFieldForWGS84AngleMinSecFormat.setBackground(new Color(249, 249, 249));
+        pointIdFieldForWGS84AngleMinSecFormat.setHorizontalAlignment(SwingConstants.CENTER);
+        pointIdFieldForWGS84AngleMinSecFormat.setPreferredSize(new Dimension(80, 35));
+        pointIdFieldForWGS84AngleMinSecFormat.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        pointIdFieldForWGS84AngleMinSecFormat.setForeground(Color.LIGHT_GRAY);
+        panel.add(pointIdFieldForWGS84AngleMinSecFormat);
         JLabel fiLabel = new JLabel("Szélesség:");
         fiLabel.setFont(boldFont);
         panel.add(fiLabel);
@@ -202,7 +241,7 @@ public class ManuallyInputDataWindow {
         fiAngleField.setFont(plainFont);
         fiAngleField.setBackground(new Color(249, 249, 249));
         fiAngleField.setHorizontalAlignment(SwingConstants.CENTER);
-        fiAngleField.setPreferredSize(new Dimension(100, 35));
+        fiAngleField.setPreferredSize(new Dimension(80, 35));
         fiAngleField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         fiAngleField.setForeground(Color.LIGHT_GRAY);
         panel.add(fiAngleField);
@@ -211,16 +250,16 @@ public class ManuallyInputDataWindow {
         fiMinField.setFont(plainFont);
         fiMinField.setBackground(new Color(249, 249, 249));
         fiMinField.setHorizontalAlignment(SwingConstants.CENTER);
-        fiMinField.setPreferredSize(new Dimension(100, 35));
+        fiMinField.setPreferredSize(new Dimension(80, 35));
         fiMinField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         fiMinField.setForeground(Color.LIGHT_GRAY);
         panel.add(fiMinField);
         fiSecField = new JTextField();
-        fiSecField.setText("másodperc");
+        fiSecField.setText("mperc");
         fiSecField.setFont(plainFont);
         fiSecField.setBackground(new Color(249, 249, 249));
         fiSecField.setHorizontalAlignment(SwingConstants.CENTER);
-        fiSecField.setPreferredSize(new Dimension(100, 35));
+        fiSecField.setPreferredSize(new Dimension(80, 35));
         fiSecField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         fiSecField.setForeground(Color.LIGHT_GRAY);
         panel.add(fiSecField);
@@ -232,7 +271,7 @@ public class ManuallyInputDataWindow {
         lambdaAngleField.setFont(plainFont);
         lambdaAngleField.setBackground(new Color(249, 249, 249));
         lambdaAngleField.setHorizontalAlignment(SwingConstants.CENTER);
-        lambdaAngleField.setPreferredSize(new Dimension(100, 35));
+        lambdaAngleField.setPreferredSize(new Dimension(80, 35));
         lambdaAngleField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         lambdaAngleField.setForeground(Color.LIGHT_GRAY);
         panel.add(lambdaAngleField);
@@ -241,16 +280,16 @@ public class ManuallyInputDataWindow {
         lambdaMinField.setFont(plainFont);
         lambdaMinField.setBackground(new Color(249, 249, 249));
         lambdaMinField.setHorizontalAlignment(SwingConstants.CENTER);
-        lambdaMinField.setPreferredSize(new Dimension(100, 35));
+        lambdaMinField.setPreferredSize(new Dimension(80, 35));
         lambdaMinField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         lambdaMinField.setForeground(Color.LIGHT_GRAY);
         panel.add(lambdaMinField);
         lambdaSecField = new JTextField();
-        lambdaSecField.setText("másodperc");
+        lambdaSecField.setText("mperc");
         lambdaSecField.setFont(plainFont);
         lambdaSecField.setBackground(new Color(249, 249, 249));
         lambdaSecField.setHorizontalAlignment(SwingConstants.CENTER);
-        lambdaSecField.setPreferredSize(new Dimension(100, 35));
+        lambdaSecField.setPreferredSize(new Dimension(80, 35));
         lambdaSecField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         lambdaSecField.setForeground(Color.LIGHT_GRAY);
         panel.add(lambdaSecField);
@@ -261,7 +300,7 @@ public class ManuallyInputDataWindow {
         h_angle_min_sec_WGS84_field.setFont(boldFont);
         h_angle_min_sec_WGS84_field.setBackground(new Color(249, 249, 249));
         h_angle_min_sec_WGS84_field.setHorizontalAlignment(SwingConstants.CENTER);
-        h_angle_min_sec_WGS84_field.setPreferredSize(new Dimension(100, 35));
+        h_angle_min_sec_WGS84_field.setPreferredSize(new Dimension(80, 35));
         h_angle_min_sec_WGS84_field.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(h_angle_min_sec_WGS84_field);
         inputDataPanel.add(panel);
@@ -269,6 +308,16 @@ public class ManuallyInputDataWindow {
 
     private void getInputDataPanelForWGSXYZFormat(){
         JPanel panel = new JPanel();
+        JLabel pointIDLabel = new JLabel("Pontszám");
+        pointIDLabel.setFont(boldFont);
+        panel.add(pointIDLabel);
+        pointIdFieldForWGS84XYZFormat = new JTextField();
+        pointIdFieldForWGS84XYZFormat.setFont(boldFont);
+        pointIdFieldForWGS84XYZFormat.setBackground(new Color(249, 249, 249));
+        pointIdFieldForWGS84XYZFormat.setHorizontalAlignment(SwingConstants.CENTER);
+        pointIdFieldForWGS84XYZFormat.setPreferredSize(new Dimension(150, 35));
+        pointIdFieldForWGS84XYZFormat.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(pointIdFieldForWGS84XYZFormat);
         JLabel xLabel = new JLabel("X:");
         xLabel.setFont(boldFont);
         panel.add(xLabel);

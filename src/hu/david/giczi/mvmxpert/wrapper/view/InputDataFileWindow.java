@@ -23,11 +23,17 @@ public class InputDataFileWindow {
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
     public final String[] EOV_DATA_TYPE = {
             "Formátum választása",
+            "EOV (Psz,Y,X,H)",
             "EOV (Y,X,H)",
+            "EOV (Psz Y X H)",
             "EOV (Y X H)",
+            "EOV (Psz;Y;X;H)",
             "EOV (Y;X;H)",
+            "EOV (Psz,X,Y,H)",
             "EOV (X,Y,H)",
+            "EOV (Psz X Y H)",
             "EOV (X Y H)",
+            "EOV (Psz;X;Y;H)",
             "EOV (X;Y;H)"};
     private final String[] WGS_DATA_TYPE = {
             "Formátum választása",
@@ -213,6 +219,14 @@ public class InputDataFileWindow {
     private void addComboBoxForInputFileOptionPanel(){
         JPanel panel = new JPanel();
         inputDataTypeComboBox = new JComboBox<>(EOV_DATA_TYPE);
+        inputDataTypeComboBox.addItemListener(e -> {
+            if( e.getItem().toString().equals(EOV_DATA_TYPE[0]) ){
+                inputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
+            }
+            else{
+                inputDataTypeComboBox.setForeground(Color.BLACK);
+            }
+        });
         inputDataTypeComboBox.setPreferredSize(new Dimension(600, 35));
         inputDataTypeComboBox.setBackground(new Color(249, 249, 249));
         inputDataTypeComboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -248,15 +262,17 @@ public class InputDataFileWindow {
     private void addPointNumberDataForOutputFile(){
         JPanel panel = new JPanel();
         JTextField pointPreIdField = new JTextField();
-        pointPreIdField.setText("Pont prefix");
+        pointPreIdField.setText("Pontszám prefix");
         pointPreIdField.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if( "Pont prefix".equals(pointPreIdField.getText()) ){
+                if( "Pontszám prefix".equals(pointPreIdField.getText()) ){
+                    pointPreIdField.setFont(boldFont);
                     pointPreIdField.setText(null);
                 }
                 else if( pointPreIdField.getText().length() == 0 ){
-                    pointPreIdField.setText("Pont prefix");
+                    pointPreIdField.setFont(plainFont);
+                    pointPreIdField.setText("Pontszám prefix");
                 }
             }
 
@@ -278,15 +294,15 @@ public class InputDataFileWindow {
             @Override
             public void mouseExited(MouseEvent e) {
                 if( pointPreIdField.getText().length() == 0 ){
-                    pointPreIdField.setText("Pont prefix");
+                    pointPreIdField.setFont(plainFont);
+                    pointPreIdField.setText("Pontszám prefix");
                 }
             }
         });
         pointPreIdField.setFont(plainFont);
         pointPreIdField.setBackground(new Color(249, 249, 249));
-        pointPreIdField.setForeground(Color.LIGHT_GRAY);
         pointPreIdField.setHorizontalAlignment(SwingConstants.CENTER);
-        pointPreIdField.setPreferredSize(new Dimension(110, 35));
+        pointPreIdField.setPreferredSize(new Dimension(130, 35));
         pointPreIdField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JTextField pointIdField = new JTextField();
         pointIdField.setText("Pontszám (1)");
@@ -294,9 +310,11 @@ public class InputDataFileWindow {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if( "Pontszám (1)".equals(pointIdField.getText()) ){
+                    pointIdField.setFont(boldFont);
                     pointIdField.setText(null);
                 }
                 else if( pointIdField.getText().length() == 0 ){
+                    pointIdField.setFont(plainFont);
                     pointIdField.setText("Pontszám (1)");
                 }
             }
@@ -324,6 +342,7 @@ public class InputDataFileWindow {
                 try {
                     Integer.parseInt(pointIdField.getText());
                 }catch (NumberFormatException n){
+                    pointIdField.setFont(plainFont);
                     pointIdField.setText("Pontszám (1)");
                 }
 
@@ -331,20 +350,21 @@ public class InputDataFileWindow {
         });
         pointIdField.setFont(plainFont);
         pointIdField.setBackground(new Color(249, 249, 249));
-        pointIdField.setForeground(Color.LIGHT_GRAY);
         pointIdField.setHorizontalAlignment(SwingConstants.CENTER);
-        pointIdField.setPreferredSize(new Dimension(110, 35));
+        pointIdField.setPreferredSize(new Dimension(130, 35));
         pointIdField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JTextField pointPostIdField = new JTextField();
-        pointPostIdField.setText("Pont postfix");
+        pointPostIdField.setText("Pontszám postfix");
         pointPostIdField.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if( "Pont postfix".equals(pointPostIdField.getText()) ){
+                if( "Pontszám postfix".equals(pointPostIdField.getText()) ){
+                    pointPostIdField.setFont(boldFont);
                     pointPostIdField.setText(null);
                 }
                 else if( pointPostIdField.getText().length() == 0 ){
-                    pointPostIdField.setText("Pont postfix");
+                    pointPostIdField.setFont(plainFont);
+                    pointPostIdField.setText("Pontszám postfix");
                 }
             }
 
@@ -366,15 +386,15 @@ public class InputDataFileWindow {
             @Override
             public void mouseExited(MouseEvent e) {
                 if( pointPostIdField.getText().length() == 0 ){
-                    pointPostIdField.setText("Pont postfix");
+                    pointPostIdField.setFont(plainFont);
+                    pointPostIdField.setText("Pontszám postfix");
                 }
             }
         });
         pointPostIdField.setFont(plainFont);
         pointPostIdField.setBackground(new Color(249, 249, 249));
-        pointPostIdField.setForeground(Color.LIGHT_GRAY);
         pointPostIdField.setHorizontalAlignment(SwingConstants.CENTER);
-        pointPostIdField.setPreferredSize(new Dimension(110, 35));
+        pointPostIdField.setPreferredSize(new Dimension(130, 35));
         pointPostIdField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(pointPreIdField);
         panel.add(pointIdField);
@@ -426,6 +446,14 @@ public class InputDataFileWindow {
     private void addComboBoxForOutputFileOptionPanel(){
         JPanel panel = new JPanel();
         outputDataTypeComboBox = new JComboBox<>(KML_DATA_TYPE);
+        outputDataTypeComboBox.addItemListener(e -> {
+            if( e.getItem().toString().equals(EOV_DATA_TYPE[0]) ){
+                outputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
+            }
+            else{
+                outputDataTypeComboBox.setForeground(Color.BLACK);
+            }
+        });
         outputDataTypeComboBox.setPreferredSize(new Dimension(600, 35));
         outputDataTypeComboBox.setBackground(new Color(249, 249, 249));
         outputDataTypeComboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));

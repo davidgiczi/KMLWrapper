@@ -60,35 +60,76 @@ public class KMLWrapperController {
 
     public void validationManuallyInputDataForEOV(){
         try{
-            Validation.isValidManuallyInputDataForEOV(manuallyInputDataWindow.y_EOV_field.getText(),
-                    manuallyInputDataWindow.x_EOV_field.getText(), manuallyInputDataWindow.h_EOV_field.getText());
+            if( manuallyInputDataWindow.pointIdFieldForEOV.getText().isEmpty() ){
+                Validation.isValidManuallyInputDataForEOV(null, manuallyInputDataWindow.y_EOV_field.getText(),
+                        manuallyInputDataWindow.x_EOV_field.getText(), manuallyInputDataWindow.h_EOV_field.getText());
+            }
+            else {
+                Validation.isValidManuallyInputDataForEOV(manuallyInputDataWindow.pointIdFieldForEOV.getText(),
+                        manuallyInputDataWindow.y_EOV_field.getText(), manuallyInputDataWindow.x_EOV_field.getText(),
+                        manuallyInputDataWindow.h_EOV_field.getText());
+            }
+
         } catch (InvalidPreferencesFormatException e){
             MessagePane.getInfoMessage("Hibás EOV koordináta", e.getMessage(), inputDataFileWindow.jFrame);
         }
     }
     public void validationManuallyInputDataForWGS84DecimalFormat(){
         try{
-            Validation.isValidManuallyInputDataForWGS84DecimalFormat(manuallyInputDataWindow.fi_WGS84_field.getText(),
-                    manuallyInputDataWindow.lambda_WGS84_field.getText(), manuallyInputDataWindow.h_WGS84_field.getText());
+            if( manuallyInputDataWindow.pointIdFieldForWGS84DecimalFormat.getText().isEmpty() ){
+                Validation.isValidManuallyInputDataForWGS84DecimalFormat(null, manuallyInputDataWindow.fi_WGS84_field.getText(),
+                        manuallyInputDataWindow.lambda_WGS84_field.getText(), manuallyInputDataWindow.h_WGS84_field.getText());
+            }
+            else{
+                Validation.isValidManuallyInputDataForWGS84DecimalFormat(manuallyInputDataWindow.pointIdFieldForWGS84DecimalFormat.getText(),
+                        manuallyInputDataWindow.fi_WGS84_field.getText(), manuallyInputDataWindow.lambda_WGS84_field.getText(),
+                        manuallyInputDataWindow.h_WGS84_field.getText());
+            }
+
         } catch (InvalidPreferencesFormatException e){
             MessagePane.getInfoMessage("Hibás WGS84 földrajzi koordináta", e.getMessage(), inputDataFileWindow.jFrame);
         }
     }
     public void validationManuallyInputDataForWGS84AngleMinSecFormat(){
         try{
-            Validation.isValidManuallyInputDataForWGS84AngleMinSecFormat(manuallyInputDataWindow.fiAngleField.getText(),
-                    manuallyInputDataWindow.fiMinField.getText(), manuallyInputDataWindow.fiSecField.getText(),
-                    manuallyInputDataWindow.lambdaAngleField.getText(), manuallyInputDataWindow.lambdaMinField.getText(),
-                    manuallyInputDataWindow.lambdaSecField.getText(),
-                    manuallyInputDataWindow.h_angle_min_sec_WGS84_field.getText());
+            if( manuallyInputDataWindow.pointIdFieldForWGS84AngleMinSecFormat.getText().isEmpty() ) {
+                Validation.isValidManuallyInputDataForWGS84AngleMinSecFormat(null,
+                        manuallyInputDataWindow.fiAngleField.getText(),
+                        manuallyInputDataWindow.fiMinField.getText(), manuallyInputDataWindow.fiSecField.getText(),
+                        manuallyInputDataWindow.lambdaAngleField.getText(), manuallyInputDataWindow.lambdaMinField.getText(),
+                        manuallyInputDataWindow.lambdaSecField.getText(),
+                        manuallyInputDataWindow.h_angle_min_sec_WGS84_field.getText());
+            }
+            else{
+                Validation.isValidManuallyInputDataForWGS84AngleMinSecFormat(
+                        manuallyInputDataWindow.pointIdFieldForWGS84AngleMinSecFormat.getText(),
+                        manuallyInputDataWindow.fiAngleField.getText(),
+                        manuallyInputDataWindow.fiMinField.getText(), manuallyInputDataWindow.fiSecField.getText(),
+                        manuallyInputDataWindow.lambdaAngleField.getText(), manuallyInputDataWindow.lambdaMinField.getText(),
+                        manuallyInputDataWindow.lambdaSecField.getText(),
+                        manuallyInputDataWindow.h_angle_min_sec_WGS84_field.getText());
+            }
+
         } catch (InvalidPreferencesFormatException e){
             MessagePane.getInfoMessage("Hibás WGS84 földrajzi koordináta", e.getMessage(), inputDataFileWindow.jFrame);
         }
     }
     public void validationManuallyInputDataForWGS84XYZFormat(){
         try{
-            Validation.isValidManuallyInputDataForWGS84XYZFormat(manuallyInputDataWindow.x_WGS84_field.getText(),
-                    manuallyInputDataWindow.y_WGS84_field.getText(), manuallyInputDataWindow.z_WGS84_field.getText());
+            if( manuallyInputDataWindow.pointIdFieldForWGS84XYZFormat.getText().isEmpty() ){
+                Validation.isValidManuallyInputDataForWGS84XYZFormat(null,
+                        manuallyInputDataWindow.x_WGS84_field.getText(),
+                        manuallyInputDataWindow.y_WGS84_field.getText(),
+                        manuallyInputDataWindow.z_WGS84_field.getText());
+            }
+            else{
+                Validation.isValidManuallyInputDataForWGS84XYZFormat(
+                        manuallyInputDataWindow.pointIdFieldForWGS84XYZFormat.getText(),
+                        manuallyInputDataWindow.x_WGS84_field.getText(),
+                        manuallyInputDataWindow.y_WGS84_field.getText(),
+                        manuallyInputDataWindow.z_WGS84_field.getText());
+            }
+
         } catch (InvalidPreferencesFormatException e){
             MessagePane.getInfoMessage("Hibás WGS84 térbeli koordináta", e.getMessage(), inputDataFileWindow.jFrame);
         }
@@ -102,8 +143,7 @@ public class KMLWrapperController {
     }
 
     public String getWindowTitle(){
-        if( manuallyInputDataWindow != null &&
-                manuallyInputDataWindow.jFrame.isVisible() && INPUT_POINTS.isEmpty() ){
+        if( manuallyInputDataWindow != null && !inputDataFileWindow.jFrame.isVisible() && INPUT_POINTS.isEmpty() ){
             return "Kézi adatbevitel";
         }
         else if( inputDataFileWindow.jFrame.isVisible() && INPUT_POINTS.isEmpty() ){
