@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class ManuallyInputDataWindow {
@@ -60,6 +61,7 @@ public class ManuallyInputDataWindow {
                controller.inputDataFileWindow.jFrame.setVisible(true);
             }
         });
+        Arrays.fill(IS_INPUT_DATA_TYPE, false);
         addInputFileOptionPanel(selectedItem);
         if( INPUT_DATA_TYPE[0].equals(selectedItem) ) {
             inputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
@@ -377,7 +379,7 @@ public class ManuallyInputDataWindow {
 }
         switch ( inpuDataTypeIndex ){
             case 0 :
-                MessagePane.getInfoMessage("Érvénytelen bevitel","Formátum választása szükséges.", jFrame);
+                MessagePane.getInfoMessage("Érvénytelen adatbevitel","Formátum választása szükséges.", jFrame);
                 break;
             case 1 :
                 controller.validationManuallyInputDataForEOV();
