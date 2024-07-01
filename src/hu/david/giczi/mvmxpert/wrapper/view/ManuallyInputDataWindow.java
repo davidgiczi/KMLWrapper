@@ -36,6 +36,7 @@ public class ManuallyInputDataWindow {
     public JTextField z_WGS84_field;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
+    private final Boolean[] IS_INPUT_DATA_TYPE = {false, false, false, false, false};
 
     private final String[] INPUT_DATA_TYPE = {
             "Bemeneti adattípus választása",
@@ -82,18 +83,24 @@ public class ManuallyInputDataWindow {
         addComboBoxForInputDataPanel(selectedItem);
         if( selectedItem.equals(INPUT_DATA_TYPE[0])) {
             inputDataPanel.add(new JPanel());
+            IS_INPUT_DATA_TYPE[0] = true;
         }
         else if (selectedItem.equals(INPUT_DATA_TYPE[1])){
             getInputDataPanelForEOVData();
+            IS_INPUT_DATA_TYPE[1] = true;
+
         }
         else if (selectedItem.equals(INPUT_DATA_TYPE[2])){
             getInputDataPanelForWGSDecimalFormat();
+            IS_INPUT_DATA_TYPE[2] = true;
         }
         else if (selectedItem.equals(INPUT_DATA_TYPE[3])){
             getInputDataPanelForWGSAngleSecMinFormat();
+            IS_INPUT_DATA_TYPE[3] = true;
         }
         else if (selectedItem.equals(INPUT_DATA_TYPE[4])){
             getInputDataPanelForWGSXYZFormat();
+            IS_INPUT_DATA_TYPE[4] = true;
         }
         addDataButton();
         jFrame.add(inputDataPanel);
@@ -354,11 +361,39 @@ public class ManuallyInputDataWindow {
     private void addDataButton(){
         JPanel panel = new JPanel();
         JButton addBtn = new JButton("Hozzáad");
-        addBtn.addActionListener(a ->{});
+        addBtn.addActionListener(a ->{onClickAddDataButton();});
         addBtn.setFont(boldFont);
         addBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(addBtn);
         inputDataPanel.add(panel);
+    }
+
+    private void onClickAddDataButton(){
+        int inpuDataTypeIndex = 0;
+        for (int i = 0; i < IS_INPUT_DATA_TYPE.length; i++) {
+            if( IS_INPUT_DATA_TYPE[i] ){
+                inpuDataTypeIndex = i;
+        }
+}
+        switch ( inpuDataTypeIndex ){
+            case 0 :
+                MessagePane.getInfoMessage("Érvénytelen bevitel","Formátum választása szükséges.", jFrame);
+                break;
+            case 1 :
+                controller.validationManuallyInputDataForEOV();
+                break;
+            case 2:
+                controller.validationManuallyInputDataForWGS84DecimalFormat();
+                break;
+            case 3:
+                controller.validationManuallyInputDataForWGS84AngleMinSecFormat();
+                break;
+            case 4:
+                controller.validationManuallyInputDataForWGS84XYZFormat();
+                break;
+            default:
+        }
+        jFrame.setTitle(controller.getWindowTitle());
     }
 
     private void addLogo(){
@@ -374,6 +409,7 @@ public class ManuallyInputDataWindow {
         inputDataFileMenuItem.addActionListener(e -> {
             jFrame.setVisible(false);
             controller.inputDataFileWindow.jFrame.setVisible(true);
+            controller.inputDataFileWindow.jFrame.setTitle(controller.getWindowTitle());
         });
         inputDataFileMenuItem.setFont(plainFont);
         inputDataFileMenuItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
