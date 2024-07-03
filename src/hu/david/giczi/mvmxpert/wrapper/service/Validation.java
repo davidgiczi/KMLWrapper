@@ -18,6 +18,7 @@ public class Validation {
         runInputDataValidation();
     }
 
+
     private void runInputDataValidation() throws InvalidPreferencesFormatException {
         String[] rowData;
         for (String row : FileProcess.INPUT_DATA_LIST) {
@@ -28,7 +29,7 @@ public class Validation {
                                 + (FileProcess.INPUT_DATA_LIST.indexOf(row) + 1) + ". sorában.");
             }
         Point validPoint = parseInputData(rowData, FileProcess.INPUT_DATA_LIST.indexOf(row) + 1);
-        KMLWrapperController.INPUT_POINTS.add(validPoint);
+        KMLWrapperController.addValidInputPoint(validPoint);
         }
     }
 
@@ -37,47 +38,47 @@ public class Validation {
         try{
 
             if( "EOV".equals(coordinateType) && rowData.length == 2 ){
-             double firstData =  Double.parseDouble(rowData[0]);
-             double secondData = Double.parseDouble(rowData[1]);
+             double firstData =  Double.parseDouble(rowData[0].replace(",", "."));
+             double secondData = Double.parseDouble(rowData[1].replace(",", "."));
              point = isValidEOVData(null, firstData, secondData, 0.0, indexValue);
             }
             else if( "EOV".equals(coordinateType) && !"Psz".equals(dataComponents[0]) && rowData.length == 3 ){
-                double firstData =  Double.parseDouble(rowData[0]);
-                double secondData = Double.parseDouble(rowData[1]);
-                double elevation = Double.parseDouble(rowData[2]);
+                double firstData =  Double.parseDouble(rowData[0].replace(",", "."));
+                double secondData = Double.parseDouble(rowData[1].replace(",", "."));
+                double elevation = Double.parseDouble(rowData[2].replace(",", "."));
                 point = isValidEOVData(null, firstData, secondData, elevation, indexValue);
             }
             else if( "EOV".equals(coordinateType) && "Psz".equals(dataComponents[0]) && rowData.length == 3 ){
-                double firstData =  Double.parseDouble(rowData[1]);
-                double secondData = Double.parseDouble(rowData[2]);
+                double firstData =  Double.parseDouble(rowData[1].replace(",", "."));
+                double secondData = Double.parseDouble(rowData[2].replace(",", "."));
                 point = isValidEOVData(rowData[0], firstData, secondData, 0.0, indexValue);
             }
             else if( "EOV".equals(coordinateType) && rowData.length == 4 ){
-                double firstData =  Double.parseDouble(rowData[1]);
-                double secondData = Double.parseDouble(rowData[2]);
-                double elevation = Double.parseDouble(rowData[3]);
+                double firstData =  Double.parseDouble(rowData[1].replace(",", "."));
+                double secondData = Double.parseDouble(rowData[2].replace(",", "."));
+                double elevation = Double.parseDouble(rowData[3].replace(",", "."));
                 point = isValidEOVData(rowData[0], firstData, secondData, elevation, indexValue);
             }
             else if( "WGS84".equals(coordinateType) && rowData.length == 2 ){
-                double firstData =  Double.parseDouble(rowData[0]);
-                double secondData = Double.parseDouble(rowData[1]);
+                double firstData =  Double.parseDouble(rowData[0].replace(",", "."));
+                double secondData = Double.parseDouble(rowData[1].replace(",", "."));
                 point = isValidWGS84Data(null, firstData, secondData, 0.0, indexValue);
             }
             else if( "WGS84".equals(coordinateType) && !"Psz".equals(dataComponents[0]) && rowData.length == 3 ){
-                double firstData =  Double.parseDouble(rowData[0]);
-                double secondData = Double.parseDouble(rowData[1]);
-                double elevation = Double.parseDouble(rowData[2]);
+                double firstData =  Double.parseDouble(rowData[0].replace(",", "."));
+                double secondData = Double.parseDouble(rowData[1].replace(",", "."));
+                double elevation = Double.parseDouble(rowData[2].replace(",", "."));
                 point = isValidWGS84Data(null, firstData, secondData, elevation, indexValue);
             }
             else if( "WGS84".equals(coordinateType) && "Psz".equals(dataComponents[0]) && rowData.length == 3 ){
-                double firstData =  Double.parseDouble(rowData[1]);
-                double secondData = Double.parseDouble(rowData[2]);
+                double firstData =  Double.parseDouble(rowData[1].replace(",", "."));
+                double secondData = Double.parseDouble(rowData[2].replace(",", "."));
                 point = isValidWGS84Data(rowData[0], firstData, secondData, 0.0, indexValue);
             }
             else if( "WGS84".equals(coordinateType) && rowData.length == 4 ){
-                double firstData =  Double.parseDouble(rowData[1]);
-                double secondData = Double.parseDouble(rowData[2]);
-                double elevation = Double.parseDouble(rowData[3]);
+                double firstData =  Double.parseDouble(rowData[1].replace(",", "."));
+                double secondData = Double.parseDouble(rowData[2].replace(",", "."));
+                double elevation = Double.parseDouble(rowData[3].replace(",", "."));
                 point = isValidWGS84Data(rowData[0], firstData, secondData, elevation, indexValue);
             }
 
@@ -94,23 +95,19 @@ public class Validation {
     private Point isValidEOVData(String pointID, Double firstData, Double secondData, Double elevation, int indexValue)
     throws InvalidPreferencesFormatException {
         Point pointEOV = new Point();
-        if( ("Y".equals(dataComponents[0]) || "Y".equals(dataComponents[1]))
-                && (400000 > firstData || 960000 < firstData)){
+        if( "Y".equals(dataComponents[0]) && (400000 > firstData || 960000 < firstData)){
             throw new InvalidPreferencesFormatException("Hibás Y koordináta érték a belovasott fájl " +
                     indexValue + ". sorában. (960km> Y_EOV > 400km)");
         }
-        else if( ("Y".equals(dataComponents[0]) || "Y".equals(dataComponents[1]))
-                && (32000 > secondData || 384000 < secondData)){
+        else if( "Y".equals(dataComponents[0]) && (32000 > secondData || 384000 < secondData)){
             throw new InvalidPreferencesFormatException("Hibás X koordináta érték a belovasott fájl " +
                     indexValue + ". sorában. (384km > X_EOV > 32km)");
         }
-        else if( ("X".equals(dataComponents[0]) || "X".equals(dataComponents[1]))
-                && (32000 > firstData || 384000 < firstData)){
+        else if( "X".equals(dataComponents[0]) && (32000 > firstData || 384000 < firstData)){
             throw new InvalidPreferencesFormatException("Hibás X koordináta érték a belovasott fájl " +
                     indexValue + ". sorában. (384km > X_EOV > 32km)");
         }
-        else if( ("X".equals(dataComponents[0]) || "X".equals(dataComponents[1]))
-                && (400000 > secondData || 960000 < secondData) ){
+        else if( "X".equals(dataComponents[0]) && (400000 > secondData || 960000 < secondData)){
             throw new InvalidPreferencesFormatException("Hibás Y koordináta érték a belovasott fájl " +
                     indexValue + ". sorában. (960km> Y_EOV > 400km)");
         }
@@ -118,23 +115,23 @@ public class Validation {
             pointEOV.setPointId(pointID);
             pointEOV.setY_EOV(firstData);
             pointEOV.setX_EOV(secondData);
-            pointEOV.setH_EOV(elevation);
+            pointEOV.setM_EOV(elevation);
         }
         else if( "Psz".equals(dataComponents[0]) && "X".equals(dataComponents[1]) ){
             pointEOV.setPointId(pointID);
             pointEOV.setY_EOV(secondData);
             pointEOV.setX_EOV(firstData);
-            pointEOV.setH_EOV(elevation);
+            pointEOV.setM_EOV(elevation);
         }
         else if( "Y".equals(dataComponents[0]) ){
             pointEOV.setY_EOV(firstData);
             pointEOV.setX_EOV(secondData);
-            pointEOV.setH_EOV(elevation);
+            pointEOV.setM_EOV(elevation);
         }
         else if( "X".equals(dataComponents[0]) ){
             pointEOV.setY_EOV(secondData);
             pointEOV.setX_EOV(firstData);
-            pointEOV.setH_EOV(elevation);
+            pointEOV.setM_EOV(elevation);
         }
 
         return pointEOV;
@@ -142,24 +139,19 @@ public class Validation {
     private Point isValidWGS84Data(String pointId, Double firstData, Double secondData, Double elevation, int indexValue)
             throws InvalidPreferencesFormatException {
         Point pointWGS84 = new Point();
-        if( ("Szélesség".equals(dataComponents[0]) || "Szélesség".equals(dataComponents[1]))
-                && (45.74 > firstData || 48.58 < firstData) ){
+        if( "Szélesség".equals(dataComponents[0]) && (45.74 > firstData || 48.58 < firstData) ){
             throw new InvalidPreferencesFormatException("Hibás földrajzi szélesség fok érték a belovasott fájl " +
                     indexValue + ". sorában. (48.58° > Szélesség fok > 45.74°)");
         }
-        else if( ("Szélesség".equals(dataComponents[0]) || "Szélesség".equals(dataComponents[1]))
-                && (16.11 > secondData || 22.9 < secondData) ){
-
+        else if( "Szélesség".equals(dataComponents[0]) && (16.11 > secondData || 22.9 < secondData) ){
             throw new InvalidPreferencesFormatException("Hibás földrajzi hosszúság fok érték a belovasott fájl " +
                     indexValue + ". sorában. (22.9° > Hosszúság fok > 16.11°)");
         }
-        else if( ("Hosszúság".equals(dataComponents[0]) || "Hosszúság".equals(dataComponents[1]))
-                && (16.11 > firstData || 22.9 < firstData) ){
+        else if( "Hosszúság".equals(dataComponents[0]) && (16.11 > firstData || 22.9 < firstData) ){
             throw new InvalidPreferencesFormatException("Hibás földrajzi hosszúság fok érték a belovasott fájl " +
                     indexValue + ". sorában. (22.9° > Hosszúság fok > 16.11°)");
         }
-        else if( ("Hosszúság".equals(dataComponents[0]) || "Hosszúság".equals(dataComponents[1]))
-                && (45.74 > secondData || 48.58 < secondData)){
+        else if( "Hosszúság".equals(dataComponents[0]) && (45.74 > secondData || 48.58 < secondData)){
             throw new InvalidPreferencesFormatException("Hibás földrajzi szélesség fok érték a belovasott fájl " +
                     indexValue + ". sorában. (48.58° > Szélesség fok > 45.74°)");
         }
@@ -176,7 +168,7 @@ public class Validation {
             pointWGS84.setFi_WGS84(firstData);
             pointWGS84.setLambda_WGS84(secondData);
             pointWGS84.setH_WGS84(elevation);
-            List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84(firstData, secondData, elevation);
+            List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84ByDegrees(firstData, secondData, elevation);
             pointWGS84.setX_WGS84(xyz_WGS84.get(0));
             pointWGS84.setY_WGS84(xyz_WGS84.get(1));
             pointWGS84.setZ_WGS84(xyz_WGS84.get(2));
@@ -186,7 +178,7 @@ public class Validation {
             pointWGS84.setFi_WGS84(secondData);
             pointWGS84.setLambda_WGS84(firstData);
             pointWGS84.setH_WGS84(elevation);
-            List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84(secondData, firstData, elevation);
+            List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84ByDegrees(secondData, firstData, elevation);
             pointWGS84.setX_WGS84(xyz_WGS84.get(0));
             pointWGS84.setY_WGS84(xyz_WGS84.get(1));
             pointWGS84.setZ_WGS84(xyz_WGS84.get(2));
@@ -196,7 +188,7 @@ public class Validation {
             pointWGS84.setX_WGS84(firstData);
             pointWGS84.setY_WGS84(secondData);
             pointWGS84.setZ_WGS84(elevation);
-            List<Double> geo_WGS84 = ToWGS.getGeographicalCoordinatesForWGS84(firstData, secondData, elevation);
+            List<Double> geo_WGS84 = ToWGS.getGeographicalCoordinatesDegreesForWGS84(firstData, secondData, elevation);
             pointWGS84.setFi_WGS84(geo_WGS84.get(0));
             pointWGS84.setLambda_WGS84(geo_WGS84.get(1));
             pointWGS84.setH_WGS84(geo_WGS84.get(2));
@@ -205,7 +197,7 @@ public class Validation {
             pointWGS84.setFi_WGS84(firstData);
             pointWGS84.setLambda_WGS84(secondData);
             pointWGS84.setH_WGS84(elevation);
-            List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84(firstData, secondData, elevation);
+            List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84ByDegrees(firstData, secondData, elevation);
             pointWGS84.setX_WGS84(xyz_WGS84.get(0));
             pointWGS84.setY_WGS84(xyz_WGS84.get(1));
             pointWGS84.setZ_WGS84(xyz_WGS84.get(2));
@@ -214,7 +206,7 @@ public class Validation {
             pointWGS84.setFi_WGS84(secondData);
             pointWGS84.setLambda_WGS84(firstData);
             pointWGS84.setH_WGS84(elevation);
-            List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84(secondData, firstData, elevation);
+            List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84ByDegrees(secondData, firstData, elevation);
             pointWGS84.setX_WGS84(xyz_WGS84.get(0));
             pointWGS84.setY_WGS84(xyz_WGS84.get(1));
             pointWGS84.setZ_WGS84(xyz_WGS84.get(2));
@@ -223,7 +215,7 @@ public class Validation {
             pointWGS84.setX_WGS84(firstData);
             pointWGS84.setY_WGS84(secondData);
             pointWGS84.setZ_WGS84(elevation);
-            List<Double> geo_WGS84 = ToWGS.getGeographicalCoordinatesForWGS84(firstData, secondData, elevation);
+            List<Double> geo_WGS84 = ToWGS.getGeographicalCoordinatesDegreesForWGS84(firstData, secondData, elevation);
             pointWGS84.setFi_WGS84(geo_WGS84.get(0));
             pointWGS84.setLambda_WGS84(geo_WGS84.get(1));
             pointWGS84.setH_WGS84(geo_WGS84.get(2));
@@ -249,28 +241,28 @@ public class Validation {
          }
     }
 
-    public static void isValidManuallyInputDataForEOV(String pointId, String Y_EOV, String X_EOV, String H_EOV)
+    public static void isValidInputDataForEOV(String pointId, String Y_EOV, String X_EOV, String M_EOV)
     throws InvalidPreferencesFormatException {
         double Y;
         double X;
-        double H;
+        double M;
         try {
-            Y = Double.parseDouble(Y_EOV);
+            Y = Double.parseDouble(Y_EOV.replace(",", "."));
         } catch (NumberFormatException e) {
             throw new InvalidPreferencesFormatException("Az EOV Y koordináta érték csak szám lehet.");
         }
         try {
-            X = Double.parseDouble(X_EOV);
+            X = Double.parseDouble(X_EOV.replace(",", "."));
         } catch (NumberFormatException e) {
             throw new InvalidPreferencesFormatException("Az EOV X koordináta érték csak szám lehet.");
         }
         try {
-            H = Double.parseDouble(H_EOV);
-            if( 0 > H ){
+            M = Double.parseDouble(M_EOV.replace(",", "."));
+            if( 0 > M ){
                 throw new NumberFormatException();
             }
         } catch (NumberFormatException e) {
-            throw new InvalidPreferencesFormatException("A h magasság érték csak pozitív szám lehet.");
+            throw new InvalidPreferencesFormatException("Az M magasság érték csak pozitív szám lehet.");
         }
         if (400000 > Y || 960000 < Y) {
             throw new InvalidPreferencesFormatException("Hibás EOV Y koordináta érték. (960km> Y_EOV > 400km)");
@@ -281,8 +273,8 @@ public class Validation {
         pointEOV.setPointId(pointId);
         pointEOV.setY_EOV(Y);
         pointEOV.setX_EOV(X);
-        pointEOV.setH_EOV(H);
-        KMLWrapperController.INPUT_POINTS.add(pointEOV);
+        pointEOV.setM_EOV(M);
+        KMLWrapperController.addValidInputPoint(pointEOV);
     }
     public static void isValidManuallyInputDataForWGS84DecimalFormat(String pointId, String Fi, String Lambda, String H)
     throws  InvalidPreferencesFormatException{
@@ -290,19 +282,19 @@ public class Validation {
     double lambda;
     double h;
         try {
-            fi = Double.parseDouble(Fi);
+            fi = Double.parseDouble(Fi.replace(",", "."));
         }
         catch (NumberFormatException e){
             throw new InvalidPreferencesFormatException("A WGS84 szélesség földrajzi koordináta érték csak szám lehet.");
         }
         try{
-            lambda = Double.parseDouble(Lambda);
+            lambda = Double.parseDouble(Lambda.replace(",", "."));
         }
         catch (NumberFormatException e){
             throw new InvalidPreferencesFormatException("A WGS84 hosszúság földrajzi koordináta érték csak szám lehet.");
         }
         try{
-            h = Double.parseDouble(H);
+            h = Double.parseDouble(H.replace(",", "."));
             if( 0 > h ){
                 throw new NumberFormatException();
             }
@@ -323,11 +315,11 @@ public class Validation {
         pointWGS84.setFi_WGS84(fi);
         pointWGS84.setLambda_WGS84(lambda);
         pointWGS84.setH_WGS84(h);
-        List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84(fi, lambda, h);
+        List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84ByDegrees(fi, lambda, h);
         pointWGS84.setX_WGS84(xyz_WGS84.get(0));
         pointWGS84.setY_WGS84(xyz_WGS84.get(1));
         pointWGS84.setZ_WGS84(xyz_WGS84.get(2));
-        KMLWrapperController.INPUT_POINTS.add(pointWGS84);
+        KMLWrapperController.addValidInputPoint(pointWGS84);
     }
     public static void isValidManuallyInputDataForWGS84AngleMinSecFormat(String pointId, String Fi_angle, String Fi_min, String Fi_sec,
          String Lambda_angle, String Lambda_min, String Lambda_sec, String H)
@@ -341,67 +333,67 @@ public class Validation {
         double h;
         try{
             fi_angle = Integer.parseInt(Fi_angle);
-            if( 0 > fi_angle ){
+            if( 0 > fi_angle || 59 < fi_angle ){
                 throw new NumberFormatException();
             }
         }
         catch (NumberFormatException e){
             throw new InvalidPreferencesFormatException(
-                    "A WGS84 szélesség földrajzi koordináta fok érték csak pozitív egész szám lehet.");
+                    "A WGS84 szélesség földrajzi koordináta fok érték csak pozitív egész szám lehet. (60 > fok >= 0)");
         }
         try{
             fi_min = Integer.parseInt(Fi_min);
-            if( 0 > fi_min ){
+            if( 0 > fi_min || 59 < fi_min){
                 throw new NumberFormatException();
             }
         }
         catch (NumberFormatException e){
             throw new InvalidPreferencesFormatException(
-                    "A WGS84 szélesség földrajzi koordináta perc érték csak pozitív egész szám lehet.");
+                    "A WGS84 szélesség földrajzi koordináta perc érték csak pozitív egész szám lehet. (60 > perc >= 0)");
         }
         try{
-            fi_sec = Double.parseDouble(Fi_sec);
-            if( 0 > fi_sec ){
+            fi_sec = Double.parseDouble(Fi_sec.replace(",", "."));
+            if( 0 > fi_sec || 59 < fi_sec ){
                 throw new NumberFormatException();
             }
         }
         catch (NumberFormatException e){
             throw new InvalidPreferencesFormatException(
-                    "A WGS84 szélesség földrajzi koordináta másodperc érték csak pozitív szám lehet.");
+                    "A WGS84 szélesség földrajzi koordináta másodperc érték csak pozitív szám lehet. (60 > mperc >= 0)");
         }
 
         try{
             lambda_angle = Integer.parseInt(Lambda_angle);
-            if( 0 > lambda_angle ){
+            if( 0 > lambda_angle || 59 < lambda_angle ){
                 throw new NumberFormatException();
             }
         }
         catch (NumberFormatException e){
             throw new InvalidPreferencesFormatException(
-                    "A WGS84 hosszúság földrajzi koordináta fok érték csak pozitív egész szám lehet.");
+                    "A WGS84 hosszúság földrajzi koordináta fok érték csak pozitív egész szám lehet. (60 > fok >= 0)");
         }
         try{
             lambda_min = Integer.parseInt(Lambda_min);
-            if( 0 > lambda_min ){
+            if( 0 > lambda_min || 59 < lambda_min ){
                 throw new NumberFormatException();
             }
         }
         catch (NumberFormatException e){
             throw new InvalidPreferencesFormatException(
-                    "A WGS84 hosszúság földrajzi koordináta perc érték csak pozitív egész szám lehet.");
+                    "A WGS84 hosszúság földrajzi koordináta perc érték csak pozitív egész szám lehet. (60 > perc >= 0)");
         }
         try{
-            lambda_sec = Double.parseDouble(Lambda_sec);
-            if( 0 > lambda_sec ){
+            lambda_sec = Double.parseDouble(Lambda_sec.replace(",", "."));
+            if( 0 > lambda_sec || 59 < lambda_sec){
                 throw new NumberFormatException();
             }
         }
         catch (NumberFormatException e){
             throw new InvalidPreferencesFormatException(
-                    "A WGS84 hosszúság földrajzi koordináta másodperc érték csak pozitív szám lehet.");
+                    "A WGS84 hosszúság földrajzi koordináta másodperc érték csak pozitív szám lehet. (60 > mperc >= 0)");
         }
         try{
-            h = Double.parseDouble(H);
+            h = Double.parseDouble(H.replace(",", "."));
             if( 0 > h ){
                 throw new NumberFormatException();
             }
@@ -427,11 +419,11 @@ public class Validation {
         double LambdaValue = lambda_angle + lambda_min / 60.0 + lambda_sec / 3600.0;
         pointWGS84.setLambda_WGS84(LambdaValue);
         pointWGS84.setH_WGS84(h);
-        List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84(FiValue, LambdaValue, h);
+        List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84ByDegrees(FiValue, LambdaValue, h);
         pointWGS84.setX_WGS84(xyz_WGS84.get(0));
         pointWGS84.setY_WGS84(xyz_WGS84.get(1));
         pointWGS84.setZ_WGS84(xyz_WGS84.get(2));
-        KMLWrapperController.INPUT_POINTS.add(pointWGS84);
+        KMLWrapperController.addValidInputPoint(pointWGS84);
     }
     public static void isValidManuallyInputDataForWGS84XYZFormat(String pointId, String X, String Y, String Z)
     throws InvalidPreferencesFormatException{
@@ -439,21 +431,21 @@ public class Validation {
     double y;
     double z;
     try{
-        x = Double.parseDouble(X);
+        x = Double.parseDouble(X.replace(",", "."));
     }
     catch (NumberFormatException e){
         throw new InvalidPreferencesFormatException(
                 "A WGS84 térbeli X koordináta érték csak szám lehet.");
     }
         try{
-            y = Double.parseDouble(Y);
+            y = Double.parseDouble(Y.replace(",", "."));
         }
         catch (NumberFormatException e){
             throw new InvalidPreferencesFormatException(
                     "A WGS84 térbeli Y koordináta érték csak szám lehet.");
         }
         try{
-            z = Double.parseDouble(Z);
+            z = Double.parseDouble(Z.replace(",", "."));
         }
         catch (NumberFormatException e){
             throw new InvalidPreferencesFormatException(
@@ -473,10 +465,12 @@ public class Validation {
         pointWGS84.setX_WGS84(x);
         pointWGS84.setY_WGS84(y);
         pointWGS84.setZ_WGS84(z);
-        List<Double> geo_WGS84 = ToWGS.getGeographicalCoordinatesForWGS84(x, y, z);
+        List<Double> geo_WGS84 = ToWGS.getGeographicalCoordinatesDegreesForWGS84(x, y, z);
         pointWGS84.setFi_WGS84(geo_WGS84.get(0));
         pointWGS84.setLambda_WGS84(geo_WGS84.get(1));
         pointWGS84.setH_WGS84(geo_WGS84.get(2));
-        KMLWrapperController.INPUT_POINTS.add(pointWGS84);
+        KMLWrapperController.addValidInputPoint(pointWGS84);
     }
+
+
 }

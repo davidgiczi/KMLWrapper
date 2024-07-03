@@ -1,6 +1,7 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.service.Transformation;
 
 
 import javax.swing.*;
@@ -12,6 +13,9 @@ import java.util.Objects;
 public class InputDataFileWindow {
 
     public JFrame jFrame;
+    public JTextField pointPreIdField;
+    public JTextField pointIdField;
+    public JTextField pointPostIdField;
     private final KMLWrapperController controller;
     private JPanel inputFileOptionPanel;
     private JPanel outputFileOptionPanel;
@@ -23,20 +27,29 @@ public class InputDataFileWindow {
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
     public final String[] EOV_DATA_TYPE = {
             "Formátum választása",
-            "EOV (Psz,Y,X,H)",
-            "EOV (Y,X,H)",
-            "EOV (Psz Y X H)",
-            "EOV (Y X H)",
-            "EOV (Psz;Y;X;H)",
-            "EOV (Y;X;H)",
-            "EOV (Psz,X,Y,H)",
-            "EOV (X,Y,H)",
-            "EOV (Psz X Y H)",
-            "EOV (X Y H)",
-            "EOV (Psz;X;Y;H)",
-            "EOV (X;Y;H)"};
+            "EOV (Psz,Y,X,M)",
+            "EOV (Psz Y X M)",
+            "EOV (Psz;Y;X;M)",
+            "EOV (Psz,X,Y,M)",
+            "EOV (Psz X Y M)",
+            "EOV (Psz;X;Y;M)",
+            "EOV (Y,X,M)",
+            "EOV (Y X M)",
+            "EOV (Y;X;M)",
+            "EOV (X,Y,M)",
+            "EOV (X Y M)",
+            "EOV (X;Y;M)"};
     private final String[] WGS_DATA_TYPE = {
             "Formátum választása",
+            "WGS84 (Psz,Szélesség,Hosszúság,Magasság)",
+            "WGS84 (Psz Szélesség Hosszúság Magasság)",
+            "WGS84 (Psz;Szélesség;Hosszúság;Magasság)",
+            "WGS84 (Psz,Hosszúság,Szélesség,Magasság)",
+            "WGS84 (Psz Hosszúság Szélesség Magasság)",
+            "WGS84 (Psz;Hosszúság;Szélesség;Magasság)",
+            "WGS84 (Psz,X,Y,Z)",
+            "WGS84 (Psz X Y Z)",
+            "WGS84 (Psz;X;Y;Z)",
             "WGS84 (Szélesség,Hosszúság,Magasság)",
             "WGS84 (Szélesség Hosszúság Magasság)",
             "WGS84 (Szélesség;Hosszúság;Magasság)",
@@ -45,7 +58,9 @@ public class InputDataFileWindow {
             "WGS84 (Hosszúság;Szélesség;Magasság)",
             "WGS84 (X,Y,Z)",
             "WGS84 (X Y Z)",
-            "WGS84 (X;Y;Z)"};
+            "WGS84 (X;Y;Z)"
+    };
+
     private final String[] KML_DATA_TYPE = {
             "Adattípus választása",
             "Pont",
@@ -55,8 +70,8 @@ public class InputDataFileWindow {
             "Kerület+pontok"};
     private final String[] TXT_DATA_TYPE = {
             "Adattípus választása",
-            "Beolvasott pontok",
-            "Közös pontok: EOV (Y, X, H)",
+            "Beolvasott és transzformált pontok",
+            "Közös pontok: EOV (Y, X, M)",
             "Közös pontok: IUGG67 (X, Y, Z)",
             "Közös pontok: IUGG67 (Szélesség, Hosszúság, Magasság)",
             "Közös pontok: WGS84 (X, Y, Z)",
@@ -70,11 +85,6 @@ public class InputDataFileWindow {
         this.controller = controller;
         createWindow();
     }
-
-    public void setInputDataFileWindowTitle(String title){
-        jFrame.setTitle(title);
-    }
-
     private void createWindow(){
         jFrame = new JFrame("Adatok fájlból beolvasása");
         jFrame.addWindowListener(new WindowAdapter() {
@@ -142,13 +152,13 @@ public class InputDataFileWindow {
         JMenuItem manuallyInputMenuItem = new JMenuItem("Kézi adatbevitel");
         manuallyInputMenuItem.addActionListener(e -> {
             jFrame.setVisible(false);
-            if( controller.manuallyInputDataWindow == null ){
-                controller.manuallyInputDataWindow = new ManuallyInputDataWindow(controller);
+            if( KMLWrapperController.MANUALLY_INPUT_DATA_WINDOW == null ){
+                KMLWrapperController.MANUALLY_INPUT_DATA_WINDOW = new ManuallyInputDataWindow(controller);
             }
             else {
-                controller.manuallyInputDataWindow.jFrame.setVisible(true);
+                KMLWrapperController.MANUALLY_INPUT_DATA_WINDOW.jFrame.setVisible(true);
             }
-            controller.manuallyInputDataWindow.jFrame.setTitle(controller.getWindowTitle());
+            KMLWrapperController.setWindowTitle();
         });
         manuallyInputMenuItem.setFont(plainFont);
         manuallyInputMenuItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -199,7 +209,7 @@ public class InputDataFileWindow {
         wgsRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         JRadioButton listRadioBtn = new JRadioButton("AutoCad lista");
         listRadioBtn.addActionListener( e ->{
-            String[] cadList = {"AutoCad lista koordináták"};
+            String[] cadList = {"AutoCad lista koordináták EOV (Y,X,M)"};
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
             inputDataTypeComboBox.setModel(model);
         });
@@ -258,140 +268,25 @@ public class InputDataFileWindow {
         outputFileOptionPanel.add(panel);
     }
 
-
     private void addPointNumberDataForOutputFile(){
         JPanel panel = new JPanel();
-        JTextField pointPreIdField = new JTextField();
-        pointPreIdField.setText("Pontszám prefix");
-        pointPreIdField.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if( "Pontszám prefix".equals(pointPreIdField.getText()) ){
-                    pointPreIdField.setFont(boldFont);
-                    pointPreIdField.setText(null);
-                }
-                else if( pointPreIdField.getText().length() == 0 ){
-                    pointPreIdField.setFont(plainFont);
-                    pointPreIdField.setText("Pontszám prefix");
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                if( pointPreIdField.getText().length() == 0 ){
-                    pointPreIdField.setFont(plainFont);
-                    pointPreIdField.setText("Pontszám prefix");
-                }
-            }
-        });
-        pointPreIdField.setFont(plainFont);
+        pointPreIdField = new JTextField();
+        pointPreIdField.setToolTipText("Pontszám prefix");
+        pointPreIdField.setFont(boldFont);
         pointPreIdField.setBackground(new Color(249, 249, 249));
         pointPreIdField.setHorizontalAlignment(SwingConstants.CENTER);
         pointPreIdField.setPreferredSize(new Dimension(130, 35));
         pointPreIdField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        JTextField pointIdField = new JTextField();
-        pointIdField.setText("Pontszám (1)");
-        pointIdField.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if( "Pontszám (1)".equals(pointIdField.getText()) ){
-                    pointIdField.setFont(boldFont);
-                    pointIdField.setText(null);
-                }
-                else if( pointIdField.getText().length() == 0 ){
-                    pointIdField.setFont(plainFont);
-                    pointIdField.setText("Pontszám (1)");
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                if( "Pontszám (1)".equals(pointIdField.getText()) ){
-                    return;
-                }
-                try {
-                    Integer.parseInt(pointIdField.getText());
-                }catch (NumberFormatException n){
-                    pointIdField.setFont(plainFont);
-                    pointIdField.setText("Pontszám (1)");
-                }
-
-            }
-        });
-        pointIdField.setFont(plainFont);
+        pointIdField = new JTextField();
+        pointIdField.setToolTipText("Pontszám (1)");
+        pointIdField.setFont(boldFont);
         pointIdField.setBackground(new Color(249, 249, 249));
         pointIdField.setHorizontalAlignment(SwingConstants.CENTER);
         pointIdField.setPreferredSize(new Dimension(130, 35));
         pointIdField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        JTextField pointPostIdField = new JTextField();
-        pointPostIdField.setText("Pontszám postfix");
-        pointPostIdField.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if( "Pontszám postfix".equals(pointPostIdField.getText()) ){
-                    pointPostIdField.setFont(boldFont);
-                    pointPostIdField.setText(null);
-                }
-                else if( pointPostIdField.getText().length() == 0 ){
-                    pointPostIdField.setFont(plainFont);
-                    pointPostIdField.setText("Pontszám postfix");
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                if( pointPostIdField.getText().length() == 0 ){
-                    pointPostIdField.setFont(plainFont);
-                    pointPostIdField.setText("Pontszám postfix");
-                }
-            }
-        });
-        pointPostIdField.setFont(plainFont);
+        pointPostIdField = new JTextField();
+        pointPostIdField.setToolTipText("Pontszám postfix");
+        pointPostIdField.setFont(boldFont);
         pointPostIdField.setBackground(new Color(249, 249, 249));
         pointPostIdField.setHorizontalAlignment(SwingConstants.CENTER);
         pointPostIdField.setPreferredSize(new Dimension(130, 35));
@@ -425,7 +320,7 @@ public class InputDataFileWindow {
         txtRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         JRadioButton scrRadioBtn = new JRadioButton("scr fájl");
         scrRadioBtn.addActionListener( e ->{
-            String[] cadList = {"AutoCad scr fájl (EOV Y, X, H)"};
+            String[] cadList = {"AutoCad scr fájl (EOV Y, X, M)"};
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
             outputDataTypeComboBox.setModel(model);
             saveFileNameField.setText("pontok.scr");
@@ -491,6 +386,7 @@ public class InputDataFileWindow {
     private void addSaveButtonForOutputFile(){
         JPanel panel = new JPanel();
         JButton saveBtn = new JButton("Fájl mentése");
+        saveBtn.addActionListener(e -> {});
         saveBtn.setFont(boldFont);
         saveBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(saveBtn);
@@ -500,6 +396,11 @@ public class InputDataFileWindow {
     private void addShowButtonForData(){
         JPanel panel = new JPanel();
         JButton showBtn = new JButton("Adatok megtekintése");
+        showBtn.addActionListener(e -> {
+            new Transformation();
+            controller.setIdForValidPointList();
+            KMLWrapperController.INPUT_POINTS.forEach(System.out::println);
+        });
         showBtn.setFont(boldFont);
         showBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(showBtn);

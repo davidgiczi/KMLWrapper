@@ -77,13 +77,13 @@ public class ToWGS {
         X_WGS84 = deltaX + kRxRyRz_00 * X_IUGG67 + kRxRyRz_01 * Y_IUGG67 + kRxRyRz_02 * Z_IUGG67;
         Y_WGS84 = deltaY + kRxRyRz_10 * X_IUGG67 + kRxRyRz_11 *  Y_IUGG67 + kRxRyRz_12 * Z_IUGG67;
         Z_WGS84 = deltaZ + kRxRyRz_20 * X_IUGG67 + kRxRyRz_21 * Y_IUGG67 + kRxRyRz_22 * Z_IUGG67;
-        List<Double> geographicalCoordinates = getGeographicalCoordinatesForWGS84(X_WGS84, Y_WGS84, Z_WGS84);
+        List<Double> geographicalCoordinates = getGeographicalCoordinatesDegreesForWGS84(X_WGS84, Y_WGS84, Z_WGS84);
         Fi_WGS84 = geographicalCoordinates.get(0);
         Lambda_WGS84 = geographicalCoordinates.get(1);
         h_WGS84 = geographicalCoordinates.get(2);
     }
 
-    public static List<Double> getGeographicalCoordinatesForWGS84(double X_WGS84, double Y_WGS84, double Z_WGS84){
+    public static List<Double> getGeographicalCoordinatesDegreesForWGS84(double X_WGS84, double Y_WGS84, double Z_WGS84){
         double p = Math.sqrt(Math.pow(X_WGS84, 2) + Math.pow(Y_WGS84, 2));
         double theta = Math.atan(Z_WGS84 * a / (p * b));
         double FI_WGS84 = Math.atan( (Z_WGS84 + Math.pow(e_, 2) * b * Math.pow(Math.sin(theta), 3)) /
@@ -91,15 +91,15 @@ public class ToWGS {
         double LAMBDA_WGS84 = Math.atan(Y_WGS84 / X_WGS84);
         double N = a / Math.sqrt(1 - Math.pow(e, 2) * Math.pow(Math.sin(FI_WGS84), 2));
         double H_WGS84 = p / Math.cos(FI_WGS84) - N;
-        return Arrays.asList(FI_WGS84, LAMBDA_WGS84, H_WGS84);
+        return Arrays.asList(Math.toDegrees(FI_WGS84), Math.toDegrees(LAMBDA_WGS84), H_WGS84);
     }
 
-    public static List<Double> getXYZCoordinatesForWGS84(double Fi_WGS84, double Lambda_WGS84, double h_WGS84){
+    public static List<Double> getXYZCoordinatesForWGS84ByDegrees(double Fi_WGS84, double Lambda_WGS84, double h_WGS84){
 
-        double N = a / Math.sqrt(1 - Math.pow(e, 2) * Math.pow(Math.sin(Fi_WGS84), 2));
-        double X = (N + h_WGS84) * Math.cos(Fi_WGS84) * Math.cos(Lambda_WGS84);
-        double Y = (N + h_WGS84) * Math.cos(Fi_WGS84) * Math.sin(Lambda_WGS84);
-        double Z = ((1 - Math.pow(e, 2)) * N + h_WGS84) * Math.sin(Fi_WGS84);
+        double N = a / Math.sqrt(1 - Math.pow(e, 2) * Math.pow(Math.sin(Math.toRadians(Fi_WGS84)), 2));
+        double X = (N + h_WGS84) * Math.cos(Math.toRadians(Fi_WGS84)) * Math.cos(Math.toRadians(Lambda_WGS84));
+        double Y = (N + h_WGS84) * Math.cos(Math.toRadians(Fi_WGS84)) * Math.sin(Math.toRadians(Lambda_WGS84));
+        double Z = ((1 - Math.pow(e, 2)) * N + h_WGS84) * Math.sin(Math.toRadians(Fi_WGS84));
 
         return Arrays.asList(X, Y, Z);
     }

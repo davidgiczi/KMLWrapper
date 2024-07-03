@@ -20,17 +20,17 @@ public class FileProcess {
     public static List<String> INPUT_DATA_LIST;
 
     public void openInputDataFile() {
-        JFileChooser jfc = new JFileChooser(){
+        JFileChooser jfc = new JFileChooser() {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected JDialog createDialog( Component parent ) throws HeadlessException {
-                JDialog dialog = super.createDialog( parent );
+            protected JDialog createDialog(Component parent) throws HeadlessException {
+                JDialog dialog = super.createDialog(parent);
                 dialog.setLocationRelativeTo(null);
                 dialog.setIconImage(
                         new ImageIcon(Objects.requireNonNull(
-                                this.getClass().getResource("/logo/MVM.jpg"))).getImage() );
+                                this.getClass().getResource("/logo/MVM.jpg"))).getImage());
                 return dialog;
             }
         };
@@ -49,13 +49,12 @@ public class FileProcess {
                 FileSystemView.getFileSystemView().getHomeDirectory() : new File(FOLDER_PATH));
         jfc.setDialogTitle("Adat fájl megnyitása");
         int returnValue = jfc.showOpenDialog(null);
-        if(returnValue == JFileChooser.APPROVE_OPTION) {
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = jfc.getSelectedFile();
             FILE_NAME = selectedFile.getName();
             FOLDER_PATH = selectedFile.getParent();
             openInputFile();
-        }
-        else {
+        } else {
             FILE_NAME = null;
         }
     }
@@ -72,7 +71,7 @@ public class FileProcess {
             point.setZ_WGS84(Double.parseDouble(pointData[3]));
             point.setY_EOV(Double.parseDouble(pointData[4]));
             point.setX_EOV(Double.parseDouble(pointData[5]));
-            point.setH_EOV(Double.parseDouble(pointData[6]));
+            point.setM_EOV(Double.parseDouble(pointData[6]));
             point.convertEOVCoordinatesForXYZForIUGG67();
             KMLWrapperController.REFERENCE_POINTS.add(point);
         }
@@ -83,16 +82,15 @@ public class FileProcess {
         try (InputStream is = FileProcess.class.getClassLoader().getResourceAsStream("points/common_points.txt");
              BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)))) {
             String row;
-            while ((row = br.readLine()) != null){
+            while ((row = br.readLine()) != null) {
                 pointsData.add(row);
             }
-        }
-        catch (IOException ignored){
+        } catch (IOException ignored) {
         }
         return pointsData;
     }
 
-    public void openInputFile(){
+    public void openInputFile() {
         INPUT_DATA_LIST = new ArrayList<>();
         File file = new File(FOLDER_PATH + "/" + FILE_NAME);
         try (FileInputStream fis = new FileInputStream(file);
@@ -101,14 +99,37 @@ public class FileProcess {
         ) {
 
             String line;
-            while ( (line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 INPUT_DATA_LIST.add(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    public List<String> getAutoCadInputData() {
+
+        List<String> resultData = new ArrayList<>();
+
+        for (String row : INPUT_DATA_LIST) {
+
+            String dataLine;
+
+            if (row.trim().startsWith("pont,")) {
+
+                dataLine = row;
+
+                String[] data = dataLine.trim().split("\\s+");
+
+                String result = data[1].substring(2) + "," + data[2].substring(2) + ","
+                        + data[data.length - 1];
+
+                resultData.add(result);
+            }
+
+        }
+
+        return resultData;
+    }
+
 }
-
-
-

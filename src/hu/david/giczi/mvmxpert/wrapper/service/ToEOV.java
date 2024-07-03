@@ -23,7 +23,7 @@ public class ToEOV {
     public List<Point> referencePoints;
     public static double X_EOV;
     public static double Y_EOV;
-    public static double H_EOV;
+    public static double M_EOV;
 
 
     public ToEOV(double X_WGS84, double Y_WGS84, double Z_WGS84, List<Point> referencePoints) {
@@ -139,7 +139,7 @@ public class ToEOV {
         double lambda_ = Math.asin(Math.cos(sphereFi)  * Math.sin(sphereLambda) / Math.cos(fi_));
         X_EOV = R * m0 * Math.log(Math.tan(Math.PI / 4 + fi_ / 2)) + 200000;
         Y_EOV =  R * m0 * lambda_ + 650000;
-        H_EOV = h_IUGG67;
+        M_EOV = h_IUGG67;
     }
 
     private void runMatrixProcess() {
