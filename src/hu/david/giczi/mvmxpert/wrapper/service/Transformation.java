@@ -22,7 +22,7 @@ public class Transformation {
     private void transformInputPoints(){
         for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
             if( inputPoint.getY_EOV() != null &&
-                    inputPoint.getX_EOV() != null && inputPoint.getM_EOV() != null ){
+                    inputPoint.getX_EOV() != null ){
                 List<Double> IUGG67 =
                 ToEOV.getXYZCoordinatesForIUGG67(inputPoint.getY_EOV(), inputPoint.getX_EOV(), inputPoint.getM_EOV());
                 toWGS = new ToWGS(IUGG67.get(0), IUGG67.get(1), IUGG67.get(2), EOV_TO_WGS_REFERENCE_POINTS);

@@ -161,29 +161,65 @@ public class KMLWrapperController {
                     FileProcess.FILE_NAME + " - " + "Beolvasott pontok száma: " + INPUT_POINTS.size() + " db");
         }
     }
-    public static void addValidInputPoint(Point validPoint){
-        if( KMLWrapperController.INPUT_POINTS.contains(validPoint) ){
-            if(MessagePane.getYesNoOptionMessage("Hozzáadott pont: "
-                            + (validPoint.getPointId() == null ? "-" : validPoint.getPointId()) ,
-                    "Korábban már beolvasott pont, biztosan újra hozzáadja?", null ) == 0 ){
+    public static void addValidInputPoint(Point validPoint) {
+
+        if( KMLWrapperController.INPUT_POINTS.isEmpty() ){
+            validPoint.setPointId("1");
+            KMLWrapperController.INPUT_POINTS.add(validPoint);
+            return;
+        }
+
+        for (int i = KMLWrapperController.INPUT_POINTS.size() - 1; i >= 0; i--) {
+            if (!validPoint.isWGS() && !KMLWrapperController.INPUT_POINTS.get(i).isWGS() &&
+                    Objects.equals(validPoint.getY_EOV(), KMLWrapperController.INPUT_POINTS.get(i).getY_EOV()) &&
+                    Objects.equals(validPoint.getX_EOV(), KMLWrapperController.INPUT_POINTS.get(i).getX_EOV()) &&
+                    Objects.equals(validPoint.getM_EOV(), KMLWrapperController.INPUT_POINTS.get(i).getM_EOV())) {
+                if (MessagePane.getYesNoOptionMessage("Hozzáadott pont: " + KMLWrapperController.INPUT_POINTS.get(i).getPointId(),
+                        "Korábban már beolvasott pont, biztosan újra hozzáadja?", null) == 0) {
+                    validPoint.setPointId(KMLWrapperController.INPUT_POINTS.get(i).getPointId());
+                    KMLWrapperController.INPUT_POINTS.add(validPoint);
+                    setWindowTitle();
+                }
+            } else if (validPoint.isWGS() && KMLWrapperController.INPUT_POINTS.get(i).isWGS() &&
+                    !validPoint.isXYZ() && !KMLWrapperController.INPUT_POINTS.get(i).isXYZ() &&
+                    Objects.equals(validPoint.getFi_WGS84(), KMLWrapperController.INPUT_POINTS.get(i).getFi_WGS84()) &&
+                    Objects.equals(validPoint.getLambda_WGS84(), KMLWrapperController.INPUT_POINTS.get(i).getLambda_WGS84()) &&
+                    Objects.equals(validPoint.getH_WGS84(), KMLWrapperController.INPUT_POINTS.get(i).getH_WGS84())) {
+                if (MessagePane.getYesNoOptionMessage("Hozzáadott pont: " + KMLWrapperController.INPUT_POINTS.get(i).getPointId(),
+                        "Korábban már beolvasott pont, biztosan újra hozzáadja?", null) == 0) {
+                    validPoint.setPointId(KMLWrapperController.INPUT_POINTS.get(i).getPointId());
+                    KMLWrapperController.INPUT_POINTS.add(validPoint);
+                    setWindowTitle();
+                }
+            } else if (validPoint.isWGS() && KMLWrapperController.INPUT_POINTS.get(i).isWGS() &&
+                    validPoint.isXYZ() && KMLWrapperController.INPUT_POINTS.get(i).isXYZ() &&
+                    Objects.equals(validPoint.getX_WGS84(), KMLWrapperController.INPUT_POINTS.get(i).getX_WGS84()) &&
+                    Objects.equals(validPoint.getY_WGS84(), KMLWrapperController.INPUT_POINTS.get(i).getY_WGS84()) &&
+                    Objects.equals(validPoint.getZ_IUGG67(), KMLWrapperController.INPUT_POINTS.get(i).getZ_WGS84())) {
+                if (MessagePane.getYesNoOptionMessage("Hozzáadott pont: " + KMLWrapperController.INPUT_POINTS.get(i).getPointId(),
+                        "Korábban már beolvasott pont, biztosan újra hozzáadja?", null) == 0) {
+                    validPoint.setPointId(KMLWrapperController.INPUT_POINTS.get(i).getPointId());
+                    KMLWrapperController.INPUT_POINTS.add(validPoint);
+                    setWindowTitle();
+                }
+            } else {
+                validPoint.setPointId(validPoint.getPointId() == null ?
+                        String.valueOf(INPUT_POINTS.size() + 1) : validPoint.getPointId());
                 KMLWrapperController.INPUT_POINTS.add(validPoint);
                 setWindowTitle();
             }
         }
-        else {
-            KMLWrapperController.INPUT_POINTS.add(validPoint);
-            setWindowTitle();
-        }
     }
-    public void setIdForValidPointList(){
-        String pointId = INPUT_DATA_FILE_WINDOW.pointIdField.getText();
+
+    public void setIdForInputDataPoints(){
+        String inputPointId = INPUT_DATA_FILE_WINDOW.pointIdField.getText();
         int pointIdValue;
-        if( pointId.isEmpty() ){
-            pointIdValue = 1;
+        if( inputPointId.isEmpty() ){
+            pointIdValue = INPUT_POINTS.size() + 1;
         }
         else{
             try{
-                pointIdValue = Integer.parseInt(pointId);
+                pointIdValue = Integer.parseInt(inputPointId);
             }catch (NumberFormatException e){
                 MessagePane.getInfoMessage("Hibás pontszám érték",
                         "A pontszám érétke csak pozitív egész szám lehet.", INPUT_DATA_FILE_WINDOW.jFrame);

@@ -1,12 +1,15 @@
 package hu.david.giczi.mvmxpert.wrapper.domain;
 
 
+import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.service.ToEOV;
 import java.util.List;
 import java.util.Objects;
 
 public class Point {
 
+    private boolean isWGS;
+    private boolean isXYZ;
     private String pointId;
     private Double y_EOV;
     private Double x_EOV;
@@ -24,6 +27,22 @@ public class Point {
     private Double lambda_WGS84;
     private Double h_WGS84;
 
+
+    public boolean isWGS() {
+        return isWGS;
+    }
+
+    public void setWGS(boolean WGS) {
+        isWGS = WGS;
+    }
+
+    public boolean isXYZ() {
+        return isXYZ;
+    }
+
+    public void setXYZ(boolean XYZ) {
+        isXYZ = XYZ;
+    }
 
     public String getPointId() {
         return pointId;
@@ -165,21 +184,12 @@ public class Point {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Point point = (Point) o;
-        return Objects.equals(pointId, point.pointId) && Objects.equals(y_EOV, point.y_EOV)
-                && Objects.equals(x_EOV, point.x_EOV) && Objects.equals(M_EOV, point.M_EOV)
-                && Objects.equals(x_IUGG67, point.x_IUGG67) && Objects.equals(y_IUGG67, point.y_IUGG67)
-                && Objects.equals(z_IUGG67, point.z_IUGG67) && Objects.equals(fi_IUGG67, point.fi_IUGG67)
-                && Objects.equals(lambda_IUGG67, point.lambda_IUGG67) && Objects.equals(h_IUGG67, point.h_IUGG67)
-                && Objects.equals(x_WGS84, point.x_WGS84) && Objects.equals(y_WGS84, point.y_WGS84)
-                && Objects.equals(z_WGS84, point.z_WGS84) && Objects.equals(fi_WGS84, point.fi_WGS84)
-                && Objects.equals(lambda_WGS84, point.lambda_WGS84) && Objects.equals(h_WGS84, point.h_WGS84);
+        return Objects.equals(pointId, point.pointId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pointId, y_EOV, x_EOV, M_EOV, x_IUGG67, y_IUGG67, z_IUGG67,
-                fi_IUGG67, lambda_IUGG67, h_IUGG67, x_WGS84, y_WGS84, z_WGS84,
-                fi_WGS84, lambda_WGS84, h_WGS84);
+        return Objects.hash(pointId);
     }
 
     @Override

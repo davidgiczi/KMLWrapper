@@ -70,7 +70,9 @@ public class InputDataFileWindow {
             "Kerület+pontok"};
     private final String[] TXT_DATA_TYPE = {
             "Adattípus választása",
-            "Beolvasott és transzformált pontok",
+            "Beolvasott pontok",
+            "EOV-be transzformált pontok",
+            "WGS84-be transzformált pontok",
             "Közös pontok: EOV (Y, X, M)",
             "Közös pontok: IUGG67 (X, Y, Z)",
             "Közös pontok: IUGG67 (Szélesség, Hosszúság, Magasság)",
@@ -398,7 +400,6 @@ public class InputDataFileWindow {
         JButton showBtn = new JButton("Adatok megtekintése");
         showBtn.addActionListener(e -> {
             new Transformation();
-            controller.setIdForValidPointList();
             KMLWrapperController.INPUT_POINTS.forEach(System.out::println);
         });
         showBtn.setFont(boldFont);

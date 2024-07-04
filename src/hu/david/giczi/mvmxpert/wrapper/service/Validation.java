@@ -2,7 +2,6 @@ package hu.david.giczi.mvmxpert.wrapper.service;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
-
 import java.util.List;
 import java.util.prefs.InvalidPreferencesFormatException;
 
@@ -165,6 +164,7 @@ public class Validation {
         }
         else if( "Psz".equals(dataComponents[0]) && "Szélesség".equals(dataComponents[1]) ){
             pointWGS84.setPointId(pointId);
+            pointWGS84.setWGS(true);
             pointWGS84.setFi_WGS84(firstData);
             pointWGS84.setLambda_WGS84(secondData);
             pointWGS84.setH_WGS84(elevation);
@@ -175,6 +175,7 @@ public class Validation {
         }
         else if( "Psz".equals(dataComponents[0]) && "Hosszúság".equals(dataComponents[1]) ){
             pointWGS84.setPointId(pointId);
+            pointWGS84.setWGS(true);
             pointWGS84.setFi_WGS84(secondData);
             pointWGS84.setLambda_WGS84(firstData);
             pointWGS84.setH_WGS84(elevation);
@@ -185,9 +186,11 @@ public class Validation {
         }
         else if( "Psz".equals(dataComponents[0]) && "X".equals(dataComponents[1]) ){
             pointWGS84.setPointId(pointId);
+            pointWGS84.setWGS(true);
             pointWGS84.setX_WGS84(firstData);
             pointWGS84.setY_WGS84(secondData);
             pointWGS84.setZ_WGS84(elevation);
+            pointWGS84.setXYZ(true);
             List<Double> geo_WGS84 = ToWGS.getGeographicalCoordinatesDegreesForWGS84(firstData, secondData, elevation);
             pointWGS84.setFi_WGS84(geo_WGS84.get(0));
             pointWGS84.setLambda_WGS84(geo_WGS84.get(1));
@@ -195,6 +198,7 @@ public class Validation {
         }
         else if( "Szélesség".equals(dataComponents[0]) ){
             pointWGS84.setFi_WGS84(firstData);
+            pointWGS84.setWGS(true);
             pointWGS84.setLambda_WGS84(secondData);
             pointWGS84.setH_WGS84(elevation);
             List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84ByDegrees(firstData, secondData, elevation);
@@ -204,6 +208,7 @@ public class Validation {
         }
         else if( "Hosszúság".equals(dataComponents[0]) ){
             pointWGS84.setFi_WGS84(secondData);
+            pointWGS84.setWGS(true);
             pointWGS84.setLambda_WGS84(firstData);
             pointWGS84.setH_WGS84(elevation);
             List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84ByDegrees(secondData, firstData, elevation);
@@ -213,8 +218,10 @@ public class Validation {
         }
         else if( "X".equals(dataComponents[0]) ){
             pointWGS84.setX_WGS84(firstData);
+            pointWGS84.setWGS(true);
             pointWGS84.setY_WGS84(secondData);
             pointWGS84.setZ_WGS84(elevation);
+            pointWGS84.setXYZ(true);
             List<Double> geo_WGS84 = ToWGS.getGeographicalCoordinatesDegreesForWGS84(firstData, secondData, elevation);
             pointWGS84.setFi_WGS84(geo_WGS84.get(0));
             pointWGS84.setLambda_WGS84(geo_WGS84.get(1));
@@ -311,6 +318,7 @@ public class Validation {
                     "(22.9° > Hosszúság fok > 16.11°)");
         }
         Point pointWGS84 = new Point();
+        pointWGS84.setWGS(true);
         pointWGS84.setPointId(pointId);
         pointWGS84.setFi_WGS84(fi);
         pointWGS84.setLambda_WGS84(lambda);
@@ -413,6 +421,7 @@ public class Validation {
                     "(22.9° > Hosszúság fok > 16.11°)");
         }
         Point pointWGS84 = new Point();
+        pointWGS84.setWGS(true);
         pointWGS84.setPointId(pointId);
         double FiValue = fi_angle + fi_min / 60.0 + fi_sec / 3600.0;
         pointWGS84.setFi_WGS84(FiValue);
@@ -461,10 +470,12 @@ public class Validation {
             throw new InvalidPreferencesFormatException("Hibás térbeli Z koordináta érték. (4800km > Z_WGS84 > 4270km)");
         }
         Point pointWGS84 = new Point();
+        pointWGS84.setWGS(true);
         pointWGS84.setPointId(pointId);
         pointWGS84.setX_WGS84(x);
         pointWGS84.setY_WGS84(y);
         pointWGS84.setZ_WGS84(z);
+        pointWGS84.setXYZ(true);
         List<Double> geo_WGS84 = ToWGS.getGeographicalCoordinatesDegreesForWGS84(x, y, z);
         pointWGS84.setFi_WGS84(geo_WGS84.get(0));
         pointWGS84.setLambda_WGS84(geo_WGS84.get(1));
