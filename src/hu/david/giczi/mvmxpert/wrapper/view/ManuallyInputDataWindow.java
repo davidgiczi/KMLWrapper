@@ -39,7 +39,7 @@ public class ManuallyInputDataWindow {
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
     private final Boolean[] IS_INPUT_DATA_TYPE = new Boolean[5];
 
-    private final String[] INPUT_DATA_TYPE = {
+    private static final String[] INPUT_DATA_TYPE = {
             "Bemeneti adattípus választása",
             "EOV (Y,X,M)",
             "WGS84 (decimális)",

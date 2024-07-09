@@ -1,7 +1,6 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
-
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
-import hu.david.giczi.mvmxpert.wrapper.service.Transformation;
+
 
 
 import javax.swing.*;
@@ -16,6 +15,7 @@ public class InputDataFileWindow {
     public JTextField pointPreIdField;
     public JTextField pointIdField;
     public JTextField pointPostIdField;
+    private JButton showBtn;
     private final KMLWrapperController controller;
     private JPanel inputFileOptionPanel;
     private JPanel outputFileOptionPanel;
@@ -25,7 +25,7 @@ public class InputDataFileWindow {
     private JComboBox<String> outputDataTypeComboBox;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
-    public final String[] EOV_DATA_TYPE = {
+    public static final String[] EOV_DATA_TYPE = {
             "Formátum választása",
             "EOV (Psz,Y,X,M)",
             "EOV (Psz Y X M)",
@@ -39,7 +39,7 @@ public class InputDataFileWindow {
             "EOV (X,Y,M)",
             "EOV (X Y M)",
             "EOV (X;Y;M)"};
-    private final String[] WGS_DATA_TYPE = {
+    private static final String[] WGS_DATA_TYPE = {
             "Formátum választása",
             "WGS84 (Psz,Szélesség,Hosszúság,Magasság)",
             "WGS84 (Psz Szélesség Hosszúság Magasság)",
@@ -61,16 +61,17 @@ public class InputDataFileWindow {
             "WGS84 (X;Y;Z)"
     };
 
-    private final String[] KML_DATA_TYPE = {
+    private static final String[] KML_DATA_TYPE = {
             "Adattípus választása",
             "Pont",
             "Vonal",
             "Kerület",
             "Vonal+pontok",
             "Kerület+pontok"};
-    private final String[] TXT_DATA_TYPE = {
+    public static final String[] TXT_DATA_TYPE = {
             "Adattípus választása",
-            "Beolvasott pontok",
+            "Beolvasott pontok (EOV)",
+            "Beolvasott pontok (WGS84)",
             "EOV-be transzformált pontok",
             "WGS84-be transzformált pontok",
             "Közös pontok: EOV (Y, X, M)",
@@ -78,10 +79,10 @@ public class InputDataFileWindow {
             "Közös pontok: IUGG67 (Szélesség, Hosszúság, Magasság)",
             "Közös pontok: WGS84 (X, Y, Z)",
             "Közös pontok: WGS84 (Szélesség, Hosszúság, Magasság)",
-            "Transzformáció paraméterei (EOV-WGS)",
-            "Transzformáció paraméterei (WGS-EOV)",
-            "Maradék ellentmondások EOV rendszerben",
-            "Maradék ellentmondások WGS rendszerben"};
+            "Transzformáció paraméterei (EOV-WGS84)",
+            "Transzformáció paraméterei (WGS84-EOV)",
+            "Maradék ellentmondások (EOV)",
+            "Maradék ellentmondások (WGS84)"};
 
     public InputDataFileWindow(KMLWrapperController controller) {
         this.controller = controller;
@@ -301,21 +302,23 @@ public class InputDataFileWindow {
     }
     private void addRadioButtonForOutputFileOptionPanel(){
         JPanel panel = new JPanel();
-        JRadioButton kmlRadioBtn = new JRadioButton("kml fájl");
+       JRadioButton kmlRadioBtn = new JRadioButton("kml fájl");
         kmlRadioBtn.addActionListener(e -> {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(KML_DATA_TYPE);
             outputDataTypeComboBox.setModel(model);
             saveFileNameField.setText(null);
+            showBtn.setEnabled(false);
         });
         kmlRadioBtn.setFont(plainFont);
         kmlRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        kmlRadioBtn.setSelected(true);
         kmlRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         JRadioButton txtRadioBtn = new JRadioButton("txt fájl");
+        txtRadioBtn.setSelected(true);
         txtRadioBtn.addActionListener(e -> {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(TXT_DATA_TYPE);
             outputDataTypeComboBox.setModel(model);
             saveFileNameField.setText(null);
+            showBtn.setEnabled(true);
         });
         txtRadioBtn.setFont(plainFont);
         txtRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -326,6 +329,7 @@ public class InputDataFileWindow {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
             outputDataTypeComboBox.setModel(model);
             saveFileNameField.setText("pontok.scr");
+            showBtn.setEnabled(false);
         });
         scrRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         scrRadioBtn.setFont(plainFont);
@@ -342,9 +346,9 @@ public class InputDataFileWindow {
 
     private void addComboBoxForOutputFileOptionPanel(){
         JPanel panel = new JPanel();
-        outputDataTypeComboBox = new JComboBox<>(KML_DATA_TYPE);
+        outputDataTypeComboBox = new JComboBox<>(TXT_DATA_TYPE);
         outputDataTypeComboBox.addItemListener(e -> {
-            if( e.getItem().toString().equals(EOV_DATA_TYPE[0]) ){
+            if( e.getItem().toString().equals(TXT_DATA_TYPE[0]) ){
                 outputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
             }
             else{
@@ -388,7 +392,13 @@ public class InputDataFileWindow {
     private void addSaveButtonForOutputFile(){
         JPanel panel = new JPanel();
         JButton saveBtn = new JButton("Fájl mentése");
-        saveBtn.addActionListener(e -> {});
+        saveBtn.addActionListener(e -> {
+            String selectedItem =
+                    Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
+            if (isOkInputDataProcess(selectedItem) ) {
+
+            }
+        });
         saveBtn.setFont(boldFont);
         saveBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(saveBtn);
@@ -397,15 +407,31 @@ public class InputDataFileWindow {
 
     private void addShowButtonForData(){
         JPanel panel = new JPanel();
-        JButton showBtn = new JButton("Adatok megtekintése");
+        showBtn = new JButton("Adatok megtekintése");
         showBtn.addActionListener(e -> {
-            new Transformation();
-            KMLWrapperController.INPUT_POINTS.forEach(System.out::println);
-        });
+            String selectedItem =
+                    Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
+                    if( isOkInputDataProcess(selectedItem) ){
+                        new DataDisplayerWindow(selectedItem);
+                    }});
         showBtn.setFont(boldFont);
         showBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(showBtn);
         saveOutputFileOptionPanel.add(panel);
+    }
+
+    private boolean isOkInputDataProcess(String selectedItem){
+
+        if (selectedItem.equals(TXT_DATA_TYPE[0])) {
+            MessagePane.getInfoMessage("Érvénytelen adattípus",
+                    "Adattípus választása szükséges.", jFrame);
+            return false;
+        } else if( KMLWrapperController.INPUT_POINTS.isEmpty() ) {
+            MessagePane.getInfoMessage("Nem található adat",
+                    "Hozzáadott pont nem található.", jFrame);
+            return false;
+        }
+        return true;
     }
 
     private void createFileNameForSaveOutputFile(){

@@ -168,47 +168,44 @@ public class KMLWrapperController {
             KMLWrapperController.INPUT_POINTS.add(validPoint);
             return;
         }
-
-        for (int i = KMLWrapperController.INPUT_POINTS.size() - 1; i >= 0; i--) {
-            if (!validPoint.isWGS() && !KMLWrapperController.INPUT_POINTS.get(i).isWGS() &&
-                    Objects.equals(validPoint.getY_EOV(), KMLWrapperController.INPUT_POINTS.get(i).getY_EOV()) &&
-                    Objects.equals(validPoint.getX_EOV(), KMLWrapperController.INPUT_POINTS.get(i).getX_EOV()) &&
-                    Objects.equals(validPoint.getM_EOV(), KMLWrapperController.INPUT_POINTS.get(i).getM_EOV())) {
-                if (MessagePane.getYesNoOptionMessage("Hozzáadott pont: " + KMLWrapperController.INPUT_POINTS.get(i).getPointId(),
-                        "Korábban már beolvasott pont, biztosan újra hozzáadja?", null) == 0) {
-                    validPoint.setPointId(KMLWrapperController.INPUT_POINTS.get(i).getPointId());
-                    KMLWrapperController.INPUT_POINTS.add(validPoint);
-                    setWindowTitle();
-                }
-            } else if (validPoint.isWGS() && KMLWrapperController.INPUT_POINTS.get(i).isWGS() &&
-                    !validPoint.isXYZ() && !KMLWrapperController.INPUT_POINTS.get(i).isXYZ() &&
-                    Objects.equals(validPoint.getFi_WGS84(), KMLWrapperController.INPUT_POINTS.get(i).getFi_WGS84()) &&
-                    Objects.equals(validPoint.getLambda_WGS84(), KMLWrapperController.INPUT_POINTS.get(i).getLambda_WGS84()) &&
-                    Objects.equals(validPoint.getH_WGS84(), KMLWrapperController.INPUT_POINTS.get(i).getH_WGS84())) {
-                if (MessagePane.getYesNoOptionMessage("Hozzáadott pont: " + KMLWrapperController.INPUT_POINTS.get(i).getPointId(),
-                        "Korábban már beolvasott pont, biztosan újra hozzáadja?", null) == 0) {
-                    validPoint.setPointId(KMLWrapperController.INPUT_POINTS.get(i).getPointId());
-                    KMLWrapperController.INPUT_POINTS.add(validPoint);
-                    setWindowTitle();
-                }
-            } else if (validPoint.isWGS() && KMLWrapperController.INPUT_POINTS.get(i).isWGS() &&
-                    validPoint.isXYZ() && KMLWrapperController.INPUT_POINTS.get(i).isXYZ() &&
-                    Objects.equals(validPoint.getX_WGS84(), KMLWrapperController.INPUT_POINTS.get(i).getX_WGS84()) &&
-                    Objects.equals(validPoint.getY_WGS84(), KMLWrapperController.INPUT_POINTS.get(i).getY_WGS84()) &&
-                    Objects.equals(validPoint.getZ_IUGG67(), KMLWrapperController.INPUT_POINTS.get(i).getZ_WGS84())) {
-                if (MessagePane.getYesNoOptionMessage("Hozzáadott pont: " + KMLWrapperController.INPUT_POINTS.get(i).getPointId(),
-                        "Korábban már beolvasott pont, biztosan újra hozzáadja?", null) == 0) {
-                    validPoint.setPointId(KMLWrapperController.INPUT_POINTS.get(i).getPointId());
-                    KMLWrapperController.INPUT_POINTS.add(validPoint);
-                    setWindowTitle();
-                }
-            } else {
+        Point addedPoint = isAddedPoint(validPoint);
+            if( addedPoint == null) {
                 validPoint.setPointId(validPoint.getPointId() == null ?
                         String.valueOf(INPUT_POINTS.size() + 1) : validPoint.getPointId());
                 KMLWrapperController.INPUT_POINTS.add(validPoint);
-                setWindowTitle();
+            } else {
+                if( MessagePane.getYesNoOptionMessage("Hozzáadott pont: " + addedPoint.getPointId(),
+                        "Korábban már beolvasott pont, biztosan újra hozzáadja?",
+                    MANUALLY_INPUT_DATA_WINDOW.jFrame) == 0 ) {
+                    validPoint.setPointId(addedPoint.getPointId());
+                    KMLWrapperController.INPUT_POINTS.add(validPoint);
+                }
+            }
+        setWindowTitle();
+        }
+    private static Point isAddedPoint(Point validPoint) {
+
+        for (Point inputPoint : INPUT_POINTS) {
+            if (!validPoint.isWGS() && !inputPoint.isWGS() &&
+                    Objects.equals(validPoint.getY_EOV(), inputPoint.getY_EOV()) &&
+                    Objects.equals(validPoint.getX_EOV(), inputPoint.getX_EOV()) &&
+                    Objects.equals(validPoint.getM_EOV(), inputPoint.getM_EOV())) {
+                return inputPoint;
+            } else if (validPoint.isWGS() && inputPoint.isWGS() &&
+                    !validPoint.isXYZ() && !inputPoint.isXYZ() &&
+                    Objects.equals(validPoint.getFi_WGS84(), inputPoint.getFi_WGS84()) &&
+                    Objects.equals(validPoint.getLambda_WGS84(), inputPoint.getLambda_WGS84()) &&
+                    Objects.equals(validPoint.getH_WGS84(), inputPoint.getH_WGS84())) {
+                return inputPoint;
+            } else if(validPoint.isWGS() && inputPoint.isWGS() &&
+                    validPoint.isXYZ() && inputPoint.isXYZ() &&
+                    Objects.equals(validPoint.getX_WGS84(), inputPoint.getX_WGS84()) &&
+                    Objects.equals(validPoint.getY_WGS84(), inputPoint.getY_WGS84()) &&
+                    Objects.equals(validPoint.getZ_WGS84(), inputPoint.getZ_WGS84())){
+                return inputPoint;
             }
         }
+        return null;
     }
 
     public void setIdForInputDataPoints(){
