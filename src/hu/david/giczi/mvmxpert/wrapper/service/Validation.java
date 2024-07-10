@@ -52,7 +52,7 @@ public class Validation {
                 double secondData = Double.parseDouble(rowData[2].replace(",", "."));
                 point = isValidEOVData(rowData[0], firstData, secondData, 0.0, indexValue);
             }
-            else if( "EOV".equals(coordinateType) && rowData.length == 4 ){
+            else if( "EOV".equals(coordinateType) && rowData.length >= 4 ){
                 double firstData =  Double.parseDouble(rowData[1].replace(",", "."));
                 double secondData = Double.parseDouble(rowData[2].replace(",", "."));
                 double elevation = Double.parseDouble(rowData[3].replace(",", "."));
@@ -74,7 +74,7 @@ public class Validation {
                 double secondData = Double.parseDouble(rowData[2].replace(",", "."));
                 point = isValidWGS84Data(rowData[0], firstData, secondData, 0.0, indexValue);
             }
-            else if( "WGS84".equals(coordinateType) && rowData.length == 4 ){
+            else if( "WGS84".equals(coordinateType) && rowData.length >= 4 ){
                 double firstData =  Double.parseDouble(rowData[1].replace(",", "."));
                 double secondData = Double.parseDouble(rowData[2].replace(",", "."));
                 double elevation = Double.parseDouble(rowData[3].replace(",", "."));

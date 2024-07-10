@@ -413,7 +413,8 @@ public class InputDataFileWindow {
                     Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
                     if( isOkInputDataProcess(selectedItem) && controller.setIdForInputDataPoints() ){
                         new DataDisplayerWindow(selectedItem);
-                    }});
+                    }
+        });
         showBtn.setFont(boldFont);
         showBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(showBtn);

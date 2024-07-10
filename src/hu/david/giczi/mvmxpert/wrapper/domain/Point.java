@@ -12,6 +12,7 @@ public class Point {
 
     private boolean isWGS;
     private boolean isXYZ;
+    private boolean isUse;
     private String pointId;
     private Double y_EOV;
     private Double x_EOV;
@@ -45,6 +46,14 @@ public class Point {
 
     public void setXYZ(boolean XYZ) {
         isXYZ = XYZ;
+    }
+
+    public boolean isUse() {
+        return isUse;
+    }
+
+    public void setUse(boolean use) {
+        isUse = use;
     }
 
     public String getPointId() {

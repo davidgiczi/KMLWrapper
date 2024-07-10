@@ -183,7 +183,6 @@ public class KMLWrapperController {
         setWindowTitle();
         }
     private static Point isAddedPoint(Point validPoint) {
-
         for (Point inputPoint : INPUT_POINTS) {
             if (!validPoint.isWGS() && !inputPoint.isWGS() &&
                     Objects.equals(validPoint.getY_EOV(), inputPoint.getY_EOV()) &&
