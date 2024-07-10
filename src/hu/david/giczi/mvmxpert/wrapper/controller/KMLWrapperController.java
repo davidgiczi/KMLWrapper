@@ -164,7 +164,6 @@ public class KMLWrapperController {
     public static void addValidInputPoint(Point validPoint) {
 
         if( KMLWrapperController.INPUT_POINTS.isEmpty() ){
-            validPoint.setPointId("1");
             KMLWrapperController.INPUT_POINTS.add(validPoint);
             return;
         }
@@ -174,9 +173,9 @@ public class KMLWrapperController {
                         String.valueOf(INPUT_POINTS.size() + 1) : validPoint.getPointId());
                 KMLWrapperController.INPUT_POINTS.add(validPoint);
             } else {
-                if( MessagePane.getYesNoOptionMessage("Hozzáadott pont: " + addedPoint.getPointId(),
+               if( MessagePane.getYesNoOptionMessage("Hozzáadott pont: " + addedPoint.getPointId(),
                         "Korábban már beolvasott pont, biztosan újra hozzáadja?",
-                    MANUALLY_INPUT_DATA_WINDOW.jFrame) == 0 ) {
+                    INPUT_DATA_FILE_WINDOW.jFrame) == 0 ) {
                     validPoint.setPointId(addedPoint.getPointId());
                     KMLWrapperController.INPUT_POINTS.add(validPoint);
                 }
@@ -208,19 +207,16 @@ public class KMLWrapperController {
         return null;
     }
 
-    public void setIdForInputDataPoints(){
+    public boolean setIdForInputDataPoints(){
         String inputPointId = INPUT_DATA_FILE_WINDOW.pointIdField.getText();
-        int pointIdValue;
-        if( inputPointId.isEmpty() ){
-            pointIdValue = INPUT_POINTS.size() + 1;
-        }
-        else{
+        int pointIdValue = 1;
+        if( !inputPointId.isEmpty() ){
             try{
                 pointIdValue = Integer.parseInt(inputPointId);
             }catch (NumberFormatException e){
                 MessagePane.getInfoMessage("Hibás pontszám érték",
                         "A pontszám érétke csak pozitív egész szám lehet.", INPUT_DATA_FILE_WINDOW.jFrame);
-                return;
+                return false;
             }
         }
         String prefix = INPUT_DATA_FILE_WINDOW.pointPreIdField.getText();
@@ -231,16 +227,19 @@ public class KMLWrapperController {
                         (pointIdValue++) +
                         (postfix.isEmpty() ? "" : postfix));
             }
-            else{
-                String id = (prefix.isEmpty() ? "" : prefix) + (pointIdValue) + (postfix.isEmpty() ? "" : postfix);
+            else if( !inputPointId.isEmpty() ){
+                String id = (prefix.isEmpty() ? "" : prefix) +
+                        (pointIdValue) + (postfix.isEmpty() ? "" : postfix);
                if( MessagePane.getYesNoOptionMessage("A pont száma: " + inputPoint.getPointId(),
-                     "Cseréli a pont számát? Az új pontszám: " +  id, INPUT_DATA_FILE_WINDOW.jFrame) == 0){
+                     "Cseréli a pont számát? Az új pontszám: " +
+                             id, INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
                    inputPoint.setPointId((prefix.isEmpty() ? "" : prefix) +
                            (pointIdValue++) +
                            (postfix.isEmpty() ? "" : postfix));
                }
             }
         }
+        return true;
     }
 
 

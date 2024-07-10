@@ -143,8 +143,8 @@ public class InputDataFileWindow {
         saveOutputFileOptionPanel.setLayout(new GridLayout(4, 1));
         addTitleForOutputFileName();
         addFileNameForOutputFile();
-        addSaveButtonForOutputFile();
         addShowButtonForData();
+        addSaveButtonForOutputFile();
         jFrame.add(saveOutputFileOptionPanel);
     }
     private void addMenu(){
@@ -391,7 +391,7 @@ public class InputDataFileWindow {
 
     private void addSaveButtonForOutputFile(){
         JPanel panel = new JPanel();
-        JButton saveBtn = new JButton("Fájl mentése");
+        JButton saveBtn = new JButton("Adatok mentése");
         saveBtn.addActionListener(e -> {
             String selectedItem =
                     Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
@@ -411,7 +411,7 @@ public class InputDataFileWindow {
         showBtn.addActionListener(e -> {
             String selectedItem =
                     Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
-                    if( isOkInputDataProcess(selectedItem) ){
+                    if( isOkInputDataProcess(selectedItem) && controller.setIdForInputDataPoints() ){
                         new DataDisplayerWindow(selectedItem);
                     }});
         showBtn.setFont(boldFont);

@@ -3,6 +3,8 @@ package hu.david.giczi.mvmxpert.wrapper.domain;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.service.ToEOV;
+
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,6 +28,7 @@ public class Point {
     private Double fi_WGS84;
     private Double lambda_WGS84;
     private Double h_WGS84;
+    private DecimalFormat decimalFormat;
 
 
     public boolean isWGS() {
@@ -179,6 +182,21 @@ public class Point {
         this.z_IUGG67 = xyzForIUGG67.get(2);
     }
 
+    public String getFormattedYForEOV(){
+        decimalFormat = new DecimalFormat("0.000");
+        return decimalFormat.format(y_EOV).replace(",", ".");
+    }
+
+    public String getFormattedXForEOV(){
+        decimalFormat = new DecimalFormat("0.000");
+        return decimalFormat.format(x_EOV).replace(",", ".");
+    }
+
+    public String getFormattedMForEOV(){
+        decimalFormat = new DecimalFormat("0.000");
+        return decimalFormat.format(M_EOV).replace(",", ".");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -199,9 +217,6 @@ public class Point {
                 ", y_EOV=" + y_EOV +
                 ", x_EOV=" + x_EOV +
                 ", M_EOV=" + M_EOV +
-                ", fi_WGS84=" + fi_WGS84 +
-                ", lambda_WGS84=" + lambda_WGS84 +
-                ", h_WGS84=" + h_WGS84 +
                 '}';
     }
 }

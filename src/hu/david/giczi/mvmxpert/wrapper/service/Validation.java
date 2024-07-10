@@ -110,6 +110,26 @@ public class Validation {
             throw new InvalidPreferencesFormatException("Hibás Y koordináta érték a belovasott fájl " +
                     indexValue + ". sorában. (960km> Y_EOV > 400km)");
         }
+        else if( "Psz".equals(dataComponents[0]) && "Y".equals(dataComponents[1]) &&
+                (400000 > firstData || 960000 < firstData)){
+            throw new InvalidPreferencesFormatException("Hibás Y koordináta érték a belovasott fájl " +
+                    indexValue + ". sorában. (960km> Y_EOV > 400km)");
+        }
+        else if( "Psz".equals(dataComponents[0]) && "Y".equals(dataComponents[1]) &&
+                (32000 > secondData || 384000 < secondData)){
+            throw new InvalidPreferencesFormatException("Hibás X koordináta érték a belovasott fájl " +
+                    indexValue + ". sorában. (384km > X_EOV > 32km)");
+        }
+        else if( "Psz".equals(dataComponents[0]) && "X".equals(dataComponents[1]) &&
+                (32000 > firstData || 384000 < firstData)){
+            throw new InvalidPreferencesFormatException("Hibás X koordináta érték a belovasott fájl " +
+                    indexValue + ". sorában. (384km > X_EOV > 32km)");
+        }
+        else if( "Psz".equals(dataComponents[0]) && "X".equals(dataComponents[1]) &&
+                (400000 > secondData || 960000 < secondData)){
+            throw new InvalidPreferencesFormatException("Hibás Y koordináta érték a belovasott fájl " +
+                    indexValue + ". sorában. (960km> Y_EOV > 400km)");
+        }
         else if( "Psz".equals(dataComponents[0]) && "Y".equals(dataComponents[1]) ){
             pointEOV.setPointId(pointID);
             pointEOV.setY_EOV(firstData);
@@ -154,7 +174,35 @@ public class Validation {
             throw new InvalidPreferencesFormatException("Hibás földrajzi szélesség fok érték a belovasott fájl " +
                     indexValue + ". sorában. (48.58° > Szélesség fok > 45.74°)");
         }
-        else if( ("X".equals(dataComponents[0]) || "X".equals(dataComponents[1]))
+        else if( "X".equals(dataComponents[0])
+                && (3750000 > firstData || 4190000 < firstData)
+                && (1060000 > secondData || 1420000 < secondData)
+                && (4270000 > elevation || 4800000 < elevation)) {
+            throw new InvalidPreferencesFormatException("Hibás térbeli koordináta érték a belovasott fájl " +
+                    indexValue + ". sorában.<br>(4190km > X_WGS84 > 3750km, 1420km > Y_WGS84 > 1060km, " +
+                    "4800km > Z_WGS84 > 4270km)");
+        }
+        else if( "Psz".equals(dataComponents[0]) && "Szélesség".equals(dataComponents[1]) &&
+                (45.74 > firstData || 48.58 < firstData) ){
+            throw new InvalidPreferencesFormatException("Hibás földrajzi szélesség fok érték a belovasott fájl " +
+                    indexValue + ". sorában. (48.58° > Szélesség fok > 45.74°)");
+        }
+        else if( "Psz".equals(dataComponents[0]) && "Szélesség".equals(dataComponents[1]) &&
+                (16.11 > secondData || 22.9 < secondData) ){
+            throw new InvalidPreferencesFormatException("Hibás földrajzi hosszúság fok érték a belovasott fájl " +
+                    indexValue + ". sorában. (22.9° > Hosszúság fok > 16.11°)");
+        }
+        else if( "Psz".equals(dataComponents[0]) && "Hosszúság".equals(dataComponents[1]) &&
+                (16.11 > firstData || 22.9 < firstData) ){
+            throw new InvalidPreferencesFormatException("Hibás földrajzi hosszúság fok érték a belovasott fájl " +
+                    indexValue + ". sorában. (22.9° > Hosszúság fok > 16.11°)");
+        }
+        else if( "Psz".equals(dataComponents[0]) && "Hosszúság".equals(dataComponents[1]) &&
+                (45.74 > secondData || 48.58 < secondData)){
+            throw new InvalidPreferencesFormatException("Hibás földrajzi szélesség fok érték a belovasott fájl " +
+                    indexValue + ". sorában. (48.58° > Szélesség fok > 45.74°)");
+        }
+        else if( "Psz".equals(dataComponents[0]) && "X".equals(dataComponents[1])
                 && (3750000 > firstData || 4190000 < firstData)
                 && (1060000 > secondData || 1420000 < secondData)
                 && (4270000 > elevation || 4800000 < elevation)) {
