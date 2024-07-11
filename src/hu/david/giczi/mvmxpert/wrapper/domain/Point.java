@@ -1,7 +1,6 @@
 package hu.david.giczi.mvmxpert.wrapper.domain;
 
 
-import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.service.ToEOV;
 
 import java.text.DecimalFormat;
@@ -12,7 +11,7 @@ public class Point {
 
     private boolean isWGS;
     private boolean isXYZ;
-    private boolean isUse;
+    private boolean isSave;
     private String pointId;
     private Double y_EOV;
     private Double x_EOV;
@@ -48,12 +47,12 @@ public class Point {
         isXYZ = XYZ;
     }
 
-    public boolean isUse() {
-        return isUse;
+    public boolean isSave() {
+        return isSave;
     }
 
-    public void setUse(boolean use) {
-        isUse = use;
+    public void setSave(boolean save) {
+        isSave = save;
     }
 
     public String getPointId() {
@@ -206,6 +205,20 @@ public class Point {
         return decimalFormat.format(M_EOV).replace(",", ".");
     }
 
+    public String getFormattedDecimalFiForWGS84(){
+        decimalFormat = new DecimalFormat("0.000000");
+        return decimalFormat.format(fi_WGS84).replace(",", ".");
+    }
+    public String getFormattedDecimalLambdaForWGS84(){
+        decimalFormat = new DecimalFormat("0.000000");
+        return decimalFormat.format(lambda_WGS84).replace(",", ".");
+    }
+
+    public String getFormattedHForWGS84(){
+        decimalFormat = new DecimalFormat("0.000");
+        return decimalFormat.format(h_WGS84).replace(",", ".");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -219,13 +232,10 @@ public class Point {
         return Objects.hash(pointId);
     }
 
-    @Override
-    public String toString() {
-        return "Point{" +
-                "pointId='" + pointId + '\'' +
-                ", y_EOV=" + y_EOV +
-                ", x_EOV=" + x_EOV +
-                ", M_EOV=" + M_EOV +
-                '}';
+    public  String convertAngleMinSecFormat(double data){
+        int angle = (int) data;
+        int min = (int) ((data - angle) * 60);
+        double sec = ((int) (100000 * ((data - angle) * 3600 - min * 60))) / 100000.0;
+        return angle + "° " + (9 < min ? min : "0" + min) + "' " + (9 < sec ? sec : "0" + sec) + "\"";
     }
 }

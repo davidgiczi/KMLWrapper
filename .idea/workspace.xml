@@ -8,9 +8,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/controller/KMLWrapperController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/controller/KMLWrapperController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/domain/Point.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/domain/Point.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/service/Validation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/service/Validation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/service/Transformation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/service/Transformation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/view/DataDisplayerWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/view/DataDisplayerWindow.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/view/InputDataFileWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/view/InputDataFileWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/view/ManuallyInputDataWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hu/david/giczi/mvmxpert/wrapper/view/ManuallyInputDataWindow.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

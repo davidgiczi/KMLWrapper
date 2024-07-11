@@ -357,14 +357,21 @@ public class ManuallyInputDataWindow {
     private void addDataButton(){
         JPanel panel = new JPanel();
         JButton addBtn = new JButton("Hozzáad");
-        addBtn.addActionListener(a -> onClickAddDataButton());
+        addBtn.addActionListener(a -> onClickProcessForAddingInputDataByManually());
         addBtn.setFont(boldFont);
         addBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(addBtn);
         inputDataPanel.add(panel);
     }
 
-    private void onClickAddDataButton(){
+    private void onClickProcessForAddingInputDataByManually(){
+        if( !KMLWrapperController.INPUT_POINTS.isEmpty() ) {
+            if (MessagePane.getYesNoOptionMessage("Beolvasott pontok lista nem üres",
+                    "Törli a korábban beolvasott pontokat?",
+                    KMLWrapperController.MANUALLY_INPUT_DATA_WINDOW.jFrame) == 0) {
+                KMLWrapperController.INPUT_POINTS.clear();
+            }
+        }
         int inpuDataTypeIndex = 0;
         for (int i = 0; i < IS_INPUT_DATA_TYPE.length; i++) {
             if( IS_INPUT_DATA_TYPE[i] ){
@@ -373,7 +380,8 @@ public class ManuallyInputDataWindow {
 }
         switch ( inpuDataTypeIndex ){
             case 0 :
-                MessagePane.getInfoMessage("Érvénytelen adatbevitel","Formátum választása szükséges.", jFrame);
+                MessagePane.getInfoMessage("Érvénytelen adatbevitel",
+                        "Formátum választása szükséges.", jFrame);
                 break;
             case 1 :
                 controller.validationManuallyInputDataForEOV();

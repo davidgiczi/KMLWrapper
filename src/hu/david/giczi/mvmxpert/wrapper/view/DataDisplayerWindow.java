@@ -1,12 +1,13 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
-import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
-import hu.david.giczi.mvmxpert.wrapper.domain.Point;
-
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class DataDisplayerWindow {
-    private JFrame jFrame;
+
+    private TableModel tableModel;
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     public DataDisplayerWindow(String dataType) {
@@ -15,39 +16,37 @@ public class DataDisplayerWindow {
 
 
     private void displayData(String dataType){
-        jFrame = new JFrame(dataType + " " + " db pont");
+        tableModel = new TableModel(dataType);
+        if( tableModel.displayedData.isEmpty() ){
+            throw new IllegalArgumentException("Nem található adat");
+        }
+        JFrame jFrame = new JFrame(dataType + " " + tableModel.getTableRowsNumber() + " db pont");
+        jFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                tableModel.setSaveInputPoint();
+            }
+        });
         jFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         jFrame.setIconImage(Toolkit.getDefaultToolkit()
                 .getImage(getClass().getResource("/logo/MVM.jpg")));
-        jFrame.setLayout(new GridLayout(getRowPcs(dataType), 1));
-        jFrame.setSize(950, 60 + getRowPcs(dataType) * 60);
-        createRowTitleForEOV(dataType);
+        JTable table = new JTable(tableModel);
+        table.setRowHeight(30);
+        table.setFont(plainFont);
+        table.getTableHeader().setFont(boldFont);
+        DefaultTableCellRenderer tableCellRenderer = new DefaultTableCellRenderer();
+        tableCellRenderer.setHorizontalAlignment( JLabel.CENTER );
+        table.setDefaultRenderer(String.class, tableCellRenderer);
+        jFrame.add(new JScrollPane(table));
+        jFrame.setSize(950,  tableModel.getTableRowsNumber() < 10 ?
+                80 + tableModel.getTableRowsNumber() * table.getRowHeight() :
+                80 + 10 * table.getRowHeight());
         jFrame.setLocationRelativeTo(null);
+        jFrame.setResizable(false);
         jFrame.setVisible(true);
     }
-
-    private void createRowTitleForEOV(String dataType){
-        JPanel dataPanel = new JPanel();
-        dataPanel.setSize(950, 60);
-        dataPanel.setBackground(Color.RED);
-        jFrame.add(dataPanel);
+    public TableModel getTableModel() {
+        return tableModel;
     }
-
-    private int getRowPcs(String dataType){
-        int pcs = 0;
-        if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[1]) ){
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
-                if( !inputPoint.isWGS() )
-                    pcs++;
-            }
-        }
-        return pcs;
-    }
-    private int getRowLength(String dataType){
-       if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[1]) ){
-           return 5;
-       }
-       return 0;
-    }
-
 }

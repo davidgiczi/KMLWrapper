@@ -2,6 +2,7 @@ package hu.david.giczi.mvmxpert.wrapper.controller;
 
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
+import hu.david.giczi.mvmxpert.wrapper.service.Transformation;
 import hu.david.giczi.mvmxpert.wrapper.service.Validation;
 import hu.david.giczi.mvmxpert.wrapper.view.InputDataFileWindow;
 import hu.david.giczi.mvmxpert.wrapper.view.ManuallyInputDataWindow;
@@ -16,6 +17,7 @@ public class KMLWrapperController {
 
     public static InputDataFileWindow INPUT_DATA_FILE_WINDOW;
     public static ManuallyInputDataWindow MANUALLY_INPUT_DATA_WINDOW;
+    public static Transformation TRANSFORMATION;
     public FileProcess fileProcess;
     public static List<Point> REFERENCE_POINTS;
     public static List<Point> INPUT_POINTS;
@@ -28,8 +30,12 @@ public class KMLWrapperController {
         FileProcess.getReferencePoints();
     }
 
+    public void transformationInputPointData(){
+        TRANSFORMATION = new Transformation();
+    }
+
     public void openInputDataFile(){
-        if(INPUT_DATA_FILE_WINDOW.EOV_DATA_TYPE[0].equals(INPUT_DATA_FILE_WINDOW.inputDataTypeComboBox.getSelectedItem())){
+        if( InputDataFileWindow.EOV_DATA_TYPE[0].equals(INPUT_DATA_FILE_WINDOW.inputDataTypeComboBox.getSelectedItem())){
             MessagePane.getInfoMessage("A fájl nem nyitható meg",
                     "Formátum választása szükséges.", INPUT_DATA_FILE_WINDOW.jFrame);
             return;
@@ -135,13 +141,6 @@ public class KMLWrapperController {
         }
     }
 
-    public static String convertAngleMinSecFormat(double data){
-        int angle = (int) data;
-        int min = (int) ((data - angle) * 60);
-        double sec = ((int) (100000 * ((data - angle) * 3600 - min * 60))) / 100000.0;
-        return angle + "°" + (9 < min ? min : "0" + min) + "'" + (9 < sec ? sec : "0" + sec) + "\"";
-    }
-
     public static void setWindowTitle(){
         if( MANUALLY_INPUT_DATA_WINDOW != null && !INPUT_DATA_FILE_WINDOW.jFrame.isVisible() && INPUT_POINTS.isEmpty() ){
             MANUALLY_INPUT_DATA_WINDOW.jFrame.setTitle("Kézi adatbevitel");
@@ -162,8 +161,7 @@ public class KMLWrapperController {
         }
     }
     public static void addValidInputPoint(Point validPoint) {
-
-        if( KMLWrapperController.INPUT_POINTS.isEmpty() ){
+        if( KMLWrapperController.INPUT_POINTS.isEmpty() ) {
             KMLWrapperController.INPUT_POINTS.add(validPoint);
             return;
         }

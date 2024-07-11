@@ -10,8 +10,10 @@ import java.util.List;
 
 public class Transformation {
 
-    public List<Point> EOV_TO_WGS_REFERENCE_POINTS = Arrays.asList(null, null, null, null, null, null, null, null);
-    public List<Point> WGS_TO_EOV_REFERENCE_POINTS = Arrays.asList(null, null, null, null, null, null, null, null);
+    private final List<Point> EOV_TO_WGS_REFERENCE_POINTS =
+            Arrays.asList(null, null, null, null, null, null, null, null);
+    private final List<Point> WGS_TO_EOV_REFERENCE_POINTS =
+            Arrays.asList(null, null, null, null, null, null, null, null);
     public ToEOV toEOV;
     public ToWGS toWGS;
 

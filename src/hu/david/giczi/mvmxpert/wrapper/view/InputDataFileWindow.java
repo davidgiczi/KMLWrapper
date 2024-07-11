@@ -412,7 +412,16 @@ public class InputDataFileWindow {
             String selectedItem =
                     Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
                     if( isOkInputDataProcess(selectedItem) && controller.setIdForInputDataPoints() ){
-                        new DataDisplayerWindow(selectedItem);
+                        try{
+                            controller.transformationInputPointData();
+                            new DataDisplayerWindow(selectedItem);
+                        }
+                        catch (IllegalArgumentException a){
+                            MessagePane.getInfoMessage(a.getMessage(),
+                                    "Nem beolvasott adat vagy érvénytelen adattípus választás." ,
+                                    KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                        }
+
                     }
         });
         showBtn.setFont(boldFont);
@@ -453,34 +462,43 @@ public class InputDataFileWindow {
             saveFileNameField.setText("_kerulet_pontok.kml");
         }
        else if( TXT_DATA_TYPE[1].equals(selectedOption)){
-           saveFileNameField.setText("_pontok.txt");
+           saveFileNameField.setText("_pontok_EOV.txt");
        }
        else if( TXT_DATA_TYPE[2].equals(selectedOption)){
-           saveFileNameField.setText("_kozos_pontok_EOV.txt");
+           saveFileNameField.setText("_pontok_WGS84.txt");
        }
        else if( TXT_DATA_TYPE[3].equals(selectedOption)){
-           saveFileNameField.setText("_kozos-pontok_IUGG67_XYZ.txt");
+           saveFileNameField.setText("_pontok_WGS84-EOV.txt");
        }
        else if( TXT_DATA_TYPE[4].equals(selectedOption)){
-           saveFileNameField.setText("_kozos-pontok_IUGG67_foldrajzi.txt");
+           saveFileNameField.setText("_pontok_EOV-WGS84.txt");
        }
        else if( TXT_DATA_TYPE[5].equals(selectedOption)){
-           saveFileNameField.setText("_kozos-pontok_WGS84_XYZ.txt");
+           saveFileNameField.setText("_kozos-pontok_EOV.txt");
        }
        else if( TXT_DATA_TYPE[6].equals(selectedOption)){
-           saveFileNameField.setText("_kozos-pontok_WGS84_foldrajzi.txt");
+           saveFileNameField.setText("_kozos-pontok_IUGG67_XYZ.txt");
        }
        else if( TXT_DATA_TYPE[7].equals(selectedOption)){
-           saveFileNameField.setText("_EOV-WGS_tr_params.txt");
+           saveFileNameField.setText("_kozos-pontok_IUGG67_foldrajzi.txt");
        }
        else if( TXT_DATA_TYPE[8].equals(selectedOption)){
-           saveFileNameField.setText("_WGS-EOV_tr_params.txt");
+           saveFileNameField.setText("_kozos-pontok_WGS84_XYZ.txt");
        }
        else if( TXT_DATA_TYPE[9].equals(selectedOption)){
-           saveFileNameField.setText("_EOV-kozephibak.txt");
+           saveFileNameField.setText("_kozos-pontok_WGS84_foldrajzi.txt");
        }
        else if( TXT_DATA_TYPE[10].equals(selectedOption)){
-           saveFileNameField.setText("_WGS-kozephibak.txt");
+           saveFileNameField.setText("_EOV-WGS84_tr_params.txt");
+       }
+       else if( TXT_DATA_TYPE[11].equals(selectedOption)){
+           saveFileNameField.setText("_WGS84-EOV_tr_params.txt");
+       }
+       else if( TXT_DATA_TYPE[12].equals(selectedOption)){
+           saveFileNameField.setText("_EOV-kozephibak.txt");
+       }
+       else if( TXT_DATA_TYPE[13].equals(selectedOption)){
+           saveFileNameField.setText("_WGS84-kozephibak.txt");
        }
     }
 
