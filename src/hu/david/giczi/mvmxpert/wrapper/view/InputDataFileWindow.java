@@ -22,7 +22,10 @@ public class InputDataFileWindow {
     private JPanel saveOutputFileOptionPanel;
     private JTextField saveFileNameField;
     public JComboBox<String> inputDataTypeComboBox;
+    private JRadioButton kmlRadioBtn;
+    private JRadioButton txtRadioBtn;
     private JComboBox<String> outputDataTypeComboBox;
+    private DataDisplayerWindow displayer;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
     public static final String[] EOV_DATA_TYPE = {
@@ -70,13 +73,13 @@ public class InputDataFileWindow {
             "Kerület+pontok"};
     public static final String[] TXT_DATA_TYPE = {
             "Adattípus választása",
-            "Beolvasott pontok (EOV)",
-            "Beolvasott pontok (WGS84)",
-            "EOV-be transzformált pontok",
-            "WGS84-be transzformált pontok",
+            "Beolvasott EOV pontok",
+            "Beolvasott WGS84 pontok",
+            "Beolvasott pontok: IUGG67 (X, Y, Z)",
+            "Beolvasott pontok: IUGG67 (Szélesség, Hosszúság, Magasság)",
+            "EOV-be transzformált WGS84 pontok",
+            "WGS84-be transzformált EOV pontok",
             "Közös pontok: EOV (Y, X, M)",
-            "Közös pontok: IUGG67 (X, Y, Z)",
-            "Közös pontok: IUGG67 (Szélesség, Hosszúság, Magasság)",
             "Közös pontok: WGS84 (X, Y, Z)",
             "Közös pontok: WGS84 (Szélesség, Hosszúság, Magasság)",
             "Transzformáció paraméterei (EOV-WGS84)",
@@ -302,7 +305,7 @@ public class InputDataFileWindow {
     }
     private void addRadioButtonForOutputFileOptionPanel(){
         JPanel panel = new JPanel();
-       JRadioButton kmlRadioBtn = new JRadioButton("kml fájl");
+        kmlRadioBtn = new JRadioButton("kml fájl");
         kmlRadioBtn.addActionListener(e -> {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(KML_DATA_TYPE);
             outputDataTypeComboBox.setModel(model);
@@ -312,7 +315,7 @@ public class InputDataFileWindow {
         kmlRadioBtn.setFont(plainFont);
         kmlRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         kmlRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
-        JRadioButton txtRadioBtn = new JRadioButton("txt fájl");
+        txtRadioBtn = new JRadioButton("txt fájl");
         txtRadioBtn.setSelected(true);
         txtRadioBtn.addActionListener(e -> {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(TXT_DATA_TYPE);
@@ -324,7 +327,7 @@ public class InputDataFileWindow {
         txtRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         txtRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         JRadioButton scrRadioBtn = new JRadioButton("scr fájl");
-        scrRadioBtn.addActionListener( e ->{
+        scrRadioBtn.addActionListener(e ->{
             String[] cadList = {"AutoCad scr fájl (EOV Y, X, M)"};
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
             outputDataTypeComboBox.setModel(model);
@@ -393,9 +396,7 @@ public class InputDataFileWindow {
         JPanel panel = new JPanel();
         JButton saveBtn = new JButton("Adatok mentése");
         saveBtn.addActionListener(e -> {
-            String selectedItem =
-                    Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
-            if (isOkInputDataProcess(selectedItem) ) {
+            if (isOkSavingData() ) {
 
             }
         });
@@ -411,10 +412,10 @@ public class InputDataFileWindow {
         showBtn.addActionListener(e -> {
             String selectedItem =
                     Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
-                    if( isOkInputDataProcess(selectedItem) && controller.setIdForInputDataPoints() ){
+                    if( isOkDisplayData(selectedItem) && controller.setIdForInputDataPoints() ){
                         try{
                             controller.transformationInputPointData();
-                            new DataDisplayerWindow(selectedItem);
+                            displayer = new DataDisplayerWindow(selectedItem);
                         }
                         catch (IllegalArgumentException a){
                             MessagePane.getInfoMessage(a.getMessage(),
@@ -430,7 +431,7 @@ public class InputDataFileWindow {
         saveOutputFileOptionPanel.add(panel);
     }
 
-    private boolean isOkInputDataProcess(String selectedItem){
+    private boolean isOkDisplayData(String selectedItem){
 
         if (selectedItem.equals(TXT_DATA_TYPE[0])) {
             MessagePane.getInfoMessage("Érvénytelen adattípus",
@@ -441,6 +442,24 @@ public class InputDataFileWindow {
                     "Hozzáadott pont nem található.", jFrame);
             return false;
         }
+        return true;
+    }
+
+    private boolean isOkSavingData(){
+
+        String selectedOption = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
+        if( kmlRadioBtn.isSelected() && selectedOption.equals(KML_DATA_TYPE[0]) ){
+            MessagePane.getInfoMessage("Mentés nem hajtható végre",
+                    "Adattípus választása szükséges.", jFrame);
+            return false;
+        }
+        else if ( txtRadioBtn.isSelected() &&
+                (displayer == null || displayer.getTableModel().displayedData.isEmpty()) ) {
+            MessagePane.getInfoMessage("Mentés nem hajtható végre",
+                    "Az adatok mentéséhez az adatok megtekintése szükséges.", jFrame);
+            return false;
+        }
+
         return true;
     }
 
@@ -462,25 +481,25 @@ public class InputDataFileWindow {
             saveFileNameField.setText("_kerulet_pontok.kml");
         }
        else if( TXT_DATA_TYPE[1].equals(selectedOption)){
-           saveFileNameField.setText("_pontok_EOV.txt");
+           saveFileNameField.setText("_EOV_pontok.txt");
        }
        else if( TXT_DATA_TYPE[2].equals(selectedOption)){
-           saveFileNameField.setText("_pontok_WGS84.txt");
+           saveFileNameField.setText("_WGS84_pontok.txt");
        }
        else if( TXT_DATA_TYPE[3].equals(selectedOption)){
-           saveFileNameField.setText("_pontok_WGS84-EOV.txt");
+           saveFileNameField.setText("_pontok_IUGG67_XYZ.txt");
        }
        else if( TXT_DATA_TYPE[4].equals(selectedOption)){
-           saveFileNameField.setText("_pontok_EOV-WGS84.txt");
+           saveFileNameField.setText("_pontok_IUGG67_foldrajzi.txt");
        }
        else if( TXT_DATA_TYPE[5].equals(selectedOption)){
-           saveFileNameField.setText("_kozos-pontok_EOV.txt");
+           saveFileNameField.setText("_tr_pontok_EOV.txt");
        }
        else if( TXT_DATA_TYPE[6].equals(selectedOption)){
-           saveFileNameField.setText("_kozos-pontok_IUGG67_XYZ.txt");
+           saveFileNameField.setText("_tr_pontok_WGS84.txt");
        }
        else if( TXT_DATA_TYPE[7].equals(selectedOption)){
-           saveFileNameField.setText("_kozos-pontok_IUGG67_foldrajzi.txt");
+           saveFileNameField.setText("_kozos-pontok_EOV.txt");
        }
        else if( TXT_DATA_TYPE[8].equals(selectedOption)){
            saveFileNameField.setText("_kozos-pontok_WGS84_XYZ.txt");

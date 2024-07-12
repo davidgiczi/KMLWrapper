@@ -65,9 +65,7 @@ public class TableModel extends DefaultTableModel {
         }
         else  if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[3]) ){
             for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
-                if( !inputPoint.isWGS() ){
-                    continue;
-                }
+
                 displayedData.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedYForEOV(),
@@ -78,9 +76,7 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[4]) ){
             for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
-                if( inputPoint.isWGS() ){
-                    continue;
-                }
+
                 displayedData.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedDecimalFiForWGS84(),
@@ -97,14 +93,14 @@ public class TableModel extends DefaultTableModel {
     private void setColumNames(){
         String[] columNames = null;
         if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[1]) ){
-            columNames = new String[]{"Pontszám", "Y_EOV", "X_EOV", "M_EOV", "Ment"};
+            columNames = new String[]{"Pontszám", "Y", "X", "M", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[2]) ){
             columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
                     "[° ' \"]" , "[° ' \"]", "h", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[3]) ){
-            columNames = new String[]{"Pontszám", "Y_EOV", "X_EOV", "M_EOV", "Ment"};
+            columNames = new String[]{"Pontszám", "X", "Y", "Z", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[4]) ){
             columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
@@ -133,7 +129,7 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[3]) ){
             for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
-                if( inputPoint.isWGS() )
+                if( !inputPoint.isWGS() )
                     pcs++;
             }
         }
@@ -145,79 +141,79 @@ public class TableModel extends DefaultTableModel {
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
-            pcs = KMLWrapperController.TRANSFORMATION.toEOV.referencePoints.size();
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[6]) ){
-            pcs = KMLWrapperController.TRANSFORMATION.toEOV.referencePoints.size();
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[7]) ){
-            pcs = KMLWrapperController.TRANSFORMATION.toEOV.referencePoints.size();
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[8]) ){
-            pcs = KMLWrapperController.TRANSFORMATION.toWGS.referencePoints.size();
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[9]) ){
-            pcs = KMLWrapperController.TRANSFORMATION.toWGS.referencePoints.size();
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[10]) ){
-            pcs = KMLWrapperController.TRANSFORMATION.toEOV.PARAM_FOR_EOV.length;
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[11]) ){
-            pcs = KMLWrapperController.TRANSFORMATION.toWGS.PARAM_FOR_WGS.length;
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
-            pcs = KMLWrapperController.TRANSFORMATION.toWGS.referencePoints.size();
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[13]) ){
-            pcs = KMLWrapperController.TRANSFORMATION.toWGS.referencePoints.size();
+
         }
 
         return pcs;
     }
 
     private int getLastIndexOfRow(){
-        int lengthOfRow = 0;
+        int lastIndex = 0;
         if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[1]) ){
-            lengthOfRow = 4;
+            lastIndex = 4;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[2]) ){
-            lengthOfRow = 6;
+            lastIndex = 6;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[3]) ){
-            lengthOfRow = 4;
+            lastIndex = 4;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[4]) ){
-            lengthOfRow = 6;
+            lastIndex = 6;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
-            lengthOfRow = 4;
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[6]) ){
-            lengthOfRow = 4;
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[7]) ){
-            lengthOfRow = 6;
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[8]) ){
-            lengthOfRow = 4;
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[9]) ){
-            lengthOfRow = 6;
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[10]) ){
-            lengthOfRow = 1;
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[11]) ){
-            lengthOfRow = 1;
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
-            lengthOfRow = 3;
+
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[13]) ){
-            lengthOfRow = 3;
+
         }
 
-        return lengthOfRow;
+        return lastIndex;
     }
 
 }
