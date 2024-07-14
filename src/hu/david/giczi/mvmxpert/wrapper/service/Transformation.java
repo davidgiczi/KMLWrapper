@@ -23,8 +23,7 @@ public class Transformation {
     }
     private void transformInputPoints(){
         for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
-            if( inputPoint.getY_EOV() != null &&
-                    inputPoint.getX_EOV() != null ){
+            if( !inputPoint.isWGS() ){
                 List<Double> IUGG67 =
                 ToEOV.getXYZCoordinatesForIUGG67(inputPoint.getY_EOV(), inputPoint.getX_EOV(), inputPoint.getM_EOV());
                 toWGS = new ToWGS(IUGG67.get(0), IUGG67.get(1), IUGG67.get(2), EOV_TO_WGS_REFERENCE_POINTS);
@@ -37,8 +36,7 @@ public class Transformation {
                 inputPoint.setLambda_WGS84(fiLambdaH_WGS84.get(1));
                 inputPoint.setH_WGS84(fiLambdaH_WGS84.get(2));
             }
-            else if( inputPoint.getX_WGS84() != null &&
-                inputPoint.getY_WGS84() != null && inputPoint.getZ_WGS84() != null ){
+            else {
                 toEOV = new ToEOV(inputPoint.getX_WGS84(), inputPoint.getY_WGS84(),
                         inputPoint.getZ_WGS84(), WGS_TO_EOV_REFERENCE_POINTS);
                 inputPoint.setY_EOV(ToEOV.Y_EOV);
@@ -149,10 +147,10 @@ public class Transformation {
     private Point getAveragePointForEOV(){
         Point avePoint = new Point();
         double aveY =  KMLWrapperController.INPUT_POINTS.stream()
-                .filter(p -> p.getY_EOV() != null && p.getX_EOV() != null)
+                .filter(p -> !p.isWGS())
                 .mapToDouble(Point::getY_EOV).average().orElse(0.0);
         double aveX =  KMLWrapperController.INPUT_POINTS.stream()
-                .filter(p -> p.getY_EOV() != null && p.getX_EOV() != null)
+                .filter(p -> !p.isWGS())
                 .mapToDouble(Point::getX_EOV).average().orElse(0.0);
         avePoint.setY_EOV(aveY);
         avePoint.setX_EOV(aveX);
@@ -176,13 +174,13 @@ public class Transformation {
     private Point getAveragePointForWGS(){
         Point avePoint = new Point();
         double aveX =  KMLWrapperController.INPUT_POINTS.stream()
-                .filter(p -> p.getX_WGS84() != null && p.getY_WGS84() != null && p.getZ_WGS84() != null)
+                .filter(Point::isWGS)
                 .mapToDouble(Point::getX_WGS84).average().orElse(0.0);
         double aveY =  KMLWrapperController.INPUT_POINTS.stream()
-                .filter(p -> p.getX_WGS84() != null && p.getY_WGS84() != null && p.getZ_WGS84() != null)
+                .filter(Point::isWGS)
                 .mapToDouble(Point::getY_WGS84).average().orElse(0.0);
         double aveZ =  KMLWrapperController.INPUT_POINTS.stream()
-                .filter(p -> p.getX_WGS84() != null && p.getY_WGS84() != null && p.getZ_WGS84() != null)
+                .filter(Point::isWGS)
                 .mapToDouble(Point::getZ_WGS84).average().orElse(0.0);
        avePoint.setX_WGS84(aveX);
        avePoint.setY_WGS84(aveY);

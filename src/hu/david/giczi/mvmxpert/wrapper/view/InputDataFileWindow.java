@@ -422,7 +422,6 @@ public class InputDataFileWindow {
                                     "Nem beolvasott adat vagy érvénytelen adattípus választás." ,
                                     KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                         }
-
                     }
         });
         showBtn.setFont(boldFont);

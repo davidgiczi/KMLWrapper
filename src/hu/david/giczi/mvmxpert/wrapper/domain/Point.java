@@ -238,4 +238,14 @@ public class Point {
         double sec = ((int) (100000 * ((data - angle) * 3600 - min * 60))) / 100000.0;
         return angle + "° " + (9 < min ? min : "0" + min) + "' " + (9 < sec ? sec : "0" + sec) + "\"";
     }
+
+    @Override
+    public String toString() {
+        return "Point{" +
+                "pointId='" + pointId + '\'' +
+                ", fi_WGS84=" + fi_WGS84 +
+                ", lambda_WGS84=" + lambda_WGS84 +
+                ", h_WGS84=" + h_WGS84 +
+                '}';
+    }
 }
