@@ -53,7 +53,6 @@ public class ManuallyInputDataWindow {
 
     private void createWindow(String selectedItem){
         jFrame = new JFrame();
-        KMLWrapperController.setWindowTitle();
         jFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -75,6 +74,7 @@ public class ManuallyInputDataWindow {
         jFrame.setLocationRelativeTo(null);
         jFrame.setResizable(false);
         jFrame.setVisible(true);
+        KMLWrapperController.setWindowTitle();
     }
 
     private void addInputFileOptionPanel(String selectedItem){

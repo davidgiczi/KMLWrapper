@@ -73,19 +73,21 @@ public class InputDataFileWindow {
             "Kerület+pontok"};
     public static final String[] TXT_DATA_TYPE = {
             "Adattípus választása",
-            "Beolvasott EOV pontok",
-            "Beolvasott WGS84 pontok",
+            "Beolvasott pontok: EOV (Y, X, M)",
+            "Beolvasott pontok: WGS84 (Szélesség, Hosszúság, Magasság)",
+            "Beolvasott pontok: WGS84 (X, Y, Z)",
             "Beolvasott pontok: IUGG67 (X, Y, Z)",
             "Beolvasott pontok: IUGG67 (Szélesség, Hosszúság, Magasság)",
-            "EOV-be transzformált WGS84 pontok",
-            "WGS84-be transzformált EOV pontok",
+            "Transzformált pontok: WGS84-EOV (Y, X, M)",
+            "Transzformált pontok: EOV-WGS84 (Szélesség, Hosszúság, Magasság)",
+            "Transzformált pontok: EOV-WGS84 (X, Y, Z)",
             "Közös pontok: EOV (Y, X, M)",
             "Közös pontok: WGS84 (X, Y, Z)",
             "Közös pontok: WGS84 (Szélesség, Hosszúság, Magasság)",
-            "Transzformáció paraméterei (EOV-WGS84)",
-            "Transzformáció paraméterei (WGS84-EOV)",
-            "Maradék ellentmondások (EOV)",
-            "Maradék ellentmondások (WGS84)"};
+            "Transzformáció paraméterei: EOV-WGS84",
+            "Transzformáció paraméterei: WGS84-EOV",
+            "Maradék ellentmondások: EOV (dY, dX, dM)",
+            "Maradék ellentmondások: WGS84 (dX, dY, dZ)"};
 
     public InputDataFileWindow(KMLWrapperController controller) {
         this.controller = controller;
@@ -243,7 +245,7 @@ public class InputDataFileWindow {
                 inputDataTypeComboBox.setForeground(Color.BLACK);
             }
         });
-        inputDataTypeComboBox.setPreferredSize(new Dimension(600, 35));
+        inputDataTypeComboBox.setPreferredSize(new Dimension(400, 35));
         inputDataTypeComboBox.setBackground(new Color(249, 249, 249));
         inputDataTypeComboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
         inputDataTypeComboBox.setFont(new Font("Roboto", Font.PLAIN, 20));
@@ -358,7 +360,7 @@ public class InputDataFileWindow {
                 outputDataTypeComboBox.setForeground(Color.BLACK);
             }
         });
-        outputDataTypeComboBox.setPreferredSize(new Dimension(600, 35));
+        outputDataTypeComboBox.setPreferredSize(new Dimension(700, 35));
         outputDataTypeComboBox.setBackground(new Color(249, 249, 249));
         outputDataTypeComboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
         outputDataTypeComboBox.setFont(new Font("Roboto", Font.PLAIN, 20));
@@ -386,7 +388,7 @@ public class InputDataFileWindow {
         saveFileNameField.setFont(boldFont);
         saveFileNameField.setBackground(new Color(249, 249, 249));
         saveFileNameField.setHorizontalAlignment(SwingConstants.CENTER);
-        saveFileNameField.setPreferredSize(new Dimension(600, 35));
+        saveFileNameField.setPreferredSize(new Dimension(700, 35));
         saveFileNameField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(saveFileNameField);
         saveOutputFileOptionPanel.add(panel);
@@ -483,39 +485,45 @@ public class InputDataFileWindow {
            saveFileNameField.setText("_EOV_pontok.txt");
        }
        else if( TXT_DATA_TYPE[2].equals(selectedOption)){
-           saveFileNameField.setText("_WGS84_pontok.txt");
+           saveFileNameField.setText("_WGS84_pontok_foldrajzi.txt");
        }
        else if( TXT_DATA_TYPE[3].equals(selectedOption)){
-           saveFileNameField.setText("_pontok_IUGG67_XYZ.txt");
+           saveFileNameField.setText("_WGS84_pontok_XYZ.txt");
        }
        else if( TXT_DATA_TYPE[4].equals(selectedOption)){
-           saveFileNameField.setText("_pontok_IUGG67_foldrajzi.txt");
+           saveFileNameField.setText("_pontok_IUGG67_XYZ.txt");
        }
        else if( TXT_DATA_TYPE[5].equals(selectedOption)){
-           saveFileNameField.setText("_tr_pontok_EOV.txt");
+           saveFileNameField.setText("_pontok_IUGG67_foldrajzi.txt");
        }
        else if( TXT_DATA_TYPE[6].equals(selectedOption)){
-           saveFileNameField.setText("_tr_pontok_WGS84.txt");
+           saveFileNameField.setText("_tr_pontok_EOV.txt");
        }
        else if( TXT_DATA_TYPE[7].equals(selectedOption)){
-           saveFileNameField.setText("_kozos-pontok_EOV.txt");
+           saveFileNameField.setText("_tr_pontok_WGS84_foldrajzi.txt");
        }
        else if( TXT_DATA_TYPE[8].equals(selectedOption)){
-           saveFileNameField.setText("_kozos-pontok_WGS84_XYZ.txt");
+           saveFileNameField.setText("_tr_pontok_WGS84_XYZ.txt");
        }
        else if( TXT_DATA_TYPE[9].equals(selectedOption)){
-           saveFileNameField.setText("_kozos-pontok_WGS84_foldrajzi.txt");
+           saveFileNameField.setText("_kozos-pontok_EOV.txt");
        }
        else if( TXT_DATA_TYPE[10].equals(selectedOption)){
-           saveFileNameField.setText("_EOV-WGS84_tr_params.txt");
+           saveFileNameField.setText("_kozos-pontok_WGS84_XYZ.txt");
        }
        else if( TXT_DATA_TYPE[11].equals(selectedOption)){
-           saveFileNameField.setText("_WGS84-EOV_tr_params.txt");
+           saveFileNameField.setText("_kozos-pontok_WGS84_foldrajzi.txt");
        }
        else if( TXT_DATA_TYPE[12].equals(selectedOption)){
-           saveFileNameField.setText("_EOV-kozephibak.txt");
+           saveFileNameField.setText("_EOV-WGS84_tr_params.txt");
        }
        else if( TXT_DATA_TYPE[13].equals(selectedOption)){
+           saveFileNameField.setText("_WGS84-EOV_tr_params.txt");
+       }
+       else if( TXT_DATA_TYPE[14].equals(selectedOption)){
+           saveFileNameField.setText("_EOV-kozephibak.txt");
+       }
+       else if( TXT_DATA_TYPE[15].equals(selectedOption)){
            saveFileNameField.setText("_WGS84-kozephibak.txt");
        }
     }

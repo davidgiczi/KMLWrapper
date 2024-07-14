@@ -92,18 +92,18 @@ public class ToEOV {
         transformIUGG67CoordinatesForEOV(Fi_IUGG67, Lambda_IUGG67, h_IUGG67);
     }
 
-    public static List<Double> getXYZCoordinatesForIUGG67(double Y_EOV, double X_EOV, double H_EOV){
-        List<Double> geographicalCoordinates = getGeographicalCoordinatesForIUGG67(Y_EOV, X_EOV);
-        double FI = geographicalCoordinates.get(0);
-        double LAMBDA = geographicalCoordinates.get(1);
+    public static List<Double> getXYZCoordinatesForIUGG67(double Y_EOV, double X_EOV, double M_EOV){
+        List<Double> geographicalCoordinates = getGeographicalCoordinatesDegreesForIUGG67(Y_EOV, X_EOV);
+        double FI = Math.toRadians(geographicalCoordinates.get(0));
+        double LAMBDA = Math.toRadians(geographicalCoordinates.get(1));
         double N = a / Math.sqrt(1 - Math.pow(e, 2) * Math.pow(Math.sin(FI), 2));
-        double X = (N + H_EOV) * Math.cos(FI) * Math.cos(LAMBDA);
-        double Y = (N + H_EOV) * Math.cos(FI) * Math.sin(LAMBDA);
-        double Z = ((1 - Math.pow(e, 2)) * N + H_EOV) * Math.sin(FI);
+        double X = (N + M_EOV) * Math.cos(FI) * Math.cos(LAMBDA);
+        double Y = (N + M_EOV) * Math.cos(FI) * Math.sin(LAMBDA);
+        double Z = ((1 - Math.pow(e, 2)) * N + M_EOV) * Math.sin(FI);
         return Arrays.asList(X, Y, Z);
     }
 
-    public static List<Double> getGeographicalCoordinatesForIUGG67(double Y_EOV, double X_EOV){
+    public static List<Double> getGeographicalCoordinatesDegreesForIUGG67(double Y_EOV, double X_EOV){
         double sphereFi_ = 2 * Math.atan( Math.pow(Math.E, (X_EOV - 200000) / (R * m0))) - Math.PI / 2;
         double sphereLambda_ = (Y_EOV - 650000) / (R * m0);
         double sphereFi = Math.asin(Math.sin(sphereFi_) * Math.cos(Math.toRadians(fi_0)) +
@@ -111,7 +111,7 @@ public class ToEOV {
         double sphereLambda = Math.asin(Math.cos(sphereFi_) * Math.sin(sphereLambda_) / Math.cos(sphereFi));
         double FI = iterateFi(sphereFi);
         double LAMBDA = Math.toRadians(lambda_0) + sphereLambda / n;
-        return Arrays.asList(FI, LAMBDA);
+        return Arrays.asList(Math.toDegrees(FI), Math.toDegrees(LAMBDA));
     }
 
     private static double iterateFi(double preFi){

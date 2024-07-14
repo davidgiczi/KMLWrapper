@@ -92,7 +92,6 @@ public class KMLWrapperController {
 
     public void validationManuallyInputDataForEOV(){
         try{
-
             String pointId = MANUALLY_INPUT_DATA_WINDOW.pointIdFieldForEOV.getText();
             String h = MANUALLY_INPUT_DATA_WINDOW.h_EOV_field.getText();
             Validation.isValidInputDataForEOV(pointId.isEmpty() ? null : pointId,

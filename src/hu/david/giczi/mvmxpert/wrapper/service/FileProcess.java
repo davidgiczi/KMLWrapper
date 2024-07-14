@@ -72,7 +72,7 @@ public class FileProcess {
             point.setY_EOV(Double.parseDouble(pointData[4]));
             point.setX_EOV(Double.parseDouble(pointData[5]));
             point.setM_EOV(Double.parseDouble(pointData[6]));
-            point.convertEOVCoordinatesForXYZForIUGG67();
+            point.convertEOVCoordinatesForIUGG67();
             KMLWrapperController.REFERENCE_POINTS.add(point);
         }
     }

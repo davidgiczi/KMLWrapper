@@ -68,15 +68,43 @@ public class TableModel extends DefaultTableModel {
 
                 displayedData.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
-                        inputPoint.getFormattedYForEOV(),
-                        inputPoint.getFormattedXForEOV(),
-                        inputPoint.getFormattedMForEOV(), true};
+                        inputPoint.getFormattedXForIUGG67(),
+                        inputPoint.getFormattedYForIUGG67(),
+                        inputPoint.getFormattedZForIUGG67(), true};
                 addRow(row);
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[4]) ){
             for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
 
+                displayedData.add(inputPoint);
+                Object[] row = new Object[]{inputPoint.getPointId(),
+                        inputPoint.getFormattedDecimalFiForIUGG67(),
+                        inputPoint.getFormattedDecimalLambdaForIUGG67(),
+                        inputPoint.convertAngleMinSecFormat(inputPoint.getFi_IUGG67()),
+                        inputPoint.convertAngleMinSecFormat(inputPoint.getLambda_IUGG67()),
+                        inputPoint.getFormattedHForIUGG67(), true};
+                addRow(row);
+            }
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
+            for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+                if( !inputPoint.isWGS() ){
+                    continue;
+                }
+                displayedData.add(inputPoint);
+                Object[] row = new Object[]{inputPoint.getPointId(),
+                        inputPoint.getFormattedYForEOV(),
+                        inputPoint.getFormattedXForEOV(),
+                        inputPoint.getFormattedMForEOV(), true};
+                addRow(row);
+            }
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[6]) ){
+            for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+                if( inputPoint.isWGS() ){
+                    continue;
+                }
                 displayedData.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedDecimalFiForWGS84(),
@@ -103,6 +131,13 @@ public class TableModel extends DefaultTableModel {
             columNames = new String[]{"Pontszám", "X", "Y", "Z", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[4]) ){
+            columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
+                    "[° ' \"]" , "[° ' \"]", "h", "Ment"};
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
+            columNames = new String[]{"Pontszám", "Y", "X", "M", "Ment"};
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[6]) ){
             columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
                     "[° ' \"]" , "[° ' \"]", "h", "Ment"};
         }

@@ -24,17 +24,12 @@ public class Transformation {
     private void transformInputPoints(){
         for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
             if( !inputPoint.isWGS() ){
-                List<Double> IUGG67 =
-                ToEOV.getXYZCoordinatesForIUGG67(inputPoint.getY_EOV(), inputPoint.getX_EOV(), inputPoint.getM_EOV());
-                toWGS = new ToWGS(IUGG67.get(0), IUGG67.get(1), IUGG67.get(2), EOV_TO_WGS_REFERENCE_POINTS);
+                toWGS = new ToWGS(inputPoint.getX_IUGG67(), inputPoint.getY_IUGG67(), inputPoint.getH_IUGG67(),
+                        EOV_TO_WGS_REFERENCE_POINTS);
                 inputPoint.setX_WGS84(ToWGS.X_WGS84);
                 inputPoint.setY_WGS84(ToWGS.Y_WGS84);
                 inputPoint.setZ_WGS84(ToWGS.Z_WGS84);
-                List<Double> fiLambdaH_WGS84 =
-                ToWGS.getGeographicalCoordinatesDegreesForWGS84(ToWGS.X_WGS84, ToWGS.Y_WGS84, ToWGS.Z_WGS84);
-                inputPoint.setFi_WGS84(fiLambdaH_WGS84.get(0));
-                inputPoint.setLambda_WGS84(fiLambdaH_WGS84.get(1));
-                inputPoint.setH_WGS84(fiLambdaH_WGS84.get(2));
+                inputPoint.convertWGS84XYZCoordinatesForWGS84Geographical();
             }
             else {
                 toEOV = new ToEOV(inputPoint.getX_WGS84(), inputPoint.getY_WGS84(),
@@ -42,6 +37,7 @@ public class Transformation {
                 inputPoint.setY_EOV(ToEOV.Y_EOV);
                 inputPoint.setX_EOV(ToEOV.X_EOV);
                 inputPoint.setM_EOV(ToEOV.M_EOV);
+                inputPoint.convertEOVCoordinatesForIUGG67();
             }
         }
     }

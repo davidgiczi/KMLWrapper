@@ -152,7 +152,7 @@ public class Validation {
             pointEOV.setX_EOV(firstData);
             pointEOV.setM_EOV(elevation);
         }
-
+        pointEOV.convertEOVCoordinatesForIUGG67();
         return pointEOV;
     }
     private Point isValidWGS84Data(String pointId, Double firstData, Double secondData, Double elevation, int indexValue)
@@ -216,10 +216,7 @@ public class Validation {
             pointWGS84.setFi_WGS84(firstData);
             pointWGS84.setLambda_WGS84(secondData);
             pointWGS84.setH_WGS84(elevation);
-            List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84ByDegrees(firstData, secondData, elevation);
-            pointWGS84.setX_WGS84(xyz_WGS84.get(0));
-            pointWGS84.setY_WGS84(xyz_WGS84.get(1));
-            pointWGS84.setZ_WGS84(xyz_WGS84.get(2));
+            pointWGS84.convertWGS84GeographicalCoordinatesForWGS84XYZ();
         }
         else if( "Psz".equals(dataComponents[0]) && "Hosszúság".equals(dataComponents[1]) ){
             pointWGS84.setPointId(pointId);
@@ -227,10 +224,7 @@ public class Validation {
             pointWGS84.setFi_WGS84(secondData);
             pointWGS84.setLambda_WGS84(firstData);
             pointWGS84.setH_WGS84(elevation);
-            List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84ByDegrees(secondData, firstData, elevation);
-            pointWGS84.setX_WGS84(xyz_WGS84.get(0));
-            pointWGS84.setY_WGS84(xyz_WGS84.get(1));
-            pointWGS84.setZ_WGS84(xyz_WGS84.get(2));
+            pointWGS84.convertWGS84GeographicalCoordinatesForWGS84XYZ();
         }
         else if( "Psz".equals(dataComponents[0]) && "X".equals(dataComponents[1]) ){
             pointWGS84.setPointId(pointId);
@@ -239,30 +233,21 @@ public class Validation {
             pointWGS84.setY_WGS84(secondData);
             pointWGS84.setZ_WGS84(elevation);
             pointWGS84.setXYZ(true);
-            List<Double> geo_WGS84 = ToWGS.getGeographicalCoordinatesDegreesForWGS84(firstData, secondData, elevation);
-            pointWGS84.setFi_WGS84(geo_WGS84.get(0));
-            pointWGS84.setLambda_WGS84(geo_WGS84.get(1));
-            pointWGS84.setH_WGS84(geo_WGS84.get(2));
+            pointWGS84.convertWGS84XYZCoordinatesForWGS84Geographical();
         }
         else if( "Szélesség".equals(dataComponents[0]) ){
             pointWGS84.setFi_WGS84(firstData);
             pointWGS84.setWGS(true);
             pointWGS84.setLambda_WGS84(secondData);
             pointWGS84.setH_WGS84(elevation);
-            List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84ByDegrees(firstData, secondData, elevation);
-            pointWGS84.setX_WGS84(xyz_WGS84.get(0));
-            pointWGS84.setY_WGS84(xyz_WGS84.get(1));
-            pointWGS84.setZ_WGS84(xyz_WGS84.get(2));
+            pointWGS84.convertWGS84GeographicalCoordinatesForWGS84XYZ();
         }
         else if( "Hosszúság".equals(dataComponents[0]) ){
             pointWGS84.setFi_WGS84(secondData);
             pointWGS84.setWGS(true);
             pointWGS84.setLambda_WGS84(firstData);
             pointWGS84.setH_WGS84(elevation);
-            List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84ByDegrees(secondData, firstData, elevation);
-            pointWGS84.setX_WGS84(xyz_WGS84.get(0));
-            pointWGS84.setY_WGS84(xyz_WGS84.get(1));
-            pointWGS84.setZ_WGS84(xyz_WGS84.get(2));
+            pointWGS84.convertWGS84GeographicalCoordinatesForWGS84XYZ();
         }
         else if( "X".equals(dataComponents[0]) ){
             pointWGS84.setX_WGS84(firstData);
@@ -270,10 +255,7 @@ public class Validation {
             pointWGS84.setY_WGS84(secondData);
             pointWGS84.setZ_WGS84(elevation);
             pointWGS84.setXYZ(true);
-            List<Double> geo_WGS84 = ToWGS.getGeographicalCoordinatesDegreesForWGS84(firstData, secondData, elevation);
-            pointWGS84.setFi_WGS84(geo_WGS84.get(0));
-            pointWGS84.setLambda_WGS84(geo_WGS84.get(1));
-            pointWGS84.setH_WGS84(geo_WGS84.get(2));
+            pointWGS84.convertWGS84XYZCoordinatesForWGS84Geographical();
         }
 
         return pointWGS84;
@@ -329,6 +311,7 @@ public class Validation {
         pointEOV.setY_EOV(Y);
         pointEOV.setX_EOV(X);
         pointEOV.setM_EOV(M);
+        pointEOV.convertEOVCoordinatesForIUGG67();
         KMLWrapperController.addValidInputPoint(pointEOV);
     }
     public static void isValidManuallyInputDataForWGS84DecimalFormat(String pointId, String Fi, String Lambda, String H)
@@ -371,10 +354,7 @@ public class Validation {
         pointWGS84.setFi_WGS84(fi);
         pointWGS84.setLambda_WGS84(lambda);
         pointWGS84.setH_WGS84(h);
-        List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84ByDegrees(fi, lambda, h);
-        pointWGS84.setX_WGS84(xyz_WGS84.get(0));
-        pointWGS84.setY_WGS84(xyz_WGS84.get(1));
-        pointWGS84.setZ_WGS84(xyz_WGS84.get(2));
+        pointWGS84.convertWGS84GeographicalCoordinatesForWGS84XYZ();
         KMLWrapperController.addValidInputPoint(pointWGS84);
     }
     public static void isValidManuallyInputDataForWGS84AngleMinSecFormat(String pointId, String Fi_angle, String Fi_min, String Fi_sec,
@@ -476,10 +456,7 @@ public class Validation {
         double LambdaValue = lambda_angle + lambda_min / 60.0 + lambda_sec / 3600.0;
         pointWGS84.setLambda_WGS84(LambdaValue);
         pointWGS84.setH_WGS84(h);
-        List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84ByDegrees(FiValue, LambdaValue, h);
-        pointWGS84.setX_WGS84(xyz_WGS84.get(0));
-        pointWGS84.setY_WGS84(xyz_WGS84.get(1));
-        pointWGS84.setZ_WGS84(xyz_WGS84.get(2));
+        pointWGS84.convertWGS84GeographicalCoordinatesForWGS84XYZ();
         KMLWrapperController.addValidInputPoint(pointWGS84);
     }
     public static void isValidManuallyInputDataForWGS84XYZFormat(String pointId, String X, String Y, String Z)
@@ -524,10 +501,7 @@ public class Validation {
         pointWGS84.setY_WGS84(y);
         pointWGS84.setZ_WGS84(z);
         pointWGS84.setXYZ(true);
-        List<Double> geo_WGS84 = ToWGS.getGeographicalCoordinatesDegreesForWGS84(x, y, z);
-        pointWGS84.setFi_WGS84(geo_WGS84.get(0));
-        pointWGS84.setLambda_WGS84(geo_WGS84.get(1));
-        pointWGS84.setH_WGS84(geo_WGS84.get(2));
+        pointWGS84.convertWGS84XYZCoordinatesForWGS84Geographical();
         KMLWrapperController.addValidInputPoint(pointWGS84);
     }
 

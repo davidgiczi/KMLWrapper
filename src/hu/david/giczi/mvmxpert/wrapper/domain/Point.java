@@ -2,6 +2,7 @@ package hu.david.giczi.mvmxpert.wrapper.domain;
 
 
 import hu.david.giczi.mvmxpert.wrapper.service.ToEOV;
+import hu.david.giczi.mvmxpert.wrapper.service.ToWGS;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -180,7 +181,7 @@ public class Point {
         return Math.sqrt(Math.pow(this.x_WGS84 - point.x_WGS84, 2) +
                 Math.pow(this.y_WGS84 - point.y_WGS84, 2) +  Math.pow(this.z_WGS84 - point.z_WGS84, 2));
     }
-    public void convertEOVCoordinatesForXYZForIUGG67(){
+    public void convertEOVCoordinatesForIUGG67(){
         if( y_EOV == null || x_EOV == null || M_EOV == null ){
             return;
         }
@@ -188,6 +189,30 @@ public class Point {
         this.x_IUGG67 = xyzForIUGG67.get(0);
         this.y_IUGG67 = xyzForIUGG67.get(1);
         this.z_IUGG67 = xyzForIUGG67.get(2);
+        List<Double> geoForIUGG67 = ToEOV.getGeographicalCoordinatesDegreesForIUGG67(y_EOV, x_EOV);
+        this.fi_IUGG67 = geoForIUGG67.get(0);
+        this.lambda_IUGG67 = geoForIUGG67.get(1);
+        this.h_IUGG67 = M_EOV;
+    }
+
+    public void convertWGS84GeographicalCoordinatesForWGS84XYZ(){
+        if( fi_WGS84 == null || lambda_WGS84 == null || h_WGS84== null ){
+            return;
+        }
+        List<Double> xyz_WGS84 = ToWGS.getXYZCoordinatesForWGS84ByDegrees(fi_WGS84, lambda_WGS84, h_WGS84);
+        this.x_WGS84 = xyz_WGS84.get(0);
+        this.y_WGS84 = xyz_WGS84.get(1);
+        this.z_WGS84 = xyz_WGS84.get(2);
+    }
+
+    public void convertWGS84XYZCoordinatesForWGS84Geographical(){
+        if( x_WGS84 == null || y_WGS84 == null || z_WGS84 == null ){
+            return;
+        }
+        List<Double> geo_WGS84 = ToWGS.getGeographicalCoordinatesDegreesForWGS84(x_WGS84, y_WGS84, z_WGS84);
+        this.fi_WGS84 = geo_WGS84.get(0);
+        this.lambda_WGS84 = geo_WGS84.get(1);
+        this.h_WGS84 = geo_WGS84.get(2);
     }
 
     public String getFormattedYForEOV(){
@@ -219,6 +244,34 @@ public class Point {
         return decimalFormat.format(h_WGS84).replace(",", ".");
     }
 
+    public String getFormattedDecimalFiForIUGG67(){
+        decimalFormat = new DecimalFormat("0.000000");
+        return decimalFormat.format(fi_IUGG67).replace(",", ".");
+    }
+    public String getFormattedDecimalLambdaForIUGG67(){
+        decimalFormat = new DecimalFormat("0.000000");
+        return decimalFormat.format(lambda_IUGG67).replace(",", ".");
+    }
+
+    public String getFormattedHForIUGG67(){
+        decimalFormat = new DecimalFormat("0.000");
+        return decimalFormat.format(h_IUGG67).replace(",", ".");
+    }
+
+    public String getFormattedXForIUGG67(){
+        decimalFormat = new DecimalFormat("0.000");
+        return decimalFormat.format(x_IUGG67).replace(",", ".");
+    }
+    public String getFormattedYForIUGG67(){
+        decimalFormat = new DecimalFormat("0.000");
+        return decimalFormat.format(y_IUGG67).replace(",", ".");
+    }
+
+    public String getFormattedZForIUGG67(){
+        decimalFormat = new DecimalFormat("0.000");
+        return decimalFormat.format(z_IUGG67).replace(",", ".");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -239,13 +292,4 @@ public class Point {
         return angle + "° " + (9 < min ? min : "0" + min) + "' " + (9 < sec ? sec : "0" + sec) + "\"";
     }
 
-    @Override
-    public String toString() {
-        return "Point{" +
-                "pointId='" + pointId + '\'' +
-                ", fi_WGS84=" + fi_WGS84 +
-                ", lambda_WGS84=" + lambda_WGS84 +
-                ", h_WGS84=" + h_WGS84 +
-                '}';
-    }
 }
