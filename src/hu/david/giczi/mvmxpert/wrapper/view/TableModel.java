@@ -65,6 +65,19 @@ public class TableModel extends DefaultTableModel {
         }
         else  if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[3]) ){
             for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+                if( !inputPoint.isWGS() ){
+                    continue;
+                }
+                displayedData.add(inputPoint);
+                Object[] row = new Object[]{inputPoint.getPointId(),
+                        inputPoint.getFormattedXForWGS84(),
+                        inputPoint.getFormattedYForWGS84(),
+                        inputPoint.getFormattedZForWGS84(), true};
+                addRow(row);
+            }
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[4]) ){
+            for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
 
                 displayedData.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
@@ -74,8 +87,8 @@ public class TableModel extends DefaultTableModel {
                 addRow(row);
             }
         }
-        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[4]) ){
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
+            for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
 
                 displayedData.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
@@ -87,9 +100,9 @@ public class TableModel extends DefaultTableModel {
                 addRow(row);
             }
         }
-        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
-            for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
-                if( !inputPoint.isWGS() ){
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[6]) ) {
+            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+                if (!inputPoint.isWGS()) {
                     continue;
                 }
                 displayedData.add(inputPoint);
@@ -100,18 +113,31 @@ public class TableModel extends DefaultTableModel {
                 addRow(row);
             }
         }
-        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[6]) ){
+            else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[7]) ){
+                for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+                    if( inputPoint.isWGS() ){
+                        continue;
+                    }
+                    displayedData.add(inputPoint);
+                    Object[] row = new Object[]{inputPoint.getPointId(),
+                            inputPoint.getFormattedDecimalFiForWGS84(),
+                            inputPoint.getFormattedDecimalLambdaForWGS84(),
+                            inputPoint.convertAngleMinSecFormat(inputPoint.getFi_WGS84()),
+                            inputPoint.convertAngleMinSecFormat(inputPoint.getLambda_WGS84()),
+                            inputPoint.getFormattedHForWGS84(), true};
+                    addRow(row);
+                }
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[8]) ){
             for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
                 if( inputPoint.isWGS() ){
                     continue;
                 }
                 displayedData.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
-                        inputPoint.getFormattedDecimalFiForWGS84(),
-                        inputPoint.getFormattedDecimalLambdaForWGS84(),
-                        inputPoint.convertAngleMinSecFormat(inputPoint.getFi_WGS84()),
-                        inputPoint.convertAngleMinSecFormat(inputPoint.getLambda_WGS84()),
-                        inputPoint.getFormattedHForWGS84(), true};
+                        inputPoint.getFormattedXForWGS84(),
+                        inputPoint.getFormattedYForWGS84(),
+                        inputPoint.getFormattedZForWGS84(), true};
                 addRow(row);
             }
         }
@@ -131,15 +157,21 @@ public class TableModel extends DefaultTableModel {
             columNames = new String[]{"Pontszám", "X", "Y", "Z", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[4]) ){
-            columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
-                    "[° ' \"]" , "[° ' \"]", "h", "Ment"};
+            columNames = new String[]{"Pontszám", "X", "Y", "Z", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
-            columNames = new String[]{"Pontszám", "Y", "X", "M", "Ment"};
-        }
-        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[6]) ){
             columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
                     "[° ' \"]" , "[° ' \"]", "h", "Ment"};
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[6]) ){
+            columNames = new String[]{"Pontszám", "Y", "X", "M", "Ment"};
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[7]) ){
+            columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
+                    "[° ' \"]" , "[° ' \"]", "h", "Ment"};
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[8]) ){
+            columNames = new String[]{"Pontszám", "X", "Y", "Z", "Ment"};
         }
 
         if( columNames == null ){
@@ -164,28 +196,38 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[3]) ){
             for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
-                if( !inputPoint.isWGS() )
+                if( inputPoint.isWGS() )
                     pcs++;
             }
         }
 
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[4]) ){
             for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+                pcs++;
+            }
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
+            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+                pcs++;
+            }
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[6]) ){
+            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+                if( inputPoint.isWGS() )
+                    pcs++;
+            }
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[7]) ){
+            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
                 if( !inputPoint.isWGS() )
                     pcs++;
             }
         }
-        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
-
-        }
-        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[6]) ){
-
-        }
-        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[7]) ){
-
-        }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[8]) ){
-
+            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+                if( !inputPoint.isWGS() )
+                    pcs++;
+            }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[9]) ){
 
@@ -218,19 +260,19 @@ public class TableModel extends DefaultTableModel {
             lastIndex = 4;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[4]) ){
-            lastIndex = 6;
+            lastIndex = 4;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
-
+            lastIndex = 6;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[6]) ){
-
+            lastIndex = 4;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[7]) ){
-
+            lastIndex = 6;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[8]) ){
-
+            lastIndex = 4;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[9]) ){
 

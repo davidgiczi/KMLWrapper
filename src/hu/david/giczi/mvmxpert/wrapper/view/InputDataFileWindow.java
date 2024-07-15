@@ -515,16 +515,16 @@ public class InputDataFileWindow {
            saveFileNameField.setText("_kozos-pontok_WGS84_foldrajzi.txt");
        }
        else if( TXT_DATA_TYPE[12].equals(selectedOption)){
-           saveFileNameField.setText("_EOV-WGS84_tr_params.txt");
+           saveFileNameField.setText("_EOV-WGS84_tr_prm.txt");
        }
        else if( TXT_DATA_TYPE[13].equals(selectedOption)){
-           saveFileNameField.setText("_WGS84-EOV_tr_params.txt");
+           saveFileNameField.setText("_WGS84-EOV_tr_prm.txt");
        }
        else if( TXT_DATA_TYPE[14].equals(selectedOption)){
-           saveFileNameField.setText("_EOV-kozephibak.txt");
+           saveFileNameField.setText("_kozephibak_EOV.txt");
        }
        else if( TXT_DATA_TYPE[15].equals(selectedOption)){
-           saveFileNameField.setText("_WGS84-kozephibak.txt");
+           saveFileNameField.setText("_kozephibak_WGS84.txt");
        }
     }
 

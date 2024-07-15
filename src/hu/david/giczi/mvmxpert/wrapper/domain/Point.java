@@ -272,6 +272,21 @@ public class Point {
         return decimalFormat.format(z_IUGG67).replace(",", ".");
     }
 
+    public String getFormattedXForWGS84(){
+        decimalFormat = new DecimalFormat("0.000");
+        return decimalFormat.format(x_WGS84).replace(",", ".");
+    }
+
+    public String getFormattedYForWGS84(){
+        decimalFormat = new DecimalFormat("0.000");
+        return decimalFormat.format(y_WGS84).replace(",", ".");
+    }
+
+    public String getFormattedZForWGS84(){
+        decimalFormat = new DecimalFormat("0.000");
+        return decimalFormat.format(z_WGS84).replace(",", ".");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
