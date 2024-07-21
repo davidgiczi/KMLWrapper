@@ -24,7 +24,7 @@ public class Transformation {
     private void transformInputPoints(){
         for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
             if( !inputPoint.isWGS() ){
-                toWGS = new ToWGS(inputPoint.getX_IUGG67(), inputPoint.getY_IUGG67(), inputPoint.getH_IUGG67(),
+                toWGS = new ToWGS(inputPoint.getX_IUGG67(), inputPoint.getY_IUGG67(), inputPoint.getZ_IUGG67(),
                         EOV_TO_WGS_REFERENCE_POINTS);
                 inputPoint.setX_WGS84(ToWGS.X_WGS84);
                 inputPoint.setY_WGS84(ToWGS.Y_WGS84);

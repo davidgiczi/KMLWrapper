@@ -37,9 +37,6 @@ public class TableModel extends DefaultTableModel {
         displayedData = new ArrayList<>();
         if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[1]) ){
             for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
-                if( inputPoint.isWGS() ){
-                    continue;
-                }
                 displayedData.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedYForEOV(),
@@ -50,9 +47,6 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[2]) ){
             for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
-                if( !inputPoint.isWGS() ){
-                    continue;
-                }
                 displayedData.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedDecimalFiForWGS84(),
@@ -65,9 +59,6 @@ public class TableModel extends DefaultTableModel {
         }
         else  if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[3]) ){
             for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
-                if( !inputPoint.isWGS() ){
-                    continue;
-                }
                 displayedData.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedXForWGS84(),
@@ -78,7 +69,6 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[4]) ){
             for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
-
                 displayedData.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedXForIUGG67(),
@@ -89,7 +79,6 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
             for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
-
                 displayedData.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedDecimalFiForIUGG67(),
@@ -183,33 +172,20 @@ public class TableModel extends DefaultTableModel {
     public int getTableRowsNumber(){
         int pcs = 0;
         if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[1]) ){
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
-                if( !inputPoint.isWGS() )
-                    pcs++;
-            }
+            pcs = KMLWrapperController.INPUT_POINTS.size();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[2]) ){
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
-                if( inputPoint.isWGS() )
-                    pcs++;
-            }
+            pcs = KMLWrapperController.INPUT_POINTS.size();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[3]) ){
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
-                if( inputPoint.isWGS() )
-                    pcs++;
-            }
+            pcs = KMLWrapperController.INPUT_POINTS.size();
         }
 
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[4]) ){
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
-                pcs++;
-            }
+            pcs = KMLWrapperController.INPUT_POINTS.size();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
-                pcs++;
-            }
+           pcs = KMLWrapperController.INPUT_POINTS.size();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[6]) ){
             for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {

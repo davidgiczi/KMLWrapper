@@ -15,12 +15,10 @@ public class ToWGS {
     private final double[][] MATRIX_l = new double[24][1];
     public double[][] PARAM_FOR_WGS;
     public List<Point> referencePoints;
-    public static double Fi_WGS84;
-    public static double Lambda_WGS84;
-    public static double h_WGS84;
     public static double X_WGS84;
     public static double Y_WGS84;
     public static double Z_WGS84;
+
 
     public ToWGS(double X_IUGG67, double Y_IUGG67, double Z_IUGG67, List<Point> referencePoints) {
         this.referencePoints = referencePoints;
@@ -38,6 +36,7 @@ public class ToWGS {
       double eX = PARAM_FOR_WGS[4][0];
       double eY = PARAM_FOR_WGS[5][0];
       double eZ = PARAM_FOR_WGS[6][0];
+
       double[][] Rx =
                 {{1.0, 0.0, 0.0},
                         {0.0, Math.cos(eX), Math.sin(eX)},
@@ -77,10 +76,6 @@ public class ToWGS {
         X_WGS84 = deltaX + kRxRyRz_00 * X_IUGG67 + kRxRyRz_01 * Y_IUGG67 + kRxRyRz_02 * Z_IUGG67;
         Y_WGS84 = deltaY + kRxRyRz_10 * X_IUGG67 + kRxRyRz_11 *  Y_IUGG67 + kRxRyRz_12 * Z_IUGG67;
         Z_WGS84 = deltaZ + kRxRyRz_20 * X_IUGG67 + kRxRyRz_21 * Y_IUGG67 + kRxRyRz_22 * Z_IUGG67;
-        List<Double> geographicalCoordinates = getGeographicalCoordinatesDegreesForWGS84(X_WGS84, Y_WGS84, Z_WGS84);
-        Fi_WGS84 = geographicalCoordinates.get(0);
-        Lambda_WGS84 = geographicalCoordinates.get(1);
-        h_WGS84 = geographicalCoordinates.get(2);
     }
 
     public static List<Double> getGeographicalCoordinatesDegreesForWGS84(double X_WGS84, double Y_WGS84, double Z_WGS84){

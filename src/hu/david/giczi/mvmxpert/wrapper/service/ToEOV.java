@@ -25,7 +25,6 @@ public class ToEOV {
     public static double Y_EOV;
     public static double M_EOV;
 
-
     public ToEOV(double X_WGS84, double Y_WGS84, double Z_WGS84, List<Point> referencePoints) {
         this.referencePoints = referencePoints;
         createMatrixA();

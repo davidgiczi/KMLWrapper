@@ -307,4 +307,13 @@ public class Point {
         return angle + "° " + (9 < min ? min : "0" + min) + "' " + (9 < sec ? sec : "0" + sec) + "\"";
     }
 
+    @Override
+    public String toString() {
+        return "Point{" +
+                "pointId='" + pointId + '\'' +
+                ", x_IUGG67=" + x_IUGG67 +
+                ", y_IUGG67=" + y_IUGG67 +
+                ", z_IUGG67=" + z_IUGG67 +
+                '}';
+    }
 }

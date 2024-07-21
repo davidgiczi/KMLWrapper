@@ -2,7 +2,6 @@ package hu.david.giczi.mvmxpert.wrapper.service;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
-import java.util.List;
 import java.util.prefs.InvalidPreferencesFormatException;
 
 public class Validation {
