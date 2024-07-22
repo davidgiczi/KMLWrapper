@@ -73,6 +73,7 @@ public class FileProcess {
             point.setX_EOV(Double.parseDouble(pointData[5]));
             point.setM_EOV(Double.parseDouble(pointData[6]));
             point.convertEOVCoordinatesForIUGG67();
+            point.convertWGS84XYZCoordinatesForWGS84Geographical();
             KMLWrapperController.REFERENCE_POINTS.add(point);
         }
     }

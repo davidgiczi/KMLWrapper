@@ -94,9 +94,9 @@ public class KMLWrapperController {
         try{
             String pointId = MANUALLY_INPUT_DATA_WINDOW.pointIdFieldForEOV.getText();
             String h = MANUALLY_INPUT_DATA_WINDOW.h_EOV_field.getText();
-            Validation.isValidInputDataForEOV(pointId.isEmpty() ? null : pointId,
-                    MANUALLY_INPUT_DATA_WINDOW.y_EOV_field.getText(),
-                    MANUALLY_INPUT_DATA_WINDOW.x_EOV_field.getText(), h.isEmpty() ? "0.0" : h);
+            Validation.isValidInputDataForEOV(pointId.isEmpty() ? null : pointId.trim(),
+                    MANUALLY_INPUT_DATA_WINDOW.y_EOV_field.getText().trim(),
+                    MANUALLY_INPUT_DATA_WINDOW.x_EOV_field.getText().trim(), h.isEmpty() ? "0.0" : h.trim());
 
         } catch (InvalidPreferencesFormatException e){
             MessagePane.getInfoMessage("Hibás EOV koordináta", e.getMessage(), INPUT_DATA_FILE_WINDOW.jFrame);
@@ -106,9 +106,9 @@ public class KMLWrapperController {
         try{
             String pointId = MANUALLY_INPUT_DATA_WINDOW.pointIdFieldForWGS84DecimalFormat.getText();
             String h = MANUALLY_INPUT_DATA_WINDOW.h_WGS84_field.getText();
-            Validation.isValidManuallyInputDataForWGS84DecimalFormat(pointId.isEmpty() ? null : pointId,
-                    MANUALLY_INPUT_DATA_WINDOW.fi_WGS84_field.getText(),
-                    MANUALLY_INPUT_DATA_WINDOW.lambda_WGS84_field.getText(), h.isEmpty() ? "0.0" : h);
+            Validation.isValidManuallyInputDataForWGS84DecimalFormat(pointId.isEmpty() ? null : pointId.trim(),
+                    MANUALLY_INPUT_DATA_WINDOW.fi_WGS84_field.getText().trim(),
+                    MANUALLY_INPUT_DATA_WINDOW.lambda_WGS84_field.getText().trim(), h.isEmpty() ? "0.0" : h.trim());
 
         } catch (InvalidPreferencesFormatException e){
             MessagePane.getInfoMessage("Hibás WGS84 földrajzi koordináta", e.getMessage(), INPUT_DATA_FILE_WINDOW.jFrame);
@@ -119,11 +119,13 @@ public class KMLWrapperController {
 
             String pointId = MANUALLY_INPUT_DATA_WINDOW.pointIdFieldForWGS84AngleMinSecFormat.getText();
             String h = MANUALLY_INPUT_DATA_WINDOW.h_angle_min_sec_WGS84_field.getText();
-            Validation.isValidManuallyInputDataForWGS84AngleMinSecFormat(pointId.isEmpty() ? null : pointId,
-                        MANUALLY_INPUT_DATA_WINDOW.fiAngleField.getText(),
-                        MANUALLY_INPUT_DATA_WINDOW.fiMinField.getText(), MANUALLY_INPUT_DATA_WINDOW.fiSecField.getText(),
-                        MANUALLY_INPUT_DATA_WINDOW.lambdaAngleField.getText(), MANUALLY_INPUT_DATA_WINDOW.lambdaMinField.getText(),
-                        MANUALLY_INPUT_DATA_WINDOW.lambdaSecField.getText(), h.isEmpty() ? "0.0" : h);
+            Validation.isValidManuallyInputDataForWGS84AngleMinSecFormat(pointId.isEmpty() ? null : pointId.trim(),
+                        MANUALLY_INPUT_DATA_WINDOW.fiAngleField.getText().trim(),
+                        MANUALLY_INPUT_DATA_WINDOW.fiMinField.getText().trim(),
+                        MANUALLY_INPUT_DATA_WINDOW.fiSecField.getText().trim(),
+                        MANUALLY_INPUT_DATA_WINDOW.lambdaAngleField.getText().trim(),
+                        MANUALLY_INPUT_DATA_WINDOW.lambdaMinField.getText().trim(),
+                        MANUALLY_INPUT_DATA_WINDOW.lambdaSecField.getText().trim(), h.isEmpty() ? "0.0" : h.trim());
         } catch (InvalidPreferencesFormatException e){
             MessagePane.getInfoMessage("Hibás WGS84 földrajzi koordináta", e.getMessage(), INPUT_DATA_FILE_WINDOW.jFrame);
         }
@@ -131,10 +133,10 @@ public class KMLWrapperController {
     public void validationManuallyInputDataForWGS84XYZFormat(){
         try{
             String pointId = MANUALLY_INPUT_DATA_WINDOW.pointIdFieldForWGS84XYZFormat.getText();
-            Validation.isValidManuallyInputDataForWGS84XYZFormat(pointId.isEmpty() ? null : pointId,
-                        MANUALLY_INPUT_DATA_WINDOW.x_WGS84_field.getText(),
-                        MANUALLY_INPUT_DATA_WINDOW.y_WGS84_field.getText(),
-                        MANUALLY_INPUT_DATA_WINDOW.z_WGS84_field.getText());
+            Validation.isValidManuallyInputDataForWGS84XYZFormat(pointId.isEmpty() ? null : pointId.trim(),
+                        MANUALLY_INPUT_DATA_WINDOW.x_WGS84_field.getText().trim(),
+                        MANUALLY_INPUT_DATA_WINDOW.y_WGS84_field.getText().trim(),
+                        MANUALLY_INPUT_DATA_WINDOW.z_WGS84_field.getText().trim());
         } catch (InvalidPreferencesFormatException e){
             MessagePane.getInfoMessage("Hibás WGS84 térbeli koordináta", e.getMessage(), INPUT_DATA_FILE_WINDOW.jFrame);
         }

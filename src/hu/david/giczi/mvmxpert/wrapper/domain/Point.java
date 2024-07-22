@@ -311,9 +311,9 @@ public class Point {
     public String toString() {
         return "Point{" +
                 "pointId='" + pointId + '\'' +
-                ", x_IUGG67=" + x_IUGG67 +
-                ", y_IUGG67=" + y_IUGG67 +
-                ", z_IUGG67=" + z_IUGG67 +
+                ", y_EOV=" + y_EOV +
+                ", x_EOV=" + x_EOV +
+                ", M_EOV=" + M_EOV +
                 '}';
     }
 }

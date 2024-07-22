@@ -256,7 +256,6 @@ public class Validation {
             pointWGS84.setXYZ(true);
             pointWGS84.convertWGS84XYZCoordinatesForWGS84Geographical();
         }
-
         return pointWGS84;
     }
 

@@ -3,6 +3,7 @@ import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TableModel extends DefaultTableModel {
@@ -130,6 +131,46 @@ public class TableModel extends DefaultTableModel {
                 addRow(row);
             }
         }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[9]) ){
+
+            setCommonPointsDisplayedData();
+
+            for (Point displayedPoint : displayedData) {
+                        Object[] row = new Object[]{displayedPoint.getPointId(),
+                        displayedPoint.getFormattedYForEOV(),
+                        displayedPoint.getFormattedXForEOV(),
+                        displayedPoint.getFormattedMForEOV(), true};
+                addRow(row);
+            }
+
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[10]) ){
+
+            setCommonPointsDisplayedData();
+
+            for (Point displayedPoint : displayedData) {
+                Object[] row = new Object[]{displayedPoint.getPointId(),
+                        displayedPoint.getFormattedXForWGS84(),
+                        displayedPoint.getFormattedYForWGS84(),
+                        displayedPoint.getFormattedHForWGS84(), true};
+                addRow(row);
+            }
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[11]) ){
+
+            setCommonPointsDisplayedData();
+
+            for (Point displayedPoint : displayedData) {
+                Object[] row = new Object[]{displayedPoint.getPointId(),
+                        displayedPoint.getFormattedDecimalFiForWGS84(),
+                        displayedPoint.getFormattedDecimalLambdaForWGS84(),
+                        displayedPoint.convertAngleMinSecFormat(displayedPoint.getFi_WGS84()),
+                        displayedPoint.convertAngleMinSecFormat(displayedPoint.getLambda_WGS84()),
+                        displayedPoint.getFormattedHForWGS84(), true};
+                addRow(row);
+            }
+
+        }
 
     }
 
@@ -162,11 +203,44 @@ public class TableModel extends DefaultTableModel {
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[8]) ){
             columNames = new String[]{"Pontszám", "X", "Y", "Z", "Ment"};
         }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[9]) ){
+            columNames = new String[]{"Pontszám", "Y", "X", "M", "Ment"};
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[10]) ){
+            columNames = new String[]{"Pontszám", "X", "Y", "Z", "Ment"};
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[11]) ){
+            columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
+                    "[° ' \"]" , "[° ' \"]", "h", "Ment"};
+        }
 
         if( columNames == null ){
             return;
         }
         setColumnIdentifiers(columNames);
+    }
+
+    private int setCommonPointsDisplayedData(){
+
+        if( !displayedData.isEmpty() ){
+            return displayedData.size();
+        }
+
+        for (Point eovToWgsReferencePoint : KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS) {
+            if( eovToWgsReferencePoint == null ){
+                continue;
+            }
+           displayedData.add(eovToWgsReferencePoint);
+        }
+
+        for (Point wgsToEovReferencePoint : KMLWrapperController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS) {
+            if( wgsToEovReferencePoint == null || displayedData.contains(wgsToEovReferencePoint)){
+                continue;
+            }
+            displayedData.add(wgsToEovReferencePoint);
+        }
+
+        return displayedData.size();
     }
 
     public int getTableRowsNumber(){
@@ -206,16 +280,16 @@ public class TableModel extends DefaultTableModel {
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[9]) ){
-
+            pcs = setCommonPointsDisplayedData();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[10]) ){
-
+            pcs = setCommonPointsDisplayedData();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[11]) ){
-
+            pcs = setCommonPointsDisplayedData();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
-
+            pcs = setCommonPointsDisplayedData();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[13]) ){
 
@@ -251,13 +325,13 @@ public class TableModel extends DefaultTableModel {
             lastIndex = 4;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[9]) ){
-
+            lastIndex = 4;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[10]) ){
-
+            lastIndex = 4;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[11]) ){
-
+            lastIndex = 6;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
 
