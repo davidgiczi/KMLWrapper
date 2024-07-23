@@ -17,7 +17,7 @@ public class DataDisplayerWindow {
 
     private void displayData(String dataType){
         tableModel = new TableModel(dataType);
-        if( tableModel.displayedData.isEmpty() ){
+        if( tableModel.displayedPointList.isEmpty() ){
             throw new IllegalArgumentException("Nem található adat");
         }
         JFrame jFrame = new JFrame(dataType + " " + tableModel.getTableRowsNumber() + " db pont");

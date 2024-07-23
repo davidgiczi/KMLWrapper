@@ -455,7 +455,7 @@ public class InputDataFileWindow {
             return false;
         }
         else if ( txtRadioBtn.isSelected() &&
-                (displayer == null || displayer.getTableModel().displayedData.isEmpty()) ) {
+                (displayer == null || displayer.getTableModel().displayedPointList.isEmpty()) ) {
             MessagePane.getInfoMessage("Mentés nem hajtható végre",
                     "Az adatok mentéséhez az adatok megtekintése szükséges.", jFrame);
             return false;

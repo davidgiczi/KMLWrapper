@@ -1,15 +1,20 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.domain.Deviation;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
+import hu.david.giczi.mvmxpert.wrapper.domain.TransformationParam;
+
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class TableModel extends DefaultTableModel {
 
     private final String dataType;
-    public List<Point> displayedData;
+    public List<Point> displayedPointList;
+    public TransformationParam toEOVParams;
+    public TransformationParam toWGSParams;
+    public List<Deviation> commonPointsDeviationList;
 
 
     public TableModel(String dataType) {
@@ -21,7 +26,7 @@ public class TableModel extends DefaultTableModel {
     public void setSaveInputPoint(){
         for(int row = 0; row < getTableRowsNumber(); row++){
            boolean isSave = (boolean) getValueAt(row, getLastIndexOfRow());
-            displayedData.get(row).setSave(isSave);
+            displayedPointList.get(row).setSave(isSave);
         }
     }
 
@@ -35,10 +40,10 @@ public class TableModel extends DefaultTableModel {
     }
 
     private void addInputData(){
-        displayedData = new ArrayList<>();
+        displayedPointList = new ArrayList<>();
         if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[1]) ){
             for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
-                displayedData.add(inputPoint);
+                displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedYForEOV(),
                         inputPoint.getFormattedXForEOV(),
@@ -48,7 +53,7 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[2]) ){
             for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
-                displayedData.add(inputPoint);
+                displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedDecimalFiForWGS84(),
                         inputPoint.getFormattedDecimalLambdaForWGS84(),
@@ -60,7 +65,7 @@ public class TableModel extends DefaultTableModel {
         }
         else  if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[3]) ){
             for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
-                displayedData.add(inputPoint);
+                displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedXForWGS84(),
                         inputPoint.getFormattedYForWGS84(),
@@ -70,7 +75,7 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[4]) ){
             for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
-                displayedData.add(inputPoint);
+                displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedXForIUGG67(),
                         inputPoint.getFormattedYForIUGG67(),
@@ -80,7 +85,7 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
             for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
-                displayedData.add(inputPoint);
+                displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedDecimalFiForIUGG67(),
                         inputPoint.getFormattedDecimalLambdaForIUGG67(),
@@ -95,7 +100,7 @@ public class TableModel extends DefaultTableModel {
                 if (!inputPoint.isWGS()) {
                     continue;
                 }
-                displayedData.add(inputPoint);
+                displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedYForEOV(),
                         inputPoint.getFormattedXForEOV(),
@@ -108,7 +113,7 @@ public class TableModel extends DefaultTableModel {
                     if( inputPoint.isWGS() ){
                         continue;
                     }
-                    displayedData.add(inputPoint);
+                    displayedPointList.add(inputPoint);
                     Object[] row = new Object[]{inputPoint.getPointId(),
                             inputPoint.getFormattedDecimalFiForWGS84(),
                             inputPoint.getFormattedDecimalLambdaForWGS84(),
@@ -123,7 +128,7 @@ public class TableModel extends DefaultTableModel {
                 if( inputPoint.isWGS() ){
                     continue;
                 }
-                displayedData.add(inputPoint);
+                displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedXForWGS84(),
                         inputPoint.getFormattedYForWGS84(),
@@ -135,7 +140,7 @@ public class TableModel extends DefaultTableModel {
 
             setCommonPointsDisplayedData();
 
-            for (Point displayedPoint : displayedData) {
+            for (Point displayedPoint : displayedPointList) {
                         Object[] row = new Object[]{displayedPoint.getPointId(),
                         displayedPoint.getFormattedYForEOV(),
                         displayedPoint.getFormattedXForEOV(),
@@ -148,11 +153,11 @@ public class TableModel extends DefaultTableModel {
 
             setCommonPointsDisplayedData();
 
-            for (Point displayedPoint : displayedData) {
+            for (Point displayedPoint : displayedPointList) {
                 Object[] row = new Object[]{displayedPoint.getPointId(),
                         displayedPoint.getFormattedXForWGS84(),
                         displayedPoint.getFormattedYForWGS84(),
-                        displayedPoint.getFormattedHForWGS84(), true};
+                        displayedPoint.getFormattedZForWGS84(), true};
                 addRow(row);
             }
         }
@@ -160,7 +165,7 @@ public class TableModel extends DefaultTableModel {
 
             setCommonPointsDisplayedData();
 
-            for (Point displayedPoint : displayedData) {
+            for (Point displayedPoint : displayedPointList) {
                 Object[] row = new Object[]{displayedPoint.getPointId(),
                         displayedPoint.getFormattedDecimalFiForWGS84(),
                         displayedPoint.getFormattedDecimalLambdaForWGS84(),
@@ -169,6 +174,40 @@ public class TableModel extends DefaultTableModel {
                         displayedPoint.getFormattedHForWGS84(), true};
                 addRow(row);
             }
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
+
+                    toEOVParams =
+                            new TransformationParam(KMLWrapperController.TRANSFORMATION.toEOV.PARAM_FOR_EOV);
+                    Object[] row = new Object[]{
+                            toEOVParams.getDeltaXParam(),
+                            toEOVParams.getDeltaYParam(),
+                            toEOVParams.getDeltaZParam(),
+                            toEOVParams.getScaleParam(),
+                            toEOVParams.getRotationXParam(),
+                            toEOVParams.getRotationYParam(),
+                            toEOVParams.getRotationZParam(), true};
+                    addRow(row);
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[13]) ){
+
+                toWGSParams =
+                        new TransformationParam(KMLWrapperController.TRANSFORMATION.toWGS.PARAM_FOR_WGS);
+                Object[] row = new Object[]{
+                        toWGSParams.getDeltaXParam(),
+                        toWGSParams.getDeltaYParam(),
+                        toWGSParams.getDeltaZParam(),
+                        toWGSParams.getScaleParam(),
+                        toWGSParams.getRotationXParam(),
+                        toWGSParams.getRotationYParam(),
+                        toWGSParams.getRotationZParam(), true};
+                addRow(row);
+
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
+
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
 
         }
 
@@ -213,6 +252,20 @@ public class TableModel extends DefaultTableModel {
             columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
                     "[° ' \"]" , "[° ' \"]", "h", "Ment"};
         }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
+            columNames = new String[]{"X eltolás", "Y eltolás", "Z eltolás",
+                    "méretarány [ppm]" , "X forgatás", "Y forgatás", "Z forgatás", "Ment"};
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[13]) ){
+            columNames = new String[]{"X eltolás", "Y eltolás", "Z eltolás",
+                    "méretarány [ppm]" , "X forgatás", "Y forgatás", "Z forgatás", "Ment"};
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
+            columNames = new String[]{"Pontszám", "dX", "dY", "dZ", "Ment"};
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
+            columNames = new String[]{"Pontszám", "dX", "dY", "dZ", "Ment"};
+        }
 
         if( columNames == null ){
             return;
@@ -222,25 +275,25 @@ public class TableModel extends DefaultTableModel {
 
     private int setCommonPointsDisplayedData(){
 
-        if( !displayedData.isEmpty() ){
-            return displayedData.size();
+        if( !displayedPointList.isEmpty() ){
+            return displayedPointList.size();
         }
 
         for (Point eovToWgsReferencePoint : KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS) {
             if( eovToWgsReferencePoint == null ){
                 continue;
             }
-           displayedData.add(eovToWgsReferencePoint);
+           displayedPointList.add(eovToWgsReferencePoint);
         }
 
         for (Point wgsToEovReferencePoint : KMLWrapperController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS) {
-            if( wgsToEovReferencePoint == null || displayedData.contains(wgsToEovReferencePoint)){
+            if( wgsToEovReferencePoint == null || displayedPointList.contains(wgsToEovReferencePoint)){
                 continue;
             }
-            displayedData.add(wgsToEovReferencePoint);
+            displayedPointList.add(wgsToEovReferencePoint);
         }
 
-        return displayedData.size();
+        return displayedPointList.size();
     }
 
     public int getTableRowsNumber(){
@@ -289,10 +342,16 @@ public class TableModel extends DefaultTableModel {
             pcs = setCommonPointsDisplayedData();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
-            pcs = setCommonPointsDisplayedData();
+            pcs = 1;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[13]) ){
-
+            pcs = 1;
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
+            pcs = setCommonPointsDisplayedData();
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
+            pcs = setCommonPointsDisplayedData();
         }
 
         return pcs;
@@ -334,10 +393,16 @@ public class TableModel extends DefaultTableModel {
             lastIndex = 6;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
-
+            lastIndex = 8;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[13]) ){
-
+            lastIndex = 8;
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
+            lastIndex = 5;
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
+            lastIndex = 5;
         }
 
         return lastIndex;
