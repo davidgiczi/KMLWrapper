@@ -1,6 +1,6 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
-
+import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 
 
 import javax.swing.*;
@@ -88,6 +88,28 @@ public class InputDataFileWindow {
             "Transzformáció paraméterei: WGS84-EOV",
             "Maradék ellentmondások: EOV (dY, dX, dM)",
             "Maradék ellentmondások: WGS84 (dX, dY, dZ)"};
+
+    private static final String[] FILE_NAME_OPTION = {
+            "_pont.kml",
+            "_vonal.kml",
+            "_kerulet.kml",
+            "_vonal_pontok.kml",
+            "_kerulet_pontok.kml",
+            "_EOV_pontok.txt",
+            "_WGS84_pontok_foldrajzi.txt",
+            "_WGS84_pontok_XYZ.txt",
+            "_pontok_IUGG67_XYZ.txt",
+            "_pontok_IUGG67_foldrajzi.txt",
+            "_tr_pontok_EOV.txt",
+            "_tr_pontok_WGS84_foldrajzi.txt",
+            "_tr_pontok_WGS84_XYZ.txt",
+            "_kozos-pontok_EOV.txt",
+            "_kozos-pontok_WGS84_XYZ.txt",
+            "_kozos-pontok_WGS84_foldrajzi.txt",
+            "_EOV-WGS84_tr_prm.txt",
+            "_WGS84-EOV_tr_prm.txt",
+            "_kozephibak_EOV.txt",
+            "_kozephibak_WGS84.txt"};
 
     public InputDataFileWindow(KMLWrapperController controller) {
         this.controller = controller;
@@ -443,6 +465,33 @@ public class InputDataFileWindow {
                     "Hozzáadott pont nem található.", jFrame);
             return false;
         }
+        else if( selectedItem.equals(TXT_DATA_TYPE[12]) ){
+            int EOVPoint = 0;
+            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+                if( !inputPoint.isWGS() ){
+                    EOVPoint++;
+                }
+            }
+            if( EOVPoint == 0 ){
+                MessagePane.getInfoMessage("Nem található adat",
+                        "Hozzáadott EOV pont nem található.", jFrame);
+                return false;
+            }
+        }
+        else if( selectedItem.equals(TXT_DATA_TYPE[13]) ){
+            int WGSPoint = 0;
+            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+                if( inputPoint.isWGS() ){
+                    WGSPoint++;
+                }
+            }
+            if( WGSPoint == 0 ){
+                MessagePane.getInfoMessage("Nem található adat",
+                        "Hozzáadott WGS84 pont nem található.", jFrame);
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -467,64 +516,64 @@ public class InputDataFileWindow {
     private void createFileNameForSaveOutputFile(){
         String selectedOption = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
        if( KML_DATA_TYPE[1].equals(selectedOption) ){
-           saveFileNameField.setText("_pont.kml");
+           saveFileNameField.setText(FILE_NAME_OPTION[0]);
        }
        else if( KML_DATA_TYPE[2].equals(selectedOption) ){
-            saveFileNameField.setText("_vonal.kml");
+            saveFileNameField.setText(FILE_NAME_OPTION[1]);
         }
        else if( KML_DATA_TYPE[3].equals(selectedOption) ){
-            saveFileNameField.setText("_kerulet.kml");
+            saveFileNameField.setText(FILE_NAME_OPTION[2]);
         }
        else if( KML_DATA_TYPE[4].equals(selectedOption) ){
-            saveFileNameField.setText("_vonal_pontok.kml");
+            saveFileNameField.setText(FILE_NAME_OPTION[3]);
         }
        else if( KML_DATA_TYPE[5].equals(selectedOption) ){
-            saveFileNameField.setText("_kerulet_pontok.kml");
+            saveFileNameField.setText(FILE_NAME_OPTION[4]);
         }
        else if( TXT_DATA_TYPE[1].equals(selectedOption)){
-           saveFileNameField.setText("_EOV_pontok.txt");
+           saveFileNameField.setText(FILE_NAME_OPTION[5]);
        }
        else if( TXT_DATA_TYPE[2].equals(selectedOption)){
-           saveFileNameField.setText("_WGS84_pontok_foldrajzi.txt");
+           saveFileNameField.setText(FILE_NAME_OPTION[6]);
        }
        else if( TXT_DATA_TYPE[3].equals(selectedOption)){
-           saveFileNameField.setText("_WGS84_pontok_XYZ.txt");
+           saveFileNameField.setText(FILE_NAME_OPTION[7]);
        }
        else if( TXT_DATA_TYPE[4].equals(selectedOption)){
-           saveFileNameField.setText("_pontok_IUGG67_XYZ.txt");
+           saveFileNameField.setText(FILE_NAME_OPTION[8]);
        }
        else if( TXT_DATA_TYPE[5].equals(selectedOption)){
-           saveFileNameField.setText("_pontok_IUGG67_foldrajzi.txt");
+           saveFileNameField.setText(FILE_NAME_OPTION[9]);
        }
        else if( TXT_DATA_TYPE[6].equals(selectedOption)){
-           saveFileNameField.setText("_tr_pontok_EOV.txt");
+           saveFileNameField.setText(FILE_NAME_OPTION[10]);
        }
        else if( TXT_DATA_TYPE[7].equals(selectedOption)){
-           saveFileNameField.setText("_tr_pontok_WGS84_foldrajzi.txt");
+           saveFileNameField.setText(FILE_NAME_OPTION[11]);
        }
        else if( TXT_DATA_TYPE[8].equals(selectedOption)){
-           saveFileNameField.setText("_tr_pontok_WGS84_XYZ.txt");
+           saveFileNameField.setText(FILE_NAME_OPTION[12]);
        }
        else if( TXT_DATA_TYPE[9].equals(selectedOption)){
-           saveFileNameField.setText("_kozos-pontok_EOV.txt");
+           saveFileNameField.setText(FILE_NAME_OPTION[13]);
        }
        else if( TXT_DATA_TYPE[10].equals(selectedOption)){
-           saveFileNameField.setText("_kozos-pontok_WGS84_XYZ.txt");
+           saveFileNameField.setText(FILE_NAME_OPTION[14]);
        }
        else if( TXT_DATA_TYPE[11].equals(selectedOption)){
-           saveFileNameField.setText("_kozos-pontok_WGS84_foldrajzi.txt");
+           saveFileNameField.setText(FILE_NAME_OPTION[15]);
        }
        else if( TXT_DATA_TYPE[12].equals(selectedOption)){
-           saveFileNameField.setText("_EOV-WGS84_tr_prm.txt");
+           saveFileNameField.setText(FILE_NAME_OPTION[16]);
        }
        else if( TXT_DATA_TYPE[13].equals(selectedOption)){
-           saveFileNameField.setText("_WGS84-EOV_tr_prm.txt");
+           saveFileNameField.setText(FILE_NAME_OPTION[17]);
        }
        else if( TXT_DATA_TYPE[14].equals(selectedOption)){
-           saveFileNameField.setText("_kozephibak_EOV.txt");
+           saveFileNameField.setText(FILE_NAME_OPTION[18]);
        }
        else if( TXT_DATA_TYPE[15].equals(selectedOption)){
-           saveFileNameField.setText("_kozephibak_WGS84.txt");
+           saveFileNameField.setText(FILE_NAME_OPTION[19]);
        }
     }
 

@@ -116,7 +116,6 @@ public class KMLWrapperController {
     }
     public void validationManuallyInputDataForWGS84AngleMinSecFormat(){
         try{
-
             String pointId = MANUALLY_INPUT_DATA_WINDOW.pointIdFieldForWGS84AngleMinSecFormat.getText();
             String h = MANUALLY_INPUT_DATA_WINDOW.h_angle_min_sec_WGS84_field.getText();
             Validation.isValidManuallyInputDataForWGS84AngleMinSecFormat(pointId.isEmpty() ? null : pointId.trim(),

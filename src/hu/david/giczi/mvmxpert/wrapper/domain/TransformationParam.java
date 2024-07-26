@@ -48,19 +48,29 @@ public class TransformationParam {
     }
 
     public String getScaleParam(){
-        return decimalFormat.format((int) ((scale - 1) * 1000000));
+        decimalFormat = new DecimalFormat("0.0000");
+        return decimalFormat.format(scale).replace(",", ".");
     }
 
     public String getRotationXParam(){
-    return new Point().convertAngleMinSecFormat(Math.toDegrees(rotationX));
+    return convertRotationValueInSec(Math.toDegrees(rotationX));
     }
 
     public String getRotationYParam(){
-        return new Point().convertAngleMinSecFormat(Math.toDegrees(rotationY));
+        return convertRotationValueInSec(Math.toDegrees(rotationY));
     }
 
     public String getRotationZParam(){
-        return new Point().convertAngleMinSecFormat(Math.toDegrees(rotationZ));
+        return convertRotationValueInSec(Math.toDegrees(rotationZ));
     }
 
+
+    private  String convertRotationValueInSec(double data){
+        int angle = (int) data;
+        int min = (int) ((data - angle) * 60);
+        double sec = ((int) (10 * ((data - angle) * 3600 - min * 60))) / 10.0;
+        return (0 > data ? "-" : "+") + Math.abs(angle) + "° " +
+                (9 < Math.abs(min) ? Math.abs(min) : "0" + Math.abs(min)) + "' " +
+                        (9 < Math.abs(sec) ? Math.abs(sec) : "0" + Math.abs(sec)) + "\"";
+    }
 }

@@ -24,9 +24,17 @@ public class TableModel extends DefaultTableModel {
     }
 
     public void setSaveInputPoint(){
-        for(int row = 0; row < getTableRowsNumber(); row++){
-           boolean isSave = (boolean) getValueAt(row, getLastIndexOfRow());
-            displayedPointList.get(row).setSave(isSave);
+        if( !displayedPointList.isEmpty() ) {
+            for (int row = 0; row < getTableRowsNumber(); row++) {
+                boolean isSave = (boolean) getValueAt(row, getLastIndexOfRow());
+                displayedPointList.get(row).setSave(isSave);
+            }
+        }
+        else if( toWGSParams != null ){
+            toWGSParams.setSave((boolean) getValueAt(0, getLastIndexOfRow()));
+        }
+        else if( toEOVParams != null ){
+            toEOVParams.setSave((boolean) getValueAt(0, getLastIndexOfRow()));
         }
     }
 
@@ -177,30 +185,30 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
 
-                    toEOVParams =
-                            new TransformationParam(KMLWrapperController.TRANSFORMATION.toEOV.PARAM_FOR_EOV);
+                    toWGSParams =
+                            new TransformationParam(KMLWrapperController.TRANSFORMATION.toWGS.PARAM_FOR_WGS);
                     Object[] row = new Object[]{
-                            toEOVParams.getDeltaXParam(),
-                            toEOVParams.getDeltaYParam(),
-                            toEOVParams.getDeltaZParam(),
-                            toEOVParams.getScaleParam(),
-                            toEOVParams.getRotationXParam(),
-                            toEOVParams.getRotationYParam(),
-                            toEOVParams.getRotationZParam(), true};
+                            toWGSParams.getDeltaXParam(),
+                            toWGSParams.getDeltaYParam(),
+                            toWGSParams.getDeltaZParam(),
+                            toWGSParams.getScaleParam(),
+                            toWGSParams.getRotationXParam(),
+                            toWGSParams.getRotationYParam(),
+                            toWGSParams.getRotationZParam(), true};
                     addRow(row);
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[13]) ){
 
-                toWGSParams =
-                        new TransformationParam(KMLWrapperController.TRANSFORMATION.toWGS.PARAM_FOR_WGS);
+                toEOVParams =
+                        new TransformationParam(KMLWrapperController.TRANSFORMATION.toEOV.PARAM_FOR_EOV);
                 Object[] row = new Object[]{
-                        toWGSParams.getDeltaXParam(),
-                        toWGSParams.getDeltaYParam(),
-                        toWGSParams.getDeltaZParam(),
-                        toWGSParams.getScaleParam(),
-                        toWGSParams.getRotationXParam(),
-                        toWGSParams.getRotationYParam(),
-                        toWGSParams.getRotationZParam(), true};
+                        toEOVParams.getDeltaXParam(),
+                        toEOVParams.getDeltaYParam(),
+                        toEOVParams.getDeltaZParam(),
+                        toEOVParams.getScaleParam(),
+                        toEOVParams.getRotationXParam(),
+                        toEOVParams.getRotationYParam(),
+                        toEOVParams.getRotationZParam(), true};
                 addRow(row);
 
         }
@@ -253,12 +261,12 @@ public class TableModel extends DefaultTableModel {
                     "[° ' \"]" , "[° ' \"]", "h", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
-            columNames = new String[]{"X eltolás", "Y eltolás", "Z eltolás",
-                    "méretarány [ppm]" , "X forgatás", "Y forgatás", "Z forgatás", "Ment"};
+            columNames = new String[]{"X elt. [m]", "Y elt. [m]", "Z elt. [m]",
+                    "Méretarány" , "X forgatás", "Y forgatás", "Z forgatás", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[13]) ){
-            columNames = new String[]{"X eltolás", "Y eltolás", "Z eltolás",
-                    "méretarány [ppm]" , "X forgatás", "Y forgatás", "Z forgatás", "Ment"};
+            columNames = new String[]{"X elt. [m]", "Y elt. [m]", "Z elt. [m]",
+                    "Méretarány" , "X forgatás", "Y forgatás", "Z forgatás", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
             columNames = new String[]{"Pontszám", "dX", "dY", "dZ", "Ment"};
@@ -393,16 +401,16 @@ public class TableModel extends DefaultTableModel {
             lastIndex = 6;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
-            lastIndex = 8;
+            lastIndex = 7;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[13]) ){
-            lastIndex = 8;
+            lastIndex = 7;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
-            lastIndex = 5;
+            lastIndex = 4;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
-            lastIndex = 5;
+            lastIndex = 4;
         }
 
         return lastIndex;
