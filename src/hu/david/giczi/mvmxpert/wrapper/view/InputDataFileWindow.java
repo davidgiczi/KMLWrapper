@@ -465,7 +465,7 @@ public class InputDataFileWindow {
                     "Hozzáadott pont nem található.", jFrame);
             return false;
         }
-        else if( selectedItem.equals(TXT_DATA_TYPE[12]) ){
+        else if( selectedItem.equals(TXT_DATA_TYPE[12]) || selectedItem.equals(TXT_DATA_TYPE[15])){
             int EOVPoint = 0;
             for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
                 if( !inputPoint.isWGS() ){
@@ -478,7 +478,7 @@ public class InputDataFileWindow {
                 return false;
             }
         }
-        else if( selectedItem.equals(TXT_DATA_TYPE[13]) ){
+        else if( selectedItem.equals(TXT_DATA_TYPE[13]) || selectedItem.equals(TXT_DATA_TYPE[14])){
             int WGSPoint = 0;
             for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
                 if( inputPoint.isWGS() ){
