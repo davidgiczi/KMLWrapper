@@ -381,7 +381,7 @@ public class ManuallyInputDataWindow {
         switch ( inpuDataTypeIndex ){
             case 0 :
                 MessagePane.getInfoMessage("Érvénytelen adatbevitel",
-                        "Formátum választása szükséges.", jFrame);
+                        "Bemeneti adattípus választása szükséges.", jFrame);
                 break;
             case 1 :
                 controller.validationManuallyInputDataForEOV();

@@ -179,6 +179,9 @@ public class InputDataFileWindow {
         JMenu optionMenu = new JMenu("Opciók");
         optionMenu.setFont(boldFont);
         optionMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JMenu transformationMenu = new JMenu("2D transzformáció");
+        transformationMenu.setFont(boldFont);
+        transformationMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem manuallyInputMenuItem = new JMenuItem("Kézi adatbevitel");
         manuallyInputMenuItem.addActionListener(e -> {
             jFrame.setVisible(false);
@@ -205,6 +208,7 @@ public class InputDataFileWindow {
         optionMenu.addSeparator();
         optionMenu.add(exitProgramMenuItem);
         jMenuBar.add(optionMenu);
+        jMenuBar.add(transformationMenu);
         jFrame.setJMenuBar(jMenuBar);
     }
 
@@ -246,13 +250,24 @@ public class InputDataFileWindow {
         listRadioBtn.setFont(plainFont);
         listRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         listRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
+        JRadioButton kmlRadioBtn = new JRadioButton("kml fájl");
+        kmlRadioBtn.addActionListener(e ->{
+            String[] cadList = {"kml fájlból WGS84 földrajzi koordináták"};
+            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
+            inputDataTypeComboBox.setModel(model);
+        });
+        kmlRadioBtn.setFont(plainFont);
+        kmlRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        kmlRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         ButtonGroup radioBtnGroup = new ButtonGroup();
         radioBtnGroup.add(eovRadioBtn);
         radioBtnGroup.add(wgsRadioBtn);
         radioBtnGroup.add(listRadioBtn);
+        radioBtnGroup.add(kmlRadioBtn);
         panel.add(eovRadioBtn);
         panel.add(wgsRadioBtn);
         panel.add(listRadioBtn);
+        panel.add(kmlRadioBtn);
         inputFileOptionPanel.add(panel);
     }
 
