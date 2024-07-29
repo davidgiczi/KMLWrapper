@@ -1,4 +1,6 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
+import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
@@ -23,16 +25,15 @@ public class DataDisplayerWindow {
             throw new IllegalArgumentException("Nem található adat");
         }
         JFrame jFrame = new JFrame(dataType + " " + tableModel.getTableRowsNumber() + " db pont");
-        jFrame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                super.windowClosing(e);
-                tableModel.setSaveInputPoint();
-            }
-        });
         jFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         jFrame.setIconImage(Toolkit.getDefaultToolkit()
                 .getImage(getClass().getResource("/logo/MVM.jpg")));
+        jFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                tableModel.setSaveInputPoint();
+            }
+        });
         JTable table = new JTable(tableModel);
         table.setRowHeight(30);
         table.setFont(plainFont);

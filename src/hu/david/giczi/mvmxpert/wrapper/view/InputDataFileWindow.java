@@ -1,8 +1,10 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
+import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
 
 
+import javax.jws.soap.SOAPBinding;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -15,16 +17,14 @@ public class InputDataFileWindow {
     public JTextField pointPreIdField;
     public JTextField pointIdField;
     public JTextField pointPostIdField;
-    private JButton showBtn;
     private final KMLWrapperController controller;
     private JPanel inputFileOptionPanel;
     private JPanel outputFileOptionPanel;
     private JPanel saveOutputFileOptionPanel;
     private JTextField saveFileNameField;
     public JComboBox<String> inputDataTypeComboBox;
-    private JRadioButton kmlRadioBtn;
+    public JComboBox<String> outputDataTypeComboBox;
     private JRadioButton txtRadioBtn;
-    private JComboBox<String> outputDataTypeComboBox;
     private DataDisplayerWindow displayer;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
@@ -151,7 +151,6 @@ public class InputDataFileWindow {
         addTitleForInputFileOptionPanel();
         addRadioButtonForInputFileOptionPanel();
         addComboBoxForInputFileOptionPanel();
-        addBrowseButtonForInputFileOptionPanel();
         jFrame.add(inputFileOptionPanel);
     }
 
@@ -170,7 +169,6 @@ public class InputDataFileWindow {
         saveOutputFileOptionPanel.setLayout(new GridLayout(4, 1));
         addTitleForOutputFileName();
         addFileNameForOutputFile();
-        addShowButtonForData();
         addSaveButtonForOutputFile();
         jFrame.add(saveOutputFileOptionPanel);
     }
@@ -246,6 +244,11 @@ public class InputDataFileWindow {
             String[] cadList = {"AutoCad lista koordináták EOV (Y,X,M)"};
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
             inputDataTypeComboBox.setModel(model);
+            controller.openInputDataFile();
+           if( FileProcess.FILE_NAME == null ){
+               return;
+           }
+            controller.openAutoCadListDataFile();
         });
         listRadioBtn.setFont(plainFont);
         listRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -278,11 +281,12 @@ public class InputDataFileWindow {
             if( e.getItem().toString().equals(EOV_DATA_TYPE[0]) ){
                 inputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
             }
-            else{
+            else {
                 inputDataTypeComboBox.setForeground(Color.BLACK);
+                controller.openInputDataFile();
             }
         });
-        inputDataTypeComboBox.setPreferredSize(new Dimension(400, 35));
+        inputDataTypeComboBox.setPreferredSize(new Dimension(500, 35));
         inputDataTypeComboBox.setBackground(new Color(249, 249, 249));
         inputDataTypeComboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
         inputDataTypeComboBox.setFont(new Font("Roboto", Font.PLAIN, 20));
@@ -294,15 +298,6 @@ public class InputDataFileWindow {
         inputFileOptionPanel.add(panel);
     }
 
-    private void addBrowseButtonForInputFileOptionPanel(){
-        JPanel panel = new JPanel();
-        JButton browseBtn = new JButton("Fájl megnyitása");
-        browseBtn.addActionListener(e -> controller.openInputDataFile());
-        browseBtn.setFont(boldFont);
-        browseBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panel.add(browseBtn);
-        inputFileOptionPanel.add(panel);
-    }
 
     private void addTitleForOutputFileOptionPanel(){
         JPanel panel = new JPanel();
@@ -344,12 +339,10 @@ public class InputDataFileWindow {
     }
     private void addRadioButtonForOutputFileOptionPanel(){
         JPanel panel = new JPanel();
-        kmlRadioBtn = new JRadioButton("kml fájl");
+        JRadioButton kmlRadioBtn = new JRadioButton("kml fájl");
         kmlRadioBtn.addActionListener(e -> {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(KML_DATA_TYPE);
             outputDataTypeComboBox.setModel(model);
-            saveFileNameField.setText(null);
-            showBtn.setEnabled(false);
         });
         kmlRadioBtn.setFont(plainFont);
         kmlRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -360,7 +353,6 @@ public class InputDataFileWindow {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(TXT_DATA_TYPE);
             outputDataTypeComboBox.setModel(model);
             saveFileNameField.setText(null);
-            showBtn.setEnabled(true);
         });
         txtRadioBtn.setFont(plainFont);
         txtRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -370,8 +362,7 @@ public class InputDataFileWindow {
             String[] cadList = {"AutoCad scr fájl (EOV Y, X, M)"};
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
             outputDataTypeComboBox.setModel(model);
-            saveFileNameField.setText("pontok.scr");
-            showBtn.setEnabled(false);
+            saveFileNameField.setText("_pontok.scr");
         });
         scrRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         scrRadioBtn.setFont(plainFont);
@@ -392,9 +383,22 @@ public class InputDataFileWindow {
         outputDataTypeComboBox.addItemListener(e -> {
             if( e.getItem().toString().equals(TXT_DATA_TYPE[0]) ){
                 outputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
+                saveFileNameField.setText(null);
             }
-            else{
+            else {
                 outputDataTypeComboBox.setForeground(Color.BLACK);
+                createFileNameForSaveOutputFile();
+                if( isOkDisplayData(e.getItem().toString()) && controller.setIdForInputDataPoints() ){
+                    try{
+                        controller.transformationInputPointData();
+                        displayer = new DataDisplayerWindow(e.getItem().toString());
+                    }
+                    catch (IllegalArgumentException a){
+                        MessagePane.getInfoMessage(a.getMessage(),
+                                "Nem beolvasott adat vagy érvénytelen adattípus választás." ,
+                                KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                    }
+                }
             }
         });
         outputDataTypeComboBox.setPreferredSize(new Dimension(700, 35));
@@ -402,7 +406,6 @@ public class InputDataFileWindow {
         outputDataTypeComboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
         outputDataTypeComboBox.setFont(new Font("Roboto", Font.PLAIN, 20));
         outputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
-        outputDataTypeComboBox.addItemListener(e -> createFileNameForSaveOutputFile());
         DefaultListCellRenderer renderer = new DefaultListCellRenderer();
         renderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
         outputDataTypeComboBox.setRenderer(renderer);
@@ -416,6 +419,7 @@ public class InputDataFileWindow {
         contentTitleLabel.setFont(boldFont);
         contentTitleLabel.setBorder(new EmptyBorder(10,0,0,0));
         panel.add(contentTitleLabel);
+        saveOutputFileOptionPanel.add(new JPanel());
         saveOutputFileOptionPanel.add(panel);
     }
 
@@ -442,30 +446,6 @@ public class InputDataFileWindow {
         saveBtn.setFont(boldFont);
         saveBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(saveBtn);
-        saveOutputFileOptionPanel.add(panel);
-    }
-
-    private void addShowButtonForData(){
-        JPanel panel = new JPanel();
-        showBtn = new JButton("Adatok megtekintése");
-        showBtn.addActionListener(e -> {
-            String selectedItem =
-                    Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
-                    if( isOkDisplayData(selectedItem) && controller.setIdForInputDataPoints() ){
-                        try{
-                            controller.transformationInputPointData();
-                            displayer = new DataDisplayerWindow(selectedItem);
-                        }
-                        catch (IllegalArgumentException a){
-                            MessagePane.getInfoMessage(a.getMessage(),
-                                    "Nem beolvasott adat vagy érvénytelen adattípus választás." ,
-                                    KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
-                        }
-                    }
-        });
-        showBtn.setFont(boldFont);
-        showBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panel.add(showBtn);
         saveOutputFileOptionPanel.add(panel);
     }
 
@@ -512,16 +492,10 @@ public class InputDataFileWindow {
 
     private boolean isOkSavingData(){
 
-        String selectedOption = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
-        if( kmlRadioBtn.isSelected() && selectedOption.equals(KML_DATA_TYPE[0]) ){
-            MessagePane.getInfoMessage("Mentés nem hajtható végre",
-                    "Adattípus választása szükséges.", jFrame);
-            return false;
-        }
-        else if ( txtRadioBtn.isSelected() &&
+        if ( txtRadioBtn.isSelected() &&
                 (displayer == null || displayer.getTableModel().displayedPointList.isEmpty()) ) {
             MessagePane.getInfoMessage("Mentés nem hajtható végre",
-                    "Az adatok mentéséhez az adatok megtekintése szükséges.", jFrame);
+                    "Adattípus választása szükséges.", jFrame);
             return false;
         }
 

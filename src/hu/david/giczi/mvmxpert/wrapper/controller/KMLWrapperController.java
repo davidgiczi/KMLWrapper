@@ -42,6 +42,7 @@ public class KMLWrapperController {
         }
         fileProcess.openInputDataFile();
         if( FileProcess.FILE_NAME == null ){
+            INPUT_DATA_FILE_WINDOW.inputDataTypeComboBox.setSelectedItem(InputDataFileWindow.EOV_DATA_TYPE[0]);
             return;
         }
         if( !INPUT_POINTS.isEmpty() ) {
@@ -51,15 +52,11 @@ public class KMLWrapperController {
             }
         }
         validationInputData();
-        openAutoCadListDataFile();
         setWindowTitle();
     }
 
     private void validationInputData(){
         String selectedFormat = Objects.requireNonNull(INPUT_DATA_FILE_WINDOW.inputDataTypeComboBox.getSelectedItem()).toString();
-       if( selectedFormat.startsWith("AutoCad") ){
-           return;
-       }
         try {
             new Validation(selectedFormat);
         } catch (InvalidPreferencesFormatException e) {
@@ -67,11 +64,7 @@ public class KMLWrapperController {
         }
     }
 
-    private void openAutoCadListDataFile(){
-        String selectedFormat = Objects.requireNonNull(INPUT_DATA_FILE_WINDOW.inputDataTypeComboBox.getSelectedItem()).toString();
-        if( !selectedFormat.startsWith("AutoCad") ){
-            return;
-        }
+    public void openAutoCadListDataFile(){
         List<String> autoCadInputDataList = fileProcess.getAutoCadInputData();
         if( autoCadInputDataList.isEmpty() ){
             MessagePane.getInfoMessage("Hiba a beolvasott fájlban",
