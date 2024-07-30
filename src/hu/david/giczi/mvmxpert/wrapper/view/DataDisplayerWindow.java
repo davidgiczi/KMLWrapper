@@ -1,6 +1,5 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 
-import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;

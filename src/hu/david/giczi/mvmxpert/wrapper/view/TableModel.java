@@ -148,8 +148,10 @@ public class TableModel extends DefaultTableModel {
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[9]) ){
-
             setCommonPointsDisplayedData();
+            if( displayedPointList.isEmpty() ){
+             throw new IllegalArgumentException("Hozzáadott WGS84 pont nem található");
+         }
 
             for (Point displayedPoint : displayedPointList) {
                         Object[] row = new Object[]{displayedPoint.getPointId(),
@@ -161,8 +163,10 @@ public class TableModel extends DefaultTableModel {
 
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[10]) ){
-
             setCommonPointsDisplayedData();
+            if( displayedPointList.isEmpty() ){
+                throw new IllegalArgumentException("Hozzáadott EOV pont nem található");
+            }
 
             for (Point displayedPoint : displayedPointList) {
                 Object[] row = new Object[]{displayedPoint.getPointId(),
@@ -173,8 +177,10 @@ public class TableModel extends DefaultTableModel {
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[11]) ){
-
             setCommonPointsDisplayedData();
+            if(  displayedPointList.isEmpty() ){
+                throw new IllegalArgumentException("Hozzáadott EOV pont nem található");
+            }
 
             for (Point displayedPoint : displayedPointList) {
                 Object[] row = new Object[]{displayedPoint.getPointId(),
@@ -228,23 +234,20 @@ public class TableModel extends DefaultTableModel {
                 throw new IllegalArgumentException("Hozzáadott EOV pont nem található");
             }
             commonPointsDeviationList = new ArrayList<>();
-                setCommonPointsDisplayedData();
+            setCommonPointsDisplayedData();
             for (Point commonPoint : displayedPointList) {
-                if( !KMLWrapperController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS.contains(commonPoint) ){
-                    continue;
-                }
-               new ToEOV(commonPoint.getX_WGS84(),
-                        commonPoint.getY_WGS84(),
-                        commonPoint.getZ_WGS84(),
-                        KMLWrapperController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS);
+               new ToWGS(commonPoint.getX_IUGG67(),
+                        commonPoint.getY_IUGG67(),
+                        commonPoint.getZ_IUGG67(),
+                        KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS);
                 Deviation deviation = new Deviation(
                         commonPoint.getPointId(),
-                        commonPoint.getY_EOV(),
-                        commonPoint.getX_EOV(),
-                        commonPoint.getM_EOV(),
-                        ToEOV.Y_EOV,
-                        ToEOV.X_EOV,
-                        ToEOV.M_EOV);
+                        commonPoint.getX_WGS84(),
+                        commonPoint.getY_WGS84(),
+                        commonPoint.getZ_WGS84(),
+                        ToWGS.X_WGS84,
+                        ToWGS.Y_WGS84,
+                        ToWGS.Z_WGS84);
                 commonPointsDeviationList.add(deviation);
                 Object[] row = new Object[]{
                         deviation.getPointId(),
@@ -262,21 +265,21 @@ public class TableModel extends DefaultTableModel {
             commonPointsDeviationList = new ArrayList<>();
             setCommonPointsDisplayedData();
             for (Point commonPoint : displayedPointList) {
-               if( !KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS.contains(commonPoint) ){
+               if( KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS.contains(commonPoint) ){
                    continue;
                }
-               new ToWGS(commonPoint.getX_IUGG67(),
-                         commonPoint.getY_IUGG67(),
-                         commonPoint.getZ_IUGG67(),
-                         KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS);
+               new ToEOV(commonPoint.getX_WGS84(),
+                         commonPoint.getY_WGS84(),
+                         commonPoint.getZ_WGS84(),
+                         KMLWrapperController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS);
                 Deviation deviation = new Deviation(
                         commonPoint.getPointId(),
-                        commonPoint.getX_WGS84(),
-                        commonPoint.getY_WGS84(),
-                        commonPoint.getZ_WGS84(),
-                        ToWGS.X_WGS84,
-                        ToWGS.Y_WGS84,
-                        ToWGS.Z_WGS84);
+                        commonPoint.getY_EOV(),
+                        commonPoint.getX_EOV(),
+                        commonPoint.getM_EOV(),
+                        ToEOV.Y_EOV,
+                        ToEOV.X_EOV,
+                        ToEOV.M_EOV);
                 commonPointsDeviationList.add(deviation);
                 Object[] row = new Object[]{
                         deviation.getPointId(),
@@ -350,27 +353,29 @@ public class TableModel extends DefaultTableModel {
         setColumnIdentifiers(columNames);
     }
 
-    private int setCommonPointsDisplayedData(){
+    private void setCommonPointsDisplayedData(){
+        displayedPointList.clear();
+        if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[9]) ||
+                dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
 
-        if( !displayedPointList.isEmpty() ){
-            return displayedPointList.size();
-        }
-
-        for (Point eovToWgsReferencePoint : KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS) {
-            if( eovToWgsReferencePoint == null ){
-                continue;
+            for (Point wgsToEovReferencePoint : KMLWrapperController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS) {
+                if( wgsToEovReferencePoint == null ){
+                    continue;
+                }
+                displayedPointList.add(wgsToEovReferencePoint);
             }
-           displayedPointList.add(eovToWgsReferencePoint);
         }
-
-        for (Point wgsToEovReferencePoint : KMLWrapperController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS) {
-            if( wgsToEovReferencePoint == null || displayedPointList.contains(wgsToEovReferencePoint)){
-                continue;
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[10]) ||
+                dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[11]) ||
+                dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
+            for (Point eovToWgsReferencePoint : KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS) {
+                if( eovToWgsReferencePoint == null ){
+                    continue;
+                }
+                displayedPointList.add(eovToWgsReferencePoint);
             }
-            displayedPointList.add(wgsToEovReferencePoint);
         }
 
-        return displayedPointList.size();
     }
 
     public int getTableRowsNumber(){
@@ -410,13 +415,16 @@ public class TableModel extends DefaultTableModel {
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[9]) ){
-            pcs = setCommonPointsDisplayedData();
+            setCommonPointsDisplayedData();
+            pcs = displayedPointList.size();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[10]) ){
-            pcs = setCommonPointsDisplayedData();
+            setCommonPointsDisplayedData();
+            pcs = displayedPointList.size();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[11]) ){
-            pcs = setCommonPointsDisplayedData();
+            setCommonPointsDisplayedData();
+            pcs = displayedPointList.size();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
             pcs = 1;

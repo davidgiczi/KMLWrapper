@@ -77,13 +77,13 @@ public class InputDataFileWindow {
             "Transzformált pontok: WGS84-EOV (Y, X, M)",
             "Transzformált pontok: EOV-WGS84 (Szélesség, Hosszúság, Magasság)",
             "Transzformált pontok: EOV-WGS84 (X, Y, Z)",
-            "Közös pontok: EOV (Y, X, M)",
-            "Közös pontok: WGS84 (X, Y, Z)",
-            "Közös pontok: WGS84 (Szélesség, Hosszúság, Magasság)",
+            "Közös pontok: WGS84-EOV (Y, X, M)",
+            "Közös pontok: EOV-WGS84 (X, Y, Z)",
+            "Közös pontok: EOV-WGS84 (Szélesség, Hosszúság, Magasság)",
             "Transzformáció paraméterei: EOV-WGS84",
             "Transzformáció paraméterei: WGS84-EOV",
-            "Maradék ellentmondások: EOV (dY, dX, dM)",
-            "Maradék ellentmondások: WGS84 (dX, dY, dZ)"};
+            "Maradék ellentmondások: EOV-WGS84 (dX, dY, dZ)",
+            "Maradék ellentmondások: WGS84-EOV (dY, dX, dM)"};
 
     private static final String[] FILE_NAME_OPTION = {
             "_pont.kml",
@@ -273,9 +273,9 @@ public class InputDataFileWindow {
     private void addComboBoxForInputFileOptionPanel(){
         JPanel panel = new JPanel();
         inputDataTypeComboBox = new JComboBox<>(EOV_DATA_TYPE);
-        inputDataTypeComboBox.addItemListener(e -> {
-
-            if( e.getItem().toString().equals(EOV_DATA_TYPE[0]) ){
+        inputDataTypeComboBox.addActionListener(e -> {
+            String selectedItem = Objects.requireNonNull(inputDataTypeComboBox.getSelectedItem()).toString();
+            if( selectedItem.equals(EOV_DATA_TYPE[0]) ){
                 inputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
             }
             else {
@@ -378,12 +378,8 @@ public class InputDataFileWindow {
     private void addComboBoxForOutputFileOptionPanel(){
         JPanel panel = new JPanel();
         outputDataTypeComboBox = new JComboBox<>(TXT_DATA_TYPE);
-        outputDataTypeComboBox.addItemListener( e -> {
+        outputDataTypeComboBox.addActionListener( e -> {
            String selectedItem = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
-           if( displayer != null ){
-                displayer = null;
-                return;
-            }
             if( selectedItem.equals(TXT_DATA_TYPE[0]) ){
                 outputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
                 saveFileNameField.setText(null);

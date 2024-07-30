@@ -57,6 +57,9 @@ public class KMLWrapperController {
 
     private void validationInputData(){
         String selectedFormat = Objects.requireNonNull(INPUT_DATA_FILE_WINDOW.inputDataTypeComboBox.getSelectedItem()).toString();
+        if( selectedFormat.startsWith("AutoCad") || selectedFormat.startsWith("kml")){
+            return;
+        }
         try {
             new Validation(selectedFormat);
         } catch (InvalidPreferencesFormatException e) {
