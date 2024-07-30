@@ -1,10 +1,6 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
-import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
-
-
-import javax.jws.soap.SOAPBinding;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -278,6 +274,7 @@ public class InputDataFileWindow {
         JPanel panel = new JPanel();
         inputDataTypeComboBox = new JComboBox<>(EOV_DATA_TYPE);
         inputDataTypeComboBox.addItemListener(e -> {
+
             if( e.getItem().toString().equals(EOV_DATA_TYPE[0]) ){
                 inputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
             }
@@ -343,6 +340,7 @@ public class InputDataFileWindow {
         kmlRadioBtn.addActionListener(e -> {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(KML_DATA_TYPE);
             outputDataTypeComboBox.setModel(model);
+            saveFileNameField.setText(null);
         });
         kmlRadioBtn.setFont(plainFont);
         kmlRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -380,18 +378,23 @@ public class InputDataFileWindow {
     private void addComboBoxForOutputFileOptionPanel(){
         JPanel panel = new JPanel();
         outputDataTypeComboBox = new JComboBox<>(TXT_DATA_TYPE);
-        outputDataTypeComboBox.addItemListener(e -> {
-            if( e.getItem().toString().equals(TXT_DATA_TYPE[0]) ){
+        outputDataTypeComboBox.addItemListener( e -> {
+           String selectedItem = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
+           if( displayer != null ){
+                displayer = null;
+                return;
+            }
+            if( selectedItem.equals(TXT_DATA_TYPE[0]) ){
                 outputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
                 saveFileNameField.setText(null);
             }
-            else {
+            else  {
                 outputDataTypeComboBox.setForeground(Color.BLACK);
                 createFileNameForSaveOutputFile();
-                if( isOkDisplayData(e.getItem().toString()) && controller.setIdForInputDataPoints() ){
+                if( isOkDisplayData(selectedItem) && controller.setIdForInputDataPoints() ){
                     try{
                         controller.transformationInputPointData();
-                        displayer = new DataDisplayerWindow(e.getItem().toString());
+                        displayer = new DataDisplayerWindow(selectedItem);
                     }
                     catch (IllegalArgumentException a){
                         MessagePane.getInfoMessage(a.getMessage(),
@@ -459,32 +462,6 @@ public class InputDataFileWindow {
             MessagePane.getInfoMessage("Nem található adat",
                     "Hozzáadott pont nem található.", jFrame);
             return false;
-        }
-        else if( selectedItem.equals(TXT_DATA_TYPE[12]) || selectedItem.equals(TXT_DATA_TYPE[15])){
-            int EOVPoint = 0;
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
-                if( !inputPoint.isWGS() ){
-                    EOVPoint++;
-                }
-            }
-            if( EOVPoint == 0 ){
-                MessagePane.getInfoMessage("Nem található adat",
-                        "Hozzáadott EOV pont nem található.", jFrame);
-                return false;
-            }
-        }
-        else if( selectedItem.equals(TXT_DATA_TYPE[13]) || selectedItem.equals(TXT_DATA_TYPE[14])){
-            int WGSPoint = 0;
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
-                if( inputPoint.isWGS() ){
-                    WGSPoint++;
-                }
-            }
-            if( WGSPoint == 0 ){
-                MessagePane.getInfoMessage("Nem található adat",
-                        "Hozzáadott WGS84 pont nem található.", jFrame);
-                return false;
-            }
         }
 
         return true;

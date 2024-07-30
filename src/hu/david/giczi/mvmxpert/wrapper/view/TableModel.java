@@ -188,6 +188,10 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
 
+            if( KMLWrapperController.TRANSFORMATION.toWGS == null ){
+                throw new IllegalArgumentException("Hozzáadott EOV pont nem található");
+            }
+
                     toWGSParams =
                             new TransformationParam(KMLWrapperController.TRANSFORMATION.toWGS.PARAM_FOR_WGS);
                     Object[] row = new Object[]{
@@ -201,6 +205,10 @@ public class TableModel extends DefaultTableModel {
                     addRow(row);
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[13]) ){
+
+            if( KMLWrapperController.TRANSFORMATION.toEOV == null ){
+                throw new IllegalArgumentException("Hozzáadott WGS84 pont nem található");
+            }
 
                 toEOVParams =
                         new TransformationParam(KMLWrapperController.TRANSFORMATION.toEOV.PARAM_FOR_EOV);
@@ -216,6 +224,9 @@ public class TableModel extends DefaultTableModel {
 
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
+            if( KMLWrapperController.TRANSFORMATION.toWGS == null ){
+                throw new IllegalArgumentException("Hozzáadott EOV pont nem található");
+            }
             commonPointsDeviationList = new ArrayList<>();
                 setCommonPointsDisplayedData();
             for (Point commonPoint : displayedPointList) {
@@ -245,6 +256,9 @@ public class TableModel extends DefaultTableModel {
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
+            if( KMLWrapperController.TRANSFORMATION.toEOV == null ){
+                throw new IllegalArgumentException("Hozzáadott WGS84 pont nem található");
+            }
             commonPointsDeviationList = new ArrayList<>();
             setCommonPointsDisplayedData();
             for (Point commonPoint : displayedPointList) {
@@ -283,7 +297,7 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[2]) ){
             columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
-                    "[° ' \"]" , "[° ' \"]", "h", "Ment"};
+                    "[fok perc mperc]" , "[fok perc mperc]", "h", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[3]) ){
             columNames = new String[]{"Pontszám", "X", "Y", "Z", "Ment"};
@@ -293,14 +307,14 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
             columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
-                    "[° ' \"]" , "[° ' \"]", "h", "Ment"};
+                    "[fok perc mperc]" , "[fok perc mperc]", "h", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[6]) ){
             columNames = new String[]{"Pontszám", "Y", "X", "M", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[7]) ){
             columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
-                    "[° ' \"]" , "[° ' \"]", "h", "Ment"};
+                    "[fok perc mperc]" , "[fok perc mperc]", "h", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[8]) ){
             columNames = new String[]{"Pontszám", "X", "Y", "Z", "Ment"};
@@ -313,7 +327,7 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[11]) ){
             columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
-                    "[° ' \"]" , "[° ' \"]", "h", "Ment"};
+                    "[fok perc mperc]" , "[fok perc mperc]", "h", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
             columNames = new String[]{"X elt. [m]", "Y elt. [m]", "Z elt. [m]",

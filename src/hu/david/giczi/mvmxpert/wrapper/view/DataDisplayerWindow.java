@@ -1,4 +1,5 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
+
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 
 import javax.swing.*;
@@ -31,6 +32,7 @@ public class DataDisplayerWindow {
         jFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
                 tableModel.setSaveInputPoint();
             }
         });
