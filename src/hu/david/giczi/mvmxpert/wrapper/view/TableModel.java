@@ -18,6 +18,7 @@ public class TableModel extends DefaultTableModel {
     public TransformationParam toEOVParams;
     public TransformationParam toWGSParams;
     public List<Deviation> commonPointsDeviationList;
+    private boolean isAddedSave;
 
 
     public TableModel(String dataType) {
@@ -27,6 +28,9 @@ public class TableModel extends DefaultTableModel {
     }
 
     public void setSaveInputPoint(){
+        if( isAddedSave ){
+            return;
+        }
         if( !displayedPointList.isEmpty() ) {
             for (int row = 0; row < getTableRowsNumber(); row++) {
                 boolean isSave = (boolean) getValueAt(row, getLastIndexOfRow());
@@ -39,6 +43,7 @@ public class TableModel extends DefaultTableModel {
         else if( toEOVParams != null ){
             toEOVParams.setSave((boolean) getValueAt(0, getLastIndexOfRow()));
         }
+        isAddedSave = true;
     }
 
     @Override
@@ -197,7 +202,6 @@ public class TableModel extends DefaultTableModel {
             if( KMLWrapperController.TRANSFORMATION.toWGS == null ){
                 throw new IllegalArgumentException("Hozzáadott EOV pont nem található");
             }
-
                     toWGSParams =
                             new TransformationParam(KMLWrapperController.TRANSFORMATION.toWGS.PARAM_FOR_WGS);
                     Object[] row = new Object[]{
@@ -265,9 +269,7 @@ public class TableModel extends DefaultTableModel {
             commonPointsDeviationList = new ArrayList<>();
             setCommonPointsDisplayedData();
             for (Point commonPoint : displayedPointList) {
-               if( KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS.contains(commonPoint) ){
-                   continue;
-               }
+
                new ToEOV(commonPoint.getX_WGS84(),
                          commonPoint.getY_WGS84(),
                          commonPoint.getZ_WGS84(),
@@ -344,7 +346,7 @@ public class TableModel extends DefaultTableModel {
             columNames = new String[]{"Pontszám", "dX", "dY", "dZ", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
-            columNames = new String[]{"Pontszám", "dX", "dY", "dZ", "Ment"};
+            columNames = new String[]{"Pontszám", "dY", "dX", "dM", "Ment"};
         }
 
         if( columNames == null ){
@@ -369,7 +371,7 @@ public class TableModel extends DefaultTableModel {
                 dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[11]) ||
                 dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
             for (Point eovToWgsReferencePoint : KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS) {
-                if( eovToWgsReferencePoint == null ){
+                if( eovToWgsReferencePoint == null || displayedPointList.contains(eovToWgsReferencePoint)){
                     continue;
                 }
                 displayedPointList.add(eovToWgsReferencePoint);
@@ -433,10 +435,12 @@ public class TableModel extends DefaultTableModel {
             pcs = 1;
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
-            pcs = 8;
+            setCommonPointsDisplayedData();
+            pcs = displayedPointList.size();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
-            pcs = 8;
+            setCommonPointsDisplayedData();
+            pcs = displayedPointList.size();
         }
 
         return pcs;

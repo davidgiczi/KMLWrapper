@@ -9,6 +9,7 @@ import java.awt.event.WindowEvent;
 
 public class DataDisplayerWindow {
 
+    public JFrame jFrame;
     private TableModel tableModel;
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
@@ -24,7 +25,7 @@ public class DataDisplayerWindow {
                     tableModel.commonPointsDeviationList ==  null ){
             throw new IllegalArgumentException("Nem található adat");
         }
-        JFrame jFrame = new JFrame(dataType + " " + tableModel.getTableRowsNumber() + " db pont");
+        jFrame = new JFrame(dataType + " " + tableModel.getTableRowsNumber() + " db pont");
         jFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         jFrame.setIconImage(Toolkit.getDefaultToolkit()
                 .getImage(getClass().getResource("/logo/MVM.jpg")));

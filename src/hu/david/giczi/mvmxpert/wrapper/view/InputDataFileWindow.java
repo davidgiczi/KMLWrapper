@@ -186,6 +186,9 @@ public class InputDataFileWindow {
                 KMLWrapperController.MANUALLY_INPUT_DATA_WINDOW.jFrame.setVisible(true);
             }
             KMLWrapperController.setWindowTitle();
+            if( displayer != null && displayer.jFrame.isVisible() ){
+                displayer.getTableModel().setSaveInputPoint();
+            }
         });
         manuallyInputMenuItem.setFont(plainFont);
         manuallyInputMenuItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
