@@ -441,7 +441,7 @@ public class InputDataFileWindow {
         JPanel panel = new JPanel();
         JButton saveBtn = new JButton("Adatok mentése");
         saveBtn.addActionListener(e -> {
-            if (isOkSavingData() ) {
+            if( isOkSavingData() ) {
 
             }
         });
@@ -467,9 +467,13 @@ public class InputDataFileWindow {
     }
 
     private boolean isOkSavingData(){
-
-        if ( txtRadioBtn.isSelected() &&
-                (displayer == null || displayer.getTableModel().displayedPointList.isEmpty()) ) {
+        String selectedItem = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
+        if( KMLWrapperController.INPUT_POINTS.isEmpty() ) {
+            MessagePane.getInfoMessage("Mentés nem hajtható végre",
+                    "Hozzáadott pont nem található.", jFrame);
+            return false;
+        }
+        else if( selectedItem.equals(KML_DATA_TYPE[0]) || selectedItem.equals(TXT_DATA_TYPE[0]) ){
             MessagePane.getInfoMessage("Mentés nem hajtható végre",
                     "Adattípus választása szükséges.", jFrame);
             return false;

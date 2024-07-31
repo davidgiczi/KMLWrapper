@@ -371,7 +371,7 @@ public class TableModel extends DefaultTableModel {
                 dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[11]) ||
                 dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
             for (Point eovToWgsReferencePoint : KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS) {
-                if( eovToWgsReferencePoint == null || displayedPointList.contains(eovToWgsReferencePoint)){
+                if( eovToWgsReferencePoint == null ){
                     continue;
                 }
                 displayedPointList.add(eovToWgsReferencePoint);
