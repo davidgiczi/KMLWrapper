@@ -292,6 +292,22 @@ public class TableModel extends DefaultTableModel {
                 addRow(row);
             }
         }
+        else if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[1]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[2]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[3]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[4]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[5])){
+            for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+                displayedPointList.add(inputPoint);
+                Object[] row = new Object[]{inputPoint.getPointId(),
+                        inputPoint.getFormattedDecimalFiForWGS84(),
+                        inputPoint.getFormattedDecimalLambdaForWGS84(),
+                        inputPoint.convertAngleMinSecFormat(inputPoint.getFi_WGS84()),
+                        inputPoint.convertAngleMinSecFormat(inputPoint.getLambda_WGS84()),
+                        inputPoint.getFormattedHForWGS84(), true};
+                addRow(row);
+            }
+        }
 
     }
 
@@ -347,6 +363,14 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
             columNames = new String[]{"Pontszám", "dY", "dX", "dM", "Ment"};
+        }
+        else if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[1]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[2]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[3]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[4]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[5])){
+            columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
+                    "[fok perc mperc]" , "[fok perc mperc]", "h", "Ment"};
         }
 
         if( columNames == null ){
@@ -442,6 +466,13 @@ public class TableModel extends DefaultTableModel {
             setCommonPointsDisplayedData();
             pcs = displayedPointList.size();
         }
+        else if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[1]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[2]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[3]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[4]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[5])){
+            pcs = KMLWrapperController.INPUT_POINTS.size();
+        }
 
         return pcs;
     }
@@ -492,6 +523,13 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
             lastIndex = 4;
+        }
+        else if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[1]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[2]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[3]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[4]) ||
+                dataType.equals(InputDataFileWindow.KML_DATA_TYPE[5])){
+            lastIndex = 6;
         }
 
         return lastIndex;

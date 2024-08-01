@@ -4,7 +4,7 @@ import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WrapDataInKML {
+public class ToKMLFormat {
 
     private final List<Point> pointList;
     private final String dataType;
@@ -12,7 +12,7 @@ public class WrapDataInKML {
     private List<String> kmlDataList;
 
 
-    public WrapDataInKML(List<Point> pointList, String dataType, String fileName) {
+    public ToKMLFormat(List<Point> pointList, String dataType, String fileName) {
         this.pointList = pointList;
         this.dataType = dataType;
         this.fileName = fileName;

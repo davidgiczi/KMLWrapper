@@ -20,7 +20,6 @@ public class InputDataFileWindow {
     private JTextField saveFileNameField;
     public JComboBox<String> inputDataTypeComboBox;
     public JComboBox<String> outputDataTypeComboBox;
-    private JRadioButton txtRadioBtn;
     private DataDisplayerWindow displayer;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
@@ -60,13 +59,13 @@ public class InputDataFileWindow {
             "WGS84 (X;Y;Z)"
     };
 
-    private static final String[] KML_DATA_TYPE = {
+    public static final String[] KML_DATA_TYPE = {
             "Adattípus választása",
-            "Pont",
-            "Vonal",
-            "Kerület",
-            "Vonal+pontok",
-            "Kerület+pontok"};
+            "Pont.kml",
+            "Vonal.kml",
+            "Kerület.kml",
+            "Vonal+pontok.kml",
+            "Kerület+pontok.kml"};
     public static final String[] TXT_DATA_TYPE = {
             "Adattípus választása",
             "Beolvasott pontok: EOV (Y, X, M)",
@@ -348,7 +347,7 @@ public class InputDataFileWindow {
         kmlRadioBtn.setFont(plainFont);
         kmlRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         kmlRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
-        txtRadioBtn = new JRadioButton("txt fájl");
+        JRadioButton txtRadioBtn = new JRadioButton("txt fájl");
         txtRadioBtn.setSelected(true);
         txtRadioBtn.addActionListener(e -> {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(TXT_DATA_TYPE);
