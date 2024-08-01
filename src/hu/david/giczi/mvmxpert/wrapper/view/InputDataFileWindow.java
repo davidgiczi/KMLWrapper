@@ -20,6 +20,7 @@ public class InputDataFileWindow {
     private JTextField saveFileNameField;
     public JComboBox<String> inputDataTypeComboBox;
     public JComboBox<String> outputDataTypeComboBox;
+    public JButton saveBtn;
     private DataDisplayerWindow displayer;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
@@ -363,6 +364,13 @@ public class InputDataFileWindow {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
             outputDataTypeComboBox.setModel(model);
             saveFileNameField.setText("_pontok.scr");
+            if( KMLWrapperController.INPUT_POINTS.isEmpty() ){
+                MessagePane.getInfoMessage("Nem található adat",
+                        "Hozzáadott pont nem található.", jFrame);
+            }
+            else{
+                saveBtn.setEnabled(true);
+            }
         });
         scrRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         scrRadioBtn.setFont(plainFont);
@@ -438,7 +446,7 @@ public class InputDataFileWindow {
 
     private void addSaveButtonForOutputFile(){
         JPanel panel = new JPanel();
-        JButton saveBtn = new JButton("Adatok mentése");
+        saveBtn = new JButton("Adatok mentése");
         saveBtn.addActionListener(e -> {
             if( isOkSavingData() ) {
 
@@ -446,6 +454,7 @@ public class InputDataFileWindow {
         });
         saveBtn.setFont(boldFont);
         saveBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        saveBtn.setEnabled(false);
         panel.add(saveBtn);
         saveOutputFileOptionPanel.add(panel);
     }
@@ -467,17 +476,25 @@ public class InputDataFileWindow {
 
     private boolean isOkSavingData(){
         String selectedItem = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
-        if( KMLWrapperController.INPUT_POINTS.isEmpty() ) {
-            MessagePane.getInfoMessage("Mentés nem hajtható végre",
-                    "Hozzáadott pont nem található.", jFrame);
-            return false;
-        }
-        else if( selectedItem.equals(KML_DATA_TYPE[0]) || selectedItem.equals(TXT_DATA_TYPE[0]) ){
+        if( selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[0])){
             MessagePane.getInfoMessage("Mentés nem hajtható végre",
                     "Adattípus választása szükséges.", jFrame);
             return false;
         }
-
+       else if( (selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[2]) ||
+                 selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[4])) &&
+                displayer != null && displayer.getTableModel().getHowManyInputPointSaved() < 2 ){
+                MessagePane.getInfoMessage("Mentés nem hajtható végre",
+                    "Vonal mentéséhez legalább két menteni kívánt pont szükséges.", jFrame);
+            return false;
+        }
+        else if( (selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[3]) ||
+                 selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[5])) &&
+                displayer != null && displayer.getTableModel().getHowManyInputPointSaved() < 3 ){
+            MessagePane.getInfoMessage("Mentés nem hajtható végre",
+                    "Kerület mentéséhez legalább három menteni kívánt pont szükséges.", jFrame);
+            return false;
+        }
         return true;
     }
 
@@ -543,6 +560,185 @@ public class InputDataFileWindow {
        else if( TXT_DATA_TYPE[15].equals(selectedOption)){
            saveFileNameField.setText(FILE_NAME_OPTION[19]);
        }
+    }
+
+    private String getOutputFileName() {
+        String selectedOption = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
+        String addedFileNameByUser = saveFileNameField.getText();
+        String fileName = null;
+        if (selectedOption.equals(KML_DATA_TYPE[1])) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[0];
+            } else if (addedFileNameByUser.endsWith(".kml")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[0];
+            }
+        } else if (selectedOption.equals(KML_DATA_TYPE[2])) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[1];
+            } else if (addedFileNameByUser.endsWith(".kml")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[1];
+            }
+        } else if (selectedOption.equals(KML_DATA_TYPE[3])) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[2];
+            } else if (addedFileNameByUser.endsWith(".kml")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[2];
+            }
+        } else if (selectedOption.equals(KML_DATA_TYPE[4])) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[3];
+            } else if (addedFileNameByUser.endsWith(".kml")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[3];
+            }
+        } else if (selectedOption.equals(KML_DATA_TYPE[5])) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[4];
+            } else if (addedFileNameByUser.endsWith(".kml")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[4];
+            }
+        } else if (selectedOption.equals(TXT_DATA_TYPE[1])) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[5];
+            } else if (addedFileNameByUser.endsWith(".txt")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[5];
+            }
+        } else if (selectedOption.equals(TXT_DATA_TYPE[2])) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[6];
+            } else if (addedFileNameByUser.endsWith(".txt")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[6];
+            }
+        } else if (selectedOption.equals(TXT_DATA_TYPE[3])) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[7];
+            } else if (addedFileNameByUser.endsWith(".txt")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[7];
+            }
+        } else if (selectedOption.equals(TXT_DATA_TYPE[4])) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[8];
+            } else if (addedFileNameByUser.endsWith(".txt")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[8];
+            }
+        } else if (selectedOption.equals(TXT_DATA_TYPE[5])) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[9];
+            } else if (addedFileNameByUser.endsWith(".txt")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[9];
+            }
+        } else if (selectedOption.equals(TXT_DATA_TYPE[6])) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[10];
+            } else if (addedFileNameByUser.endsWith(".txt")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[10];
+            }
+        } else if (selectedOption.equals(TXT_DATA_TYPE[7])) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[11];
+            } else if (addedFileNameByUser.endsWith(".txt")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[11];
+            }
+        } else if (selectedOption.equals(TXT_DATA_TYPE[8])) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[12];
+            } else if (addedFileNameByUser.endsWith(".txt")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[12];
+            }
+        } else if (selectedOption.equals(TXT_DATA_TYPE[9])) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[13];
+            } else if (addedFileNameByUser.endsWith(".txt")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[13];
+            }
+        } else if (selectedOption.equals(TXT_DATA_TYPE[10])) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[14];
+            } else if (addedFileNameByUser.endsWith(".txt")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[14];
+            }
+        } else if (selectedOption.equals(TXT_DATA_TYPE[11])) {
+
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[15];
+            } else if (addedFileNameByUser.endsWith(".txt")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[15];
+            }
+        } else if (selectedOption.equals(TXT_DATA_TYPE[12])) {
+
+        if (addedFileNameByUser.isEmpty()) {
+            fileName = FILE_NAME_OPTION[16];
+        } else if (addedFileNameByUser.endsWith(".txt")) {
+            fileName = addedFileNameByUser;
+        } else {
+            fileName = addedFileNameByUser + FILE_NAME_OPTION[16];
+        }
+
+    } else if( selectedOption.equals(TXT_DATA_TYPE[13]) ){
+
+            if( addedFileNameByUser.isEmpty() ){
+                fileName = FILE_NAME_OPTION[17];
+            }
+            else if( addedFileNameByUser.endsWith(".txt") ){
+                fileName = addedFileNameByUser;
+            }
+            else{
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[17];
+            }
+        } else if( selectedOption.equals(TXT_DATA_TYPE[14]) ){
+            if( addedFileNameByUser.isEmpty() ){
+                fileName = FILE_NAME_OPTION[18];
+            }
+            else if( addedFileNameByUser.endsWith(".txt") ){
+                fileName = addedFileNameByUser;
+            }
+            else{
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[18];
+            }
+        } else if( selectedOption.equals(TXT_DATA_TYPE[15]) ){
+            if( addedFileNameByUser.isEmpty() ){
+                fileName = FILE_NAME_OPTION[19];
+            }
+            else if( addedFileNameByUser.endsWith(".txt") ){
+                fileName = addedFileNameByUser;
+            }
+            else{
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[19];
+            }
+        }
+
+        return fileName;
     }
 
 }

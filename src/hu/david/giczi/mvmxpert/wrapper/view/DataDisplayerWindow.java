@@ -1,6 +1,8 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 
 
+import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
@@ -34,6 +36,7 @@ public class DataDisplayerWindow {
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
                 tableModel.setSaveInputPoint();
+                KMLWrapperController.INPUT_DATA_FILE_WINDOW.saveBtn.setEnabled(true);
             }
         });
         JTable table = new JTable(tableModel);

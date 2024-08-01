@@ -1,8 +1,14 @@
 package hu.david.giczi.mvmxpert.wrapper.service;
 
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ToKMLFormat {
 
@@ -16,29 +22,54 @@ public class ToKMLFormat {
         this.pointList = pointList;
         this.dataType = dataType;
         this.fileName = fileName;
+        createDataListForKML();
     }
 
     public List<String> getKmlDataList() {
         return kmlDataList;
     }
-    public void createDataListForKML(){
+    private void createDataListForKML(){
         getTemplateDataForKML();
         switch (dataType) {
-            case "Pontok":
+            case "Pont.kml":
                 wrapPointsInKML();
+                closeFile();
                 break;
-            case "Vonal":
+            case "Vonal.kml":
                 wrapPointsForLineInKML();
+                closeFile();
                 break;
-            case "Kerület":
+            case "Kerület.kml":
                 wrapPointsForPerimeterInKML();
+                closeFile();
+                break;
+            case "Vonal+pontok.kml":
+                wrapPointsInKML();
+                wrapPointsForLineInKML();
+                closeFile();
+                break;
+            case "Kerület+pontok.kml":
+                wrapPointsInKML();
+                wrapPointsForPerimeterInKML();
+                closeFile();
                 break;
         }
     }
 
     private void getTemplateDataForKML()  {
         kmlDataList = new ArrayList<>();
-
+        try (InputStream is = FileProcess.class.getClassLoader().getResourceAsStream("kml/template.kml");
+             BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)))) {
+            String row;
+            while ((row = br.readLine()) != null) {
+                if( row.contains("<name>") ){
+                    kmlDataList.add("<name>" + fileName + "</name>");
+                    continue;
+                }
+                kmlDataList.add(row);
+            }
+        } catch (IOException ignored) {
+        }
 
     }
 
@@ -49,8 +80,6 @@ public class ToKMLFormat {
            wrapPoint(point);
         }
         kmlDataList.add("</Folder>");
-        kmlDataList.add("</Document>");
-        kmlDataList.add("</kml>");
     }
 
     private void wrapPoint(Point point){
@@ -59,7 +88,8 @@ public class ToKMLFormat {
               kmlDataList.add("<description><![CDATA[Name=" + point.getPointId() + "]]></description>");
               kmlDataList.add("<styleUrl>#placemark</styleUrl>");
               kmlDataList.add("<Point>");
-              kmlDataList.add("<coordinates>" + point  + "</coordinates>");
+              kmlDataList.add("<coordinates>" + point.getFormattedDecimalLambdaForWGS84() + "," +
+                      point.getFormattedDecimalFiForWGS84() + "," + point.getFormattedHForWGS84() + "</coordinates>");
               kmlDataList.add("</Point>");
               kmlDataList.add("</Placemark>");
     }
@@ -76,14 +106,13 @@ public class ToKMLFormat {
         kmlDataList.add("<tessellate>1</tessellate>");
         kmlDataList.add("<coordinates>");
         for (Point point : pointList) {
-            kmlDataList.add(null);
+            kmlDataList.add(point.getFormattedDecimalLambdaForWGS84() + ","
+                    + point.getFormattedDecimalFiForWGS84() + "," + point.getFormattedHForWGS84());
         }
         kmlDataList.add("</coordinates>");
         kmlDataList.add("</LineString>");
         kmlDataList.add("</Placemark>");
         kmlDataList.add("</Folder>");
-        kmlDataList.add("</Document>");
-        kmlDataList.add("</kml>");
     }
 
     private void wrapPointsForPerimeterInKML(){
@@ -97,16 +126,20 @@ public class ToKMLFormat {
         kmlDataList.add("<LineString>");
         kmlDataList.add("<tessellate>1</tessellate>");
         kmlDataList.add("<coordinates>");
-        for (Point measPoint : pointList) {
-            kmlDataList.add(null);
+        for (Point point : pointList) {
+            kmlDataList.add(point.getFormattedDecimalLambdaForWGS84() + ","
+                    + point.getFormattedDecimalFiForWGS84() + "," + point.getFormattedHForWGS84());
         }
-        kmlDataList.add(null);
+        kmlDataList.add(pointList.get(0).getFormattedDecimalLambdaForWGS84() + ","
+                + pointList.get(0).getFormattedDecimalFiForWGS84() + "," + pointList.get(0).getFormattedHForWGS84());
         kmlDataList.add("</coordinates>");
         kmlDataList.add("</LineString>");
         kmlDataList.add("</Placemark>");
         kmlDataList.add("</Folder>");
+    }
+
+    private void closeFile(){
         kmlDataList.add("</Document>");
         kmlDataList.add("</kml>");
     }
-
 }

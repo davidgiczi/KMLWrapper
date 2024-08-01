@@ -2,7 +2,6 @@ package hu.david.giczi.mvmxpert.wrapper.service;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
-import hu.david.giczi.mvmxpert.wrapper.view.InputDataFileWindow;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;

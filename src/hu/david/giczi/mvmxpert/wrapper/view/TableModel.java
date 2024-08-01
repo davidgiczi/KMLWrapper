@@ -33,8 +33,8 @@ public class TableModel extends DefaultTableModel {
         }
         if( !displayedPointList.isEmpty() ) {
             for (int row = 0; row < getTableRowsNumber(); row++) {
-                boolean isSave = (boolean) getValueAt(row, getLastIndexOfRow());
-                displayedPointList.get(row).setSave(isSave);
+               boolean isSaved = (boolean) getValueAt(row, getLastIndexOfRow());
+                displayedPointList.get(row).setSave(isSaved);
             }
         }
         else if( toWGSParams != null ){
@@ -44,6 +44,26 @@ public class TableModel extends DefaultTableModel {
             toEOVParams.setSave((boolean) getValueAt(0, getLastIndexOfRow()));
         }
         isAddedSave = true;
+    }
+
+    public int getHowManyInputPointSaved() {
+        int pcs = 0;
+        if( !displayedPointList.isEmpty() ) {
+
+            for (Point displayedPoint : displayedPointList) {
+                if (displayedPoint.isSave()) {
+                    pcs++;
+                }
+            }
+        }
+        else if( toWGSParams != null ){
+            pcs = toWGSParams.isSave() ? 1 : 0;
+        }
+        else if( toEOVParams != null ){
+           pcs = toEOVParams.isSave() ? 1 : 0;
+        }
+
+        return pcs;
     }
 
     @Override
@@ -297,6 +317,8 @@ public class TableModel extends DefaultTableModel {
                 dataType.equals(InputDataFileWindow.KML_DATA_TYPE[3]) ||
                 dataType.equals(InputDataFileWindow.KML_DATA_TYPE[4]) ||
                 dataType.equals(InputDataFileWindow.KML_DATA_TYPE[5])){
+
+
             for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
                 displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
