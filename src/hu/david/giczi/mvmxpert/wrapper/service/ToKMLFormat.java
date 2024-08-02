@@ -1,5 +1,6 @@
 package hu.david.giczi.mvmxpert.wrapper.service;
 
+import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 
 import java.io.BufferedReader;
@@ -12,14 +13,12 @@ import java.util.Objects;
 
 public class ToKMLFormat {
 
-    private final List<Point> pointList;
     private final String dataType;
     private final String fileName;
     private List<String> kmlDataList;
 
 
-    public ToKMLFormat(List<Point> pointList, String dataType, String fileName) {
-        this.pointList = pointList;
+    public ToKMLFormat(String dataType, String fileName) {
         this.dataType = dataType;
         this.fileName = fileName;
         createDataListForKML();
@@ -76,8 +75,10 @@ public class ToKMLFormat {
     private void wrapPointsInKML(){
         kmlDataList.add("<Folder>");
         kmlDataList.add("<name>Points</name>");
-        for (Point point : pointList) {
-           wrapPoint(point);
+        for (Point point : KMLWrapperController.INPUT_POINTS) {
+            if( point.isSave() ){
+                wrapPoint(point);
+            }
         }
         kmlDataList.add("</Folder>");
     }
@@ -99,15 +100,18 @@ public class ToKMLFormat {
         kmlDataList.add("<name>Line</name>");
         kmlDataList.add("<Placemark>");
         kmlDataList.add( "<name>" +
-                pointList.get(0).getPointId()+ "-" +
-                pointList.get(pointList.size() - 1).getPointId() +  "_track</name>");
+                KMLWrapperController.INPUT_POINTS.get(0).getPointId()+ "-" +
+                KMLWrapperController.INPUT_POINTS.get(KMLWrapperController.INPUT_POINTS
+                        .size() - 1).getPointId() +  "_track</name>");
         kmlDataList.add("<styleUrl>#linestyle</styleUrl>");
         kmlDataList.add("<LineString>");
         kmlDataList.add("<tessellate>1</tessellate>");
         kmlDataList.add("<coordinates>");
-        for (Point point : pointList) {
-            kmlDataList.add(point.getFormattedDecimalLambdaForWGS84() + ","
-                    + point.getFormattedDecimalFiForWGS84() + "," + point.getFormattedHForWGS84());
+        for (Point point : KMLWrapperController.INPUT_POINTS) {
+            if( point.isSave() ){
+                kmlDataList.add(point.getFormattedDecimalLambdaForWGS84() + ","
+                        + point.getFormattedDecimalFiForWGS84() + "," + point.getFormattedHForWGS84());
+            }
         }
         kmlDataList.add("</coordinates>");
         kmlDataList.add("</LineString>");
@@ -120,18 +124,26 @@ public class ToKMLFormat {
         kmlDataList.add("<name>Perimeter</name>");
         kmlDataList.add("<Placemark>");
         kmlDataList.add( "<name>" +
-                pointList.get(0).getPointId() + "-" +
-                pointList.get(pointList.size() - 1).getPointId() +  "_perimeter</name>");
+                KMLWrapperController.INPUT_POINTS.get(0).getPointId() + "-" +
+                KMLWrapperController.INPUT_POINTS.get(KMLWrapperController.INPUT_POINTS.size() - 1)
+                        .getPointId() +  "_perimeter</name>");
         kmlDataList.add("<styleUrl>#linestyle</styleUrl>");
         kmlDataList.add("<LineString>");
         kmlDataList.add("<tessellate>1</tessellate>");
         kmlDataList.add("<coordinates>");
-        for (Point point : pointList) {
-            kmlDataList.add(point.getFormattedDecimalLambdaForWGS84() + ","
-                    + point.getFormattedDecimalFiForWGS84() + "," + point.getFormattedHForWGS84());
+        for (Point point : KMLWrapperController.INPUT_POINTS) {
+            if( point.isSave() ){
+                kmlDataList.add(point.getFormattedDecimalLambdaForWGS84() + ","
+                        + point.getFormattedDecimalFiForWGS84() + "," + point.getFormattedHForWGS84());
+            }
         }
-        kmlDataList.add(pointList.get(0).getFormattedDecimalLambdaForWGS84() + ","
-                + pointList.get(0).getFormattedDecimalFiForWGS84() + "," + pointList.get(0).getFormattedHForWGS84());
+        for (Point point : KMLWrapperController.INPUT_POINTS) {
+            if ( point.isSave()) {
+                kmlDataList.add(point.getFormattedDecimalLambdaForWGS84() + ","
+                        + point.getFormattedDecimalFiForWGS84() + "," + point.getFormattedHForWGS84());
+                break;
+            }
+        }
         kmlDataList.add("</coordinates>");
         kmlDataList.add("</LineString>");
         kmlDataList.add("</Placemark>");

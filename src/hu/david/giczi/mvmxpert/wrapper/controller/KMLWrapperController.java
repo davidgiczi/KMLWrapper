@@ -2,11 +2,14 @@ package hu.david.giczi.mvmxpert.wrapper.controller;
 
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
+import hu.david.giczi.mvmxpert.wrapper.service.ToKMLFormat;
 import hu.david.giczi.mvmxpert.wrapper.service.Transformation;
 import hu.david.giczi.mvmxpert.wrapper.service.Validation;
 import hu.david.giczi.mvmxpert.wrapper.view.InputDataFileWindow;
 import hu.david.giczi.mvmxpert.wrapper.view.ManuallyInputDataWindow;
 import hu.david.giczi.mvmxpert.wrapper.view.MessagePane;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -235,6 +238,33 @@ public class KMLWrapperController {
         return true;
     }
 
+    public void saveDataFile(String selectedItem){
+     if( INPUT_DATA_FILE_WINDOW.displayer.getTableModel().getHowManyInputPointSaved() == 0 ){
+         return;
+     }
+    fileProcess.openDirectory();
+    if( FileProcess.FOLDER_PATH == null ){
+        return;
+    }
+    if( selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[1]) ||
+            selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[2]) ||
+                    selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[3]) ||
+                            selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[4]) ||
+                                    selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[5]) ){
+        String fileName = INPUT_DATA_FILE_WINDOW.getOutputFileName();
+        if( new File(FileProcess.FOLDER_PATH + "/" + fileName).exists() ){
+           if( MessagePane.getYesNoOptionMessage("Korábban mentett fájl", "Biztos, hogy felülírod?",
+                   INPUT_DATA_FILE_WINDOW.jFrame) == 0){
+               ToKMLFormat toKML = new ToKMLFormat(selectedItem, fileName);
+               fileProcess.saveKMLDataFile(selectedItem, fileName);
+           }
+        }
+        fileProcess.saveKMLDataFile(selectedItem, fileName);
+        MessagePane.getInfoMessage("Sikeres mentés",
+                "Fájl mentve az alábbi mappába:<br>" + FileProcess.FOLDER_PATH + "\\" + fileName,
+                INPUT_DATA_FILE_WINDOW.jFrame);
+    }
 
+    }
 
 }

@@ -38,12 +38,14 @@ public class FileProcess {
         jfc.setFileFilter(new FileFilter() {
             @Override
             public boolean accept(File f) {
-                return f.isDirectory() || f.getName().toLowerCase().endsWith(".txt");
+                return f.isDirectory() ||
+                        f.getName().toLowerCase().endsWith(".txt") ||
+                        f.getName().toLowerCase().endsWith((".kml"));
             }
 
             @Override
             public String getDescription() {
-                return "*.txt";
+                return "*.txt *.kml";
             }
         });
         jfc.setCurrentDirectory(FOLDER_PATH == null ?
@@ -57,6 +59,35 @@ public class FileProcess {
             openInputFile();
         } else {
             FILE_NAME = null;
+        }
+    }
+
+    public void openDirectory() {
+        JFileChooser jfc = new JFileChooser() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected JDialog createDialog(Component parent) throws HeadlessException {
+                JDialog dialog = super.createDialog(parent);
+                dialog.setLocationRelativeTo(null);
+                dialog.setIconImage(
+                        new ImageIcon(Objects.requireNonNull(
+                                this.getClass().getResource("/logo/MVM.jpg"))).getImage());
+                return dialog;
+            }
+        };
+        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        jfc.setCurrentDirectory(FOLDER_PATH == null ?
+                FileSystemView.getFileSystemView().getHomeDirectory() : new File(FOLDER_PATH));
+        jfc.setDialogTitle("Mentési mappa választása");
+        int returnValue = jfc.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION ) {
+            File selectedFile = jfc.getSelectedFile();
+            FOLDER_PATH = selectedFile.getParent();
+        }
+        else {
+            FOLDER_PATH = null;
         }
     }
 
@@ -133,5 +164,20 @@ public class FileProcess {
 
         return resultData;
     }
+public void saveKMLDataFile(String selectedItem, String fileName){
+    File file = new File(FOLDER_PATH + "/" + fileName);
+    ToKMLFormat toKML = new ToKMLFormat(selectedItem, fileName);
+    try (FileOutputStream fos = new FileOutputStream(file);
+         OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+         BufferedWriter writer = new BufferedWriter(osw);
+    ) {
+        for (String kmlData : toKML.getKmlDataList()) {
+            writer.write(kmlData);
+            writer.newLine();
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
 
 }

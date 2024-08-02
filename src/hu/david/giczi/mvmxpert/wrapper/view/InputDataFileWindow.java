@@ -21,7 +21,7 @@ public class InputDataFileWindow {
     public JComboBox<String> inputDataTypeComboBox;
     public JComboBox<String> outputDataTypeComboBox;
     public JButton saveBtn;
-    private DataDisplayerWindow displayer;
+    public DataDisplayerWindow displayer;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
     public static final String[] EOV_DATA_TYPE = {
@@ -257,6 +257,10 @@ public class InputDataFileWindow {
             String[] cadList = {"kml fájlból WGS84 földrajzi koordináták"};
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
             inputDataTypeComboBox.setModel(model);
+            controller.openInputDataFile();
+            if( FileProcess.FILE_NAME == null ){
+                return;
+            }
         });
         kmlRadioBtn.setFont(plainFont);
         kmlRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -340,6 +344,7 @@ public class InputDataFileWindow {
     private void addRadioButtonForOutputFileOptionPanel(){
         JPanel panel = new JPanel();
         JRadioButton kmlRadioBtn = new JRadioButton("kml fájl");
+        kmlRadioBtn.setSelected(true);
         kmlRadioBtn.addActionListener(e -> {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(KML_DATA_TYPE);
             outputDataTypeComboBox.setModel(model);
@@ -349,7 +354,6 @@ public class InputDataFileWindow {
         kmlRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         kmlRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         JRadioButton txtRadioBtn = new JRadioButton("txt fájl");
-        txtRadioBtn.setSelected(true);
         txtRadioBtn.addActionListener(e -> {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(TXT_DATA_TYPE);
             outputDataTypeComboBox.setModel(model);
@@ -387,7 +391,7 @@ public class InputDataFileWindow {
 
     private void addComboBoxForOutputFileOptionPanel(){
         JPanel panel = new JPanel();
-        outputDataTypeComboBox = new JComboBox<>(TXT_DATA_TYPE);
+        outputDataTypeComboBox = new JComboBox<>(KML_DATA_TYPE);
         outputDataTypeComboBox.addActionListener( e -> {
            String selectedItem = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
             if( selectedItem.equals(TXT_DATA_TYPE[0]) ){
@@ -449,7 +453,8 @@ public class InputDataFileWindow {
         saveBtn = new JButton("Adatok mentése");
         saveBtn.addActionListener(e -> {
             if( isOkSavingData() ) {
-
+                String selectedItem = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
+                controller.saveDataFile(selectedItem);
             }
         });
         saveBtn.setFont(boldFont);
@@ -562,7 +567,7 @@ public class InputDataFileWindow {
        }
     }
 
-    private String getOutputFileName() {
+    public String getOutputFileName() {
         String selectedOption = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
         String addedFileNameByUser = saveFileNameField.getText();
         String fileName = null;
