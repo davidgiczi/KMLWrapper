@@ -255,8 +255,10 @@ public class KMLWrapperController {
         if( new File(FileProcess.FOLDER_PATH + "/" + fileName).exists() ){
            if( MessagePane.getYesNoOptionMessage("Korábban mentett fájl", "Biztos, hogy felülírod?",
                    INPUT_DATA_FILE_WINDOW.jFrame) == 0){
-               ToKMLFormat toKML = new ToKMLFormat(selectedItem, fileName);
                fileProcess.saveKMLDataFile(selectedItem, fileName);
+           }
+           else {
+               return;
            }
         }
         fileProcess.saveKMLDataFile(selectedItem, fileName);

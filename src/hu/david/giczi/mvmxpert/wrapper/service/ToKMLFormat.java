@@ -2,6 +2,7 @@ package hu.david.giczi.mvmxpert.wrapper.service;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
+import hu.david.giczi.mvmxpert.wrapper.view.InputDataFileWindow;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,29 +30,27 @@ public class ToKMLFormat {
     }
     private void createDataListForKML(){
         getTemplateDataForKML();
-        switch (dataType) {
-            case "Pont.kml":
-                wrapPointsInKML();
-                closeFile();
-                break;
-            case "Vonal.kml":
-                wrapPointsForLineInKML();
-                closeFile();
-                break;
-            case "Kerület.kml":
-                wrapPointsForPerimeterInKML();
-                closeFile();
-                break;
-            case "Vonal+pontok.kml":
-                wrapPointsInKML();
-                wrapPointsForLineInKML();
-                closeFile();
-                break;
-            case "Kerület+pontok.kml":
-                wrapPointsInKML();
-                wrapPointsForPerimeterInKML();
-                closeFile();
-                break;
+        if(dataType.equals(InputDataFileWindow.KML_DATA_TYPE[1])) {
+            wrapPointsInKML();
+            closeFile();
+        }
+        else if(dataType.equals(InputDataFileWindow.KML_DATA_TYPE[2])){
+           wrapPointsForLineInKML();
+           closeFile();
+        }
+        else if(dataType.equals(InputDataFileWindow.KML_DATA_TYPE[3])) {
+            wrapPointsForPerimeterInKML();
+            closeFile();
+        }
+        else if(dataType.equals(InputDataFileWindow.KML_DATA_TYPE[4])) {
+            wrapPointsInKML();
+            wrapPointsForLineInKML();
+            closeFile();
+        }
+        else if(dataType.equals(InputDataFileWindow.KML_DATA_TYPE[5])){
+             wrapPointsInKML();
+             wrapPointsForPerimeterInKML();
+             closeFile();
         }
     }
 

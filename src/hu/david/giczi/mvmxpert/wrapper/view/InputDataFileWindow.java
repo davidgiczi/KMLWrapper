@@ -393,6 +393,7 @@ public class InputDataFileWindow {
         JPanel panel = new JPanel();
         outputDataTypeComboBox = new JComboBox<>(KML_DATA_TYPE);
         outputDataTypeComboBox.addActionListener( e -> {
+           saveBtn.setEnabled(false);
            String selectedItem = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
             if( selectedItem.equals(TXT_DATA_TYPE[0]) ){
                 outputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
