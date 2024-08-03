@@ -1,7 +1,11 @@
 package hu.david.giczi.mvmxpert.wrapper.service;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.domain.Deviation;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
+import hu.david.giczi.mvmxpert.wrapper.domain.TransformationParam;
+import hu.david.giczi.mvmxpert.wrapper.view.InputDataFileWindow;
+import hu.david.giczi.mvmxpert.wrapper.view.MessagePane;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -123,21 +127,21 @@ public class FileProcess {
         return pointsData;
     }
 
-    public void openInputFile() {
+    private void openInputFile() {
         INPUT_DATA_LIST = new ArrayList<>();
         File file = new File(FOLDER_PATH + "/" + FILE_NAME);
-        try (FileInputStream fis = new FileInputStream(file);
-             InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
-             BufferedReader reader = new BufferedReader(isr)
-        ) {
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                INPUT_DATA_LIST.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+       try(FileInputStream fis = new FileInputStream(file);
+        InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+        BufferedReader reader = new BufferedReader(isr)) {
+           String line;
+           while ((line = reader.readLine()) != null) {
+               INPUT_DATA_LIST.add(line);
+           }
+       }catch (IOException e){
+           e.printStackTrace();
+           MessagePane.getInfoMessage("Fájl nem nyitható meg", FOLDER_PATH + "\\" + FILE_NAME,
+                   KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+       }
     }
 
     public List<String> getAutoCadInputData() {
@@ -164,20 +168,128 @@ public class FileProcess {
 
         return resultData;
     }
-public void saveKMLDataFile(String selectedItem, String fileName){
+
+    public List<String> getInputDataFromKML(){
+        List<String> resultData = new ArrayList<>();
+        return resultData;
+    }
+
+    public void saveAutoCadDataFile(String fileName) throws IOException {
+        File file = new File(FOLDER_PATH + "/" + fileName);
+        FileOutputStream fos = new FileOutputStream(file);
+        OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+        BufferedWriter writer = new BufferedWriter(osw);
+        writer.write("_MULTIPLE _POINT");
+        writer.newLine();
+        for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+            if( inputPoint.isSave() ){
+                writer.write(inputPoint.getFormattedYForEOV() + "," +
+                        inputPoint.getFormattedXForEOV() + "," + inputPoint.getFormattedMForEOV());
+            }
+            writer.newLine();
+        }
+        writer.close();
+        osw.close();
+        fos.close();
+    }
+
+public void saveKMLDataFile(String selectedItem, String fileName) throws IOException {
     File file = new File(FOLDER_PATH + "/" + fileName);
     ToKMLFormat toKML = new ToKMLFormat(selectedItem, fileName);
-    try (FileOutputStream fos = new FileOutputStream(file);
-         OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-         BufferedWriter writer = new BufferedWriter(osw);
-    ) {
+    FileOutputStream fos = new FileOutputStream(file);
+    OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+    BufferedWriter writer = new BufferedWriter(osw);
         for (String kmlData : toKML.getKmlDataList()) {
             writer.write(kmlData);
             writer.newLine();
         }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
+        writer.close();
+        osw.close();
+        fos.close();
 }
+    public void saveTXTDataFile(String selectedItem, String fileName) throws IOException{
+        TransformationParam trParam = null;
+        List<Deviation> deviationList = null;
+        List<Point> savedPointList = null;
+        if( selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
+            trParam = KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().toWGSParams;
+        }
+        else if( selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[13]) ){
+            trParam = KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().toEOVParams;
+        }
+        else if( selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ||
+                    selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
+            deviationList = KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer
+                    .getTableModel().commonPointsDeviationList;
+        }
+        else {
+            savedPointList = KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer
+                    .getTableModel().displayedPointList;
+        }
+        File file = new File(FOLDER_PATH + "/" + fileName);
+        FileOutputStream fos = new FileOutputStream(file);
+        OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+        BufferedWriter writer = new BufferedWriter(osw);
+        if( trParam != null ){
+        writer.write(trParam.getDeltaXParam() + "," +
+                    trParam.getDeltaYParam() + "," +
+                    trParam.getDeltaZParam() + "," +
+                    trParam.getScaleParam() + "," +
+                    trParam.getRotationXParam() + "," +
+                    trParam.getRotationYParam() + "," +
+                    trParam.getRotationZParam());
+        }
+        else if( deviationList != null ){
+            for (Deviation deviation : deviationList) {
+                if (deviation.isSave()) {
+                    writer.write(deviation.getPointId() + "," +
+                            deviation.getXDeviation() + "," +
+                            deviation.getYDeviation() + "," +
+                            deviation.getZDeviation());
+                }
+                writer.newLine();
+            }
+        }
+       else if( savedPointList != null ){
+
+            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+
+                if (!inputPoint.isSave()) {
+                    continue;
+                }
+
+                if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[1])) {
+                    writer.write(inputPoint.getPointId() + "," +
+                            inputPoint.getFormattedYForEOV() + "," +
+                            inputPoint.getFormattedXForEOV() + "," +
+                            inputPoint.getFormattedMForEOV());
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[2])) {
+
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[3])) {
+
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[4])) {
+
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[5])) {
+
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[6])) {
+
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[7])) {
+
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[8])) {
+
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[9])) {
+
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[10])) {
+
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[11])) {
+
+                }
+                writer.newLine();
+            }
+        }
+        writer.close();
+        osw.close();
+        fos.close();
+    }
 
 }

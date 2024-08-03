@@ -261,6 +261,7 @@ public class InputDataFileWindow {
             if( FileProcess.FILE_NAME == null ){
                 return;
             }
+            controller.openKMLDataFile();
         });
         kmlRadioBtn.setFont(plainFont);
         kmlRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -368,13 +369,10 @@ public class InputDataFileWindow {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
             outputDataTypeComboBox.setModel(model);
             saveFileNameField.setText("_pontok.scr");
-            if( KMLWrapperController.INPUT_POINTS.isEmpty() ){
-                MessagePane.getInfoMessage("Nem található adat",
-                        "Hozzáadott pont nem található.", jFrame);
-            }
-            else{
+            String selectedItem = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
+            if( isOkDisplayData(selectedItem) ){
                 saveBtn.setEnabled(true);
-            }
+            };
         });
         scrRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         scrRadioBtn.setFont(plainFont);
@@ -741,6 +739,18 @@ public class InputDataFileWindow {
             }
             else{
                 fileName = addedFileNameByUser + FILE_NAME_OPTION[19];
+            }
+        }
+        else if( selectedOption.startsWith("AutoCad") ){
+
+            if( addedFileNameByUser.isEmpty() ){
+                fileName = "_pontok.scr";
+            }
+            else if( addedFileNameByUser.endsWith(".scr") ){
+                fileName = addedFileNameByUser;
+            }
+            else{
+                fileName = addedFileNameByUser + "_pontok.scr";
             }
         }
 
