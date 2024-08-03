@@ -323,10 +323,9 @@ public class KMLWrapperController {
                 }
             }
 
-            MessagePane.getInfoMessage("Sikeres mentés",
-                    "Fájl mentve az alábbi mappába:<br>" + FileProcess.FOLDER_PATH + "\\" + fileName,
-                    INPUT_DATA_FILE_WINDOW.jFrame);
         }
-
+        MessagePane.getInfoMessage("Sikeres mentés",
+                "Fájl mentve az alábbi mappába:<br>" + FileProcess.FOLDER_PATH + "\\" + fileName,
+                INPUT_DATA_FILE_WINDOW.jFrame);
     }
 }
