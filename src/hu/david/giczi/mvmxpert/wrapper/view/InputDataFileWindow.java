@@ -245,6 +245,7 @@ public class InputDataFileWindow {
             String[] cadList = {"AutoCad lista koordináták EOV (Y,X,M)"};
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
             inputDataTypeComboBox.setModel(model);
+            inputDataTypeComboBox.setForeground(Color.BLACK);
             controller.openInputDataFile();
            if( FileProcess.FILE_NAME == null ){
                return;
@@ -259,6 +260,7 @@ public class InputDataFileWindow {
             String[] cadList = {"kml fájlból WGS84 földrajzi koordináták"};
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
             inputDataTypeComboBox.setModel(model);
+            inputDataTypeComboBox.setForeground(Color.BLACK);
             controller.openInputDataFile();
             if( FileProcess.FILE_NAME == null ){
                 return;

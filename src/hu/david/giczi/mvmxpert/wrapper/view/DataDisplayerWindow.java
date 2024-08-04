@@ -50,12 +50,13 @@ public class DataDisplayerWindow {
                     JTable target = (JTable)e.getSource();
                     int row = target.getSelectedRow();
                     int col = target.getSelectedColumn();
-                    if( col == 0 ){
+                    if( col == tableModel.getLastIndexOfRow() ){
                        MessagePane.getInfoMessage("Terület és távolság adatok",
-                               "Felhasznált pontok:<br>" +
+                               "Felhasznált pontok: " + target.getValueAt(row, 0) + "<br>" +
                                        "Távolság:<br>" +
                                        "Terület:<br>" +
-                                       "Kerület:",
+                                       "Kerület:<br>" +
+                                       "Magasságkülönbség:",
                        KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                     }
 

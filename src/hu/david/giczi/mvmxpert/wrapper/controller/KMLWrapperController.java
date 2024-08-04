@@ -264,6 +264,7 @@ public class KMLWrapperController {
                         MessagePane.getInfoMessage("Fájl mentése sikertelen",
                                 FileProcess.FOLDER_PATH + "\\" + fileName,
                                 KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                        return;
                     }
                 } else {
                     return;
@@ -275,6 +276,7 @@ public class KMLWrapperController {
                 MessagePane.getInfoMessage("Fájl mentése sikertelen",
                         FileProcess.FOLDER_PATH + "\\" + fileName,
                         KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                return;
             }
         } else if (Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(selectedItem) > 0 &&
                 16 > Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(selectedItem)) {
@@ -288,6 +290,7 @@ public class KMLWrapperController {
                         MessagePane.getInfoMessage("Fájl mentése sikertelen",
                                 FileProcess.FOLDER_PATH + "\\" + fileName,
                                 KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                        return;
                     }
                 } else {
                     return;
@@ -299,6 +302,7 @@ public class KMLWrapperController {
                 MessagePane.getInfoMessage("Fájl mentése sikertelen",
                         FileProcess.FOLDER_PATH + "\\" + fileName,
                         KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                return;
             }
         } else if ( selectedItem.startsWith("AutoCad") ) {
 
@@ -311,6 +315,7 @@ public class KMLWrapperController {
                         MessagePane.getInfoMessage("Fájl mentése sikertelen",
                                 FileProcess.FOLDER_PATH + "\\" + fileName,
                                 KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                        return;
                     }
                 } else {
                     return;
@@ -322,6 +327,7 @@ public class KMLWrapperController {
                     MessagePane.getInfoMessage("Fájl mentése sikertelen",
                             FileProcess.FOLDER_PATH + "\\" + fileName,
                             KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                    return;
                 }
         }
         MessagePane.getInfoMessage("Sikeres mentés",

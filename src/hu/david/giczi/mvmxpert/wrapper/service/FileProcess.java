@@ -283,31 +283,40 @@ public void saveKMLDataFile(String selectedItem, String fileName) throws IOExcep
             }
         }
         else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[9])) {
-            for (Point wgsToEovReferencePoint : KMLWrapperController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS) {
+            for (Point wgsToEovReferencePoint : KMLWrapperController.
+                    INPUT_DATA_FILE_WINDOW.displayer.getTableModel().displayedPointList) {
+                if( wgsToEovReferencePoint.isSave() ){
                 writer.write(wgsToEovReferencePoint.getPointId() + "," +
                         wgsToEovReferencePoint.getFormattedYForEOV() + "," +
                         wgsToEovReferencePoint.getFormattedXForEOV() + "," +
                         wgsToEovReferencePoint.getFormattedMForEOV());
                 writer.newLine();
+                }
             }
         } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[10])) {
-            for (Point eovToWgsReferencePoint : KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS) {
-                writer.write(eovToWgsReferencePoint.getPointId() + "," +
-                        eovToWgsReferencePoint.getFormattedXForWGS84() + "," +
-                        eovToWgsReferencePoint.getFormattedYForWGS84() + "," +
-                        eovToWgsReferencePoint.getFormattedZForWGS84());
-                writer.newLine();
+            for (Point eovToWgsReferencePoint : KMLWrapperController.
+                    INPUT_DATA_FILE_WINDOW.displayer.getTableModel().displayedPointList) {
+                if( eovToWgsReferencePoint.isSave() ) {
+                    writer.write(eovToWgsReferencePoint.getPointId() + "," +
+                            eovToWgsReferencePoint.getFormattedXForWGS84() + "," +
+                            eovToWgsReferencePoint.getFormattedYForWGS84() + "," +
+                            eovToWgsReferencePoint.getFormattedZForWGS84());
+                    writer.newLine();
+                }
             }
         } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[11])) {
-            for (Point eovToWgsReferencePoint : KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS) {
-                writer.write(eovToWgsReferencePoint.getPointId() + "," +
-                        eovToWgsReferencePoint.getFormattedDecimalFiForWGS84() + "," +
-                        eovToWgsReferencePoint.getFormattedDecimalLambdaForWGS84() + "," +
-                        eovToWgsReferencePoint.getFormattedHForWGS84()  + "\n" +
-                        eovToWgsReferencePoint.convertAngleMinSecFormat(eovToWgsReferencePoint.getFi_WGS84()) + "," +
-                        eovToWgsReferencePoint.convertAngleMinSecFormat(eovToWgsReferencePoint.getLambda_WGS84()) + "," +
-                        eovToWgsReferencePoint.getFormattedHForWGS84());
-                writer.newLine();
+            for (Point eovToWgsReferencePoint : KMLWrapperController.
+                    INPUT_DATA_FILE_WINDOW.displayer.getTableModel().displayedPointList) {
+                if( eovToWgsReferencePoint.isSave() ) {
+                        writer.write(eovToWgsReferencePoint.getPointId() + "," +
+                                eovToWgsReferencePoint.getFormattedDecimalFiForWGS84() + "," +
+                                eovToWgsReferencePoint.getFormattedDecimalLambdaForWGS84() + "," +
+                                eovToWgsReferencePoint.getFormattedHForWGS84() + "\n" +
+                                eovToWgsReferencePoint.convertAngleMinSecFormat(eovToWgsReferencePoint.getFi_WGS84()) + "," +
+                                eovToWgsReferencePoint.convertAngleMinSecFormat(eovToWgsReferencePoint.getLambda_WGS84()) + "," +
+                                eovToWgsReferencePoint.getFormattedHForWGS84());
+                        writer.newLine();
+                    }
             }
         }
         else if( selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[12])){

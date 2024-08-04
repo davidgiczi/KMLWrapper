@@ -29,42 +29,56 @@ public class TableModel extends DefaultTableModel {
        addInputData();
     }
 
-    public void setSaveInputPoint(){
-        if( isAddedSave ){
+    public void setSaveInputPoint() {
+        if (isAddedSave) {
             return;
         }
-        if( !displayedPointList.isEmpty()  ) {
-            for (int row = 0; row < getTableRowsNumber(); row++) {
-               boolean isSaved = (boolean) getValueAt(row, getLastIndexOfRow());
-                displayedPointList.get(row).setSave(isSaved);
-            }
-        }
-        else if( toWGSParams != null ){
-            toWGSParams.setSave((boolean) getValueAt(0, getLastIndexOfRow()));
-        }
-        else if( toEOVParams != null ){
-            toEOVParams.setSave((boolean) getValueAt(0, getLastIndexOfRow()));
-        }
-        else if( deviationListForWGS != null ){
+        if ( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ) {
             for (int row = 0; row < getTableRowsNumber(); row++) {
                 boolean isSaved = (boolean) getValueAt(row, getLastIndexOfRow());
                 deviationListForWGS.get(row).setSave(isSaved);
             }
         }
-        else if( deviationListForEOV != null ){
+        else if ( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ) {
             for (int row = 0; row < getTableRowsNumber(); row++) {
                 boolean isSaved = (boolean) getValueAt(row, getLastIndexOfRow());
                 deviationListForEOV.get(row).setSave(isSaved);
             }
         }
+        else if ( !displayedPointList.isEmpty()) {
+                for (int row = 0; row < getTableRowsNumber(); row++) {
+                    boolean isSaved = (boolean) getValueAt(row, getLastIndexOfRow());
+                    displayedPointList.get(row).setSave(isSaved);
+                }
+        }
+        else if (toWGSParams != null) {
+                toWGSParams.setSave((boolean) getValueAt(0, getLastIndexOfRow()));
+        }
+        else if (toEOVParams != null) {
+                toEOVParams.setSave((boolean) getValueAt(0, getLastIndexOfRow()));
+            }
 
-        isAddedSave = true;
-    }
+            isAddedSave = true;
+        }
 
     public int getHowManyInputPointSaved() {
         int pcs = 0;
-        if( !displayedPointList.isEmpty() ) {
 
+        if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
+            for (Deviation deviation : deviationListForWGS) {
+                if( deviation.isSave() ){
+                    pcs++;
+                }
+            }
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
+            for (Deviation deviation : deviationListForEOV) {
+                if( deviation.isSave() ){
+                    pcs++;
+                }
+            }
+        }
+       else if( !displayedPointList.isEmpty() ) {
             for (Point displayedPoint : displayedPointList) {
                 if (displayedPoint.isSave()) {
                     pcs++;
@@ -535,7 +549,7 @@ public class TableModel extends DefaultTableModel {
         return pcs;
     }
 
-    private int getLastIndexOfRow(){
+    public int getLastIndexOfRow(){
         int lastIndex = 0;
         if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[1]) ){
             lastIndex = 4;
