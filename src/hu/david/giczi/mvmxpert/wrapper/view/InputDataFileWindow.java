@@ -66,7 +66,8 @@ public class InputDataFileWindow {
             "Vonal.kml",
             "Kerület.kml",
             "Vonal+pontok.kml",
-            "Kerület+pontok.kml"};
+            "Kerület+pontok.kml",
+            "Terület és távolság számítása"};
     public static final String[] TXT_DATA_TYPE = {
             "Adattípus választása",
             "Beolvasott pontok: EOV (Y, X, M)",
@@ -104,8 +105,9 @@ public class InputDataFileWindow {
             "_kozos-pontok_WGS84_foldrajzi.txt",
             "_EOV-WGS84_tr_prm.txt",
             "_WGS84-EOV_tr_prm.txt",
+            "_kozephibak_WGS84.txt",
             "_kozephibak_EOV.txt",
-            "_kozephibak_WGS84.txt"};
+            "_terület_távolság.txt"};
 
     public InputDataFileWindow(KMLWrapperController controller) {
         this.controller = controller;
@@ -368,11 +370,21 @@ public class InputDataFileWindow {
             String[] cadList = {"AutoCad scr fájl (EOV Y, X, M)"};
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
             outputDataTypeComboBox.setModel(model);
-            saveFileNameField.setText("_pontok.scr");
-            String selectedItem = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
-            if( isOkDisplayData(selectedItem) ){
-                saveBtn.setEnabled(true);
-            };
+            createFileNameForSaveOutputFile();
+            outputDataTypeComboBox.setForeground(Color.BLACK);
+            saveBtn.setEnabled(false);
+            createFileNameForSaveOutputFile();
+            if( isOkDisplayData("AutoCad") && controller.setIdForInputDataPoints() ){
+                try{
+                    controller.transformationInputPointData();
+                    displayer = new DataDisplayerWindow("AutoCad scr fájl");
+                }
+                catch (IllegalArgumentException a){
+                    MessagePane.getInfoMessage(a.getMessage(),
+                            "Nem beolvasott adat vagy érvénytelen adattípus választás." ,
+                            KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                }
+            }
         });
         scrRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         scrRadioBtn.setFont(plainFont);
@@ -499,6 +511,7 @@ public class InputDataFileWindow {
                     "Kerület mentéséhez legalább három menteni kívánt pont szükséges.", jFrame);
             return false;
         }
+
         return true;
     }
 
@@ -564,6 +577,12 @@ public class InputDataFileWindow {
        else if( TXT_DATA_TYPE[15].equals(selectedOption)){
            saveFileNameField.setText(FILE_NAME_OPTION[19]);
        }
+       else if( selectedOption.startsWith("AutoCad") ){
+          saveFileNameField.setText("_pontok.scr");
+       }
+       else if( KML_DATA_TYPE[6].equals(selectedOption) ){
+           saveFileNameField.setText(FILE_NAME_OPTION[20]);
+       }
     }
 
     public String getOutputFileName() {
@@ -610,7 +629,8 @@ public class InputDataFileWindow {
             } else {
                 fileName = addedFileNameByUser + FILE_NAME_OPTION[4];
             }
-        } else if (selectedOption.equals(TXT_DATA_TYPE[1])) {
+        }
+        else if (selectedOption.equals(TXT_DATA_TYPE[1])) {
             if (addedFileNameByUser.isEmpty()) {
                 fileName = FILE_NAME_OPTION[5];
             } else if (addedFileNameByUser.endsWith(".txt")) {
@@ -749,8 +769,17 @@ public class InputDataFileWindow {
             else if( addedFileNameByUser.endsWith(".scr") ){
                 fileName = addedFileNameByUser;
             }
-            else{
+            else {
                 fileName = addedFileNameByUser + "_pontok.scr";
+            }
+        }
+        else if( selectedOption.equals(KML_DATA_TYPE[6]) ) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[20];
+            } else if (addedFileNameByUser.endsWith(".txt")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[20];
             }
         }
 

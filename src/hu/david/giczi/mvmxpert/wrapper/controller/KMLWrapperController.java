@@ -301,6 +301,7 @@ public class KMLWrapperController {
                         KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
             }
         } else if ( selectedItem.startsWith("AutoCad") ) {
+
             if (new File(FileProcess.FOLDER_PATH + "/" + fileName).exists()) {
                 if (MessagePane.getYesNoOptionMessage("Korábban mentett fájl", "Biztos, hogy felülírod?",
                         INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
@@ -314,6 +315,7 @@ public class KMLWrapperController {
                 } else {
                     return;
                 }
+            }
                 try {
                     fileProcess.saveAutoCadDataFile(fileName);
                 } catch (IOException e) {
@@ -321,8 +323,6 @@ public class KMLWrapperController {
                             FileProcess.FOLDER_PATH + "\\" + fileName,
                             KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                 }
-            }
-
         }
         MessagePane.getInfoMessage("Sikeres mentés",
                 "Fájl mentve az alábbi mappába:<br>" + FileProcess.FOLDER_PATH + "\\" + fileName,

@@ -51,4 +51,9 @@ public class Deviation {
     public boolean isSave() {
         return isSave;
     }
+
+    @Override
+    public String toString() {
+        return "Deviation{" + getPointId() + "," + getXDeviation() + "," + getYDeviation() + "," + getZDeviation() + "}";
+    }
 }

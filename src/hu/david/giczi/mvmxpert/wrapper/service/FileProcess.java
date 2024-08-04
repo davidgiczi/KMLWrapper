@@ -14,6 +14,7 @@ import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -208,30 +209,111 @@ public void saveKMLDataFile(String selectedItem, String fileName) throws IOExcep
         fos.close();
 }
     public void saveTXTDataFile(String selectedItem, String fileName) throws IOException{
-        TransformationParam trParam = null;
-        List<Deviation> deviationList = null;
-        List<Point> savedPointList = null;
-        if( selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
-            trParam = KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().toWGSParams;
-        }
-        else if( selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[13]) ){
-            trParam = KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().toEOVParams;
-        }
-        else if( selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ||
-                    selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
-            deviationList = KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer
-                    .getTableModel().commonPointsDeviationList;
-        }
-        else {
-            savedPointList = KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer
-                    .getTableModel().displayedPointList;
-        }
         File file = new File(FOLDER_PATH + "/" + fileName);
         FileOutputStream fos = new FileOutputStream(file);
         OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
         BufferedWriter writer = new BufferedWriter(osw);
-        if( trParam != null ){
-        writer.write(trParam.getDeltaXParam() + "," +
+
+        if( Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(selectedItem) < 9 ) {
+            List<Point> displayedPointList = KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer
+                    .getTableModel().displayedPointList;
+            for (Point displayedPoint : displayedPointList) {
+
+                if (!displayedPoint.isSave()) {
+                    continue;
+                }
+
+                if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[1])) {
+                    writer.write(displayedPoint.getPointId() + "," +
+                            displayedPoint.getFormattedYForEOV() + "," +
+                            displayedPoint.getFormattedXForEOV() + "," +
+                            displayedPoint.getFormattedMForEOV());
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[2])) {
+                    writer.write(displayedPoint.getPointId() + "," +
+                            displayedPoint.getFormattedDecimalFiForWGS84() + "," +
+                            displayedPoint.getFormattedDecimalLambdaForWGS84() + "," +
+                            displayedPoint.getFormattedHForWGS84() + "\n" +
+                            displayedPoint.convertAngleMinSecFormat(displayedPoint.getFi_WGS84()) + "," +
+                            displayedPoint.convertAngleMinSecFormat(displayedPoint.getLambda_WGS84()) + "," +
+                            displayedPoint.getFormattedHForWGS84());
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[3])) {
+                    writer.write(displayedPoint.getPointId() + "," +
+                            displayedPoint.getFormattedXForWGS84() + "," +
+                            displayedPoint.getFormattedYForWGS84() + "," +
+                            displayedPoint.getFormattedZForWGS84());
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[4])) {
+                    writer.write(displayedPoint.getPointId() + "," +
+                            displayedPoint.getFormattedXForIUGG67() + "," +
+                            displayedPoint.getFormattedYForIUGG67() + "," +
+                            displayedPoint.getFormattedZForIUGG67());
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[5])) {
+                    writer.write(displayedPoint.getPointId() + "," +
+                            displayedPoint.getFormattedDecimalFiForIUGG67() + "," +
+                            displayedPoint.getFormattedDecimalLambdaForIUGG67() + "," +
+                            displayedPoint.getFormattedHForIUGG67() + "\n" +
+                            displayedPoint.convertAngleMinSecFormat(displayedPoint.getFi_IUGG67()) + "," +
+                            displayedPoint.convertAngleMinSecFormat(displayedPoint.getLambda_IUGG67()) + "," +
+                            displayedPoint.getFormattedHForIUGG67());
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[6])) {
+                    if (displayedPoint.isWGS()) {
+                        writer.write(displayedPoint.getPointId() + "," +
+                                displayedPoint.getFormattedYForEOV() + "," +
+                                displayedPoint.getFormattedXForEOV() + "," +
+                                displayedPoint.getFormattedMForEOV());
+                    }
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[7])) {
+                    if (!displayedPoint.isWGS()) {
+                        writer.write(displayedPoint.getPointId() + "," +
+                                displayedPoint.getFormattedDecimalFiForWGS84() + "," +
+                                displayedPoint.getFormattedDecimalLambdaForWGS84() + "," +
+                                displayedPoint.getFormattedHForWGS84() + "\n" +
+                                displayedPoint.convertAngleMinSecFormat(displayedPoint.getFi_WGS84()) + "," +
+                                displayedPoint.convertAngleMinSecFormat(displayedPoint.getLambda_WGS84()) + "," +
+                                displayedPoint.getFormattedHForWGS84());
+                    }
+                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[8])) {
+                    if (!displayedPoint.isWGS()) {
+                        writer.write(displayedPoint.getPointId() + "," +
+                                displayedPoint.getFormattedXForWGS84() + "," +
+                                displayedPoint.getFormattedYForWGS84() + "," +
+                                displayedPoint.getFormattedZForWGS84());
+                    }
+                }
+                writer.newLine();
+            }
+        }
+        else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[9])) {
+            for (Point wgsToEovReferencePoint : KMLWrapperController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS) {
+                writer.write(wgsToEovReferencePoint.getPointId() + "," +
+                        wgsToEovReferencePoint.getFormattedYForEOV() + "," +
+                        wgsToEovReferencePoint.getFormattedXForEOV() + "," +
+                        wgsToEovReferencePoint.getFormattedMForEOV());
+                writer.newLine();
+            }
+        } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[10])) {
+            for (Point eovToWgsReferencePoint : KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS) {
+                writer.write(eovToWgsReferencePoint.getPointId() + "," +
+                        eovToWgsReferencePoint.getFormattedXForWGS84() + "," +
+                        eovToWgsReferencePoint.getFormattedYForWGS84() + "," +
+                        eovToWgsReferencePoint.getFormattedZForWGS84());
+                writer.newLine();
+            }
+        } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[11])) {
+            for (Point eovToWgsReferencePoint : KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS) {
+                writer.write(eovToWgsReferencePoint.getPointId() + "," +
+                        eovToWgsReferencePoint.getFormattedDecimalFiForWGS84() + "," +
+                        eovToWgsReferencePoint.getFormattedDecimalLambdaForWGS84() + "," +
+                        eovToWgsReferencePoint.getFormattedHForWGS84()  + "\n" +
+                        eovToWgsReferencePoint.convertAngleMinSecFormat(eovToWgsReferencePoint.getFi_WGS84()) + "," +
+                        eovToWgsReferencePoint.convertAngleMinSecFormat(eovToWgsReferencePoint.getLambda_WGS84()) + "," +
+                        eovToWgsReferencePoint.getFormattedHForWGS84());
+                writer.newLine();
+            }
+        }
+        else if( selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[12])){
+            TransformationParam trParam =
+                    KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().toWGSParams;
+            writer.write(trParam.getDeltaXParam() + "," +
                     trParam.getDeltaYParam() + "," +
                     trParam.getDeltaZParam() + "," +
                     trParam.getScaleParam() + "," +
@@ -239,9 +321,22 @@ public void saveKMLDataFile(String selectedItem, String fileName) throws IOExcep
                     trParam.getRotationYParam() + "," +
                     trParam.getRotationZParam());
         }
-        else if( deviationList != null ){
-            for (Deviation deviation : deviationList) {
-                if (deviation.isSave()) {
+        else if( selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[13])){
+            TransformationParam trParam =
+                    KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().toEOVParams;
+            writer.write(trParam.getDeltaXParam() + "," +
+                    trParam.getDeltaYParam() + "," +
+                    trParam.getDeltaZParam() + "," +
+                    trParam.getScaleParam() + "," +
+                    trParam.getRotationXParam() + "," +
+                    trParam.getRotationYParam() + "," +
+                    trParam.getRotationZParam());
+        }
+        else if( selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[14])){
+            List<Deviation> deviationDataForWGS =
+                    KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().deviationListForWGS;
+            for (Deviation deviation : deviationDataForWGS) {
+                if( deviation.isSave() ) {
                     writer.write(deviation.getPointId() + "," +
                             deviation.getXDeviation() + "," +
                             deviation.getYDeviation() + "," +
@@ -250,43 +345,20 @@ public void saveKMLDataFile(String selectedItem, String fileName) throws IOExcep
                 writer.newLine();
             }
         }
-       else if( savedPointList != null ){
-
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
-
-                if (!inputPoint.isSave()) {
-                    continue;
-                }
-
-                if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[1])) {
-                    writer.write(inputPoint.getPointId() + "," +
-                            inputPoint.getFormattedYForEOV() + "," +
-                            inputPoint.getFormattedXForEOV() + "," +
-                            inputPoint.getFormattedMForEOV());
-                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[2])) {
-
-                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[3])) {
-
-                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[4])) {
-
-                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[5])) {
-
-                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[6])) {
-
-                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[7])) {
-
-                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[8])) {
-
-                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[9])) {
-
-                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[10])) {
-
-                } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[11])) {
-
+        else if( selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[15])){
+            List<Deviation> deviationDataForEOV = KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer
+                    .getTableModel().deviationListForEOV;
+            for (Deviation deviation : deviationDataForEOV) {
+                if( deviation.isSave() ) {
+                    writer.write(deviation.getPointId() + "," +
+                            deviation.getXDeviation() + "," +
+                            deviation.getYDeviation() + "," +
+                            deviation.getZDeviation());
                 }
                 writer.newLine();
             }
         }
+
         writer.close();
         osw.close();
         fos.close();

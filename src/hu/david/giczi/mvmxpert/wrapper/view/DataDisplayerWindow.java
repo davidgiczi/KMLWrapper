@@ -6,6 +6,8 @@ import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -24,7 +26,7 @@ public class DataDisplayerWindow {
         tableModel = new TableModel(dataType);
          if( tableModel.displayedPointList.isEmpty() &&
                  tableModel.toEOVParams == null && tableModel.toWGSParams == null &&
-                    tableModel.commonPointsDeviationList ==  null ){
+                    tableModel.deviationListForEOV ==  null && tableModel.deviationListForWGS == null){
             throw new IllegalArgumentException("Nem található adat");
         }
         jFrame = new JFrame(dataType + " " + tableModel.getTableRowsNumber() + " db pont");
@@ -40,6 +42,27 @@ public class DataDisplayerWindow {
             }
         });
         JTable table = new JTable(tableModel);
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6])){
+                    JTable target = (JTable)e.getSource();
+                    int row = target.getSelectedRow();
+                    int col = target.getSelectedColumn();
+                    if( col == 0 ){
+                       MessagePane.getInfoMessage("Terület és távolság adatok",
+                               "Felhasznált pontok:<br>" +
+                                       "Távolság:<br>" +
+                                       "Terület:<br>" +
+                                       "Kerület:",
+                       KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                    }
+
+                }
+
+            }
+        });
         table.setRowHeight(30);
         table.setFont(plainFont);
         table.getTableHeader().setFont(boldFont);

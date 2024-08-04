@@ -18,7 +18,8 @@ public class TableModel extends DefaultTableModel {
     public List<Point> displayedPointList;
     public TransformationParam toEOVParams;
     public TransformationParam toWGSParams;
-    public List<Deviation> commonPointsDeviationList;
+    public List<Deviation> deviationListForEOV;
+    public List<Deviation> deviationListForWGS;
     private boolean isAddedSave;
 
 
@@ -32,7 +33,7 @@ public class TableModel extends DefaultTableModel {
         if( isAddedSave ){
             return;
         }
-        if( !displayedPointList.isEmpty() ) {
+        if( !displayedPointList.isEmpty()  ) {
             for (int row = 0; row < getTableRowsNumber(); row++) {
                boolean isSaved = (boolean) getValueAt(row, getLastIndexOfRow());
                 displayedPointList.get(row).setSave(isSaved);
@@ -44,6 +45,19 @@ public class TableModel extends DefaultTableModel {
         else if( toEOVParams != null ){
             toEOVParams.setSave((boolean) getValueAt(0, getLastIndexOfRow()));
         }
+        else if( deviationListForWGS != null ){
+            for (int row = 0; row < getTableRowsNumber(); row++) {
+                boolean isSaved = (boolean) getValueAt(row, getLastIndexOfRow());
+                deviationListForWGS.get(row).setSave(isSaved);
+            }
+        }
+        else if( deviationListForEOV != null ){
+            for (int row = 0; row < getTableRowsNumber(); row++) {
+                boolean isSaved = (boolean) getValueAt(row, getLastIndexOfRow());
+                deviationListForEOV.get(row).setSave(isSaved);
+            }
+        }
+
         isAddedSave = true;
     }
 
@@ -258,14 +272,14 @@ public class TableModel extends DefaultTableModel {
             if( KMLWrapperController.TRANSFORMATION.toWGS == null ){
                 throw new IllegalArgumentException("Hozzáadott EOV pont nem található");
             }
-            commonPointsDeviationList = new ArrayList<>();
             setCommonPointsDisplayedData();
+            deviationListForWGS = new ArrayList<>();
             for (Point commonPoint : displayedPointList) {
                new ToWGS(commonPoint.getX_IUGG67(),
                         commonPoint.getY_IUGG67(),
                         commonPoint.getZ_IUGG67(),
                         KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS);
-                Deviation deviation = new Deviation(
+                        Deviation deviationForWGS = new Deviation(
                         commonPoint.getPointId(),
                         commonPoint.getX_WGS84(),
                         commonPoint.getY_WGS84(),
@@ -273,12 +287,12 @@ public class TableModel extends DefaultTableModel {
                         ToWGS.X_WGS84,
                         ToWGS.Y_WGS84,
                         ToWGS.Z_WGS84);
-                commonPointsDeviationList.add(deviation);
+                deviationListForWGS.add(deviationForWGS);
                 Object[] row = new Object[]{
-                        deviation.getPointId(),
-                        deviation.getXDeviation(),
-                        deviation.getYDeviation(),
-                        deviation.getZDeviation(),
+                        deviationForWGS.getPointId(),
+                        deviationForWGS.getXDeviation(),
+                        deviationForWGS.getYDeviation(),
+                        deviationForWGS.getZDeviation(),
                         true};
                 addRow(row);
             }
@@ -287,15 +301,15 @@ public class TableModel extends DefaultTableModel {
             if( KMLWrapperController.TRANSFORMATION.toEOV == null ){
                 throw new IllegalArgumentException("Hozzáadott WGS84 pont nem található");
             }
-            commonPointsDeviationList = new ArrayList<>();
             setCommonPointsDisplayedData();
+            deviationListForEOV = new ArrayList<>();
             for (Point commonPoint : displayedPointList) {
 
                new ToEOV(commonPoint.getX_WGS84(),
                          commonPoint.getY_WGS84(),
                          commonPoint.getZ_WGS84(),
                          KMLWrapperController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS);
-                Deviation deviation = new Deviation(
+                        Deviation  deviationForEOV = new Deviation(
                         commonPoint.getPointId(),
                         commonPoint.getY_EOV(),
                         commonPoint.getX_EOV(),
@@ -303,13 +317,13 @@ public class TableModel extends DefaultTableModel {
                         ToEOV.Y_EOV,
                         ToEOV.X_EOV,
                         ToEOV.M_EOV);
-                commonPointsDeviationList.add(deviation);
                 Object[] row = new Object[]{
-                        deviation.getPointId(),
-                        deviation.getXDeviation(),
-                        deviation.getYDeviation(),
-                        deviation.getZDeviation(),
+                        deviationForEOV.getPointId(),
+                        deviationForEOV.getXDeviation(),
+                        deviationForEOV.getYDeviation(),
+                        deviationForEOV.getZDeviation(),
                         true};
+                deviationListForEOV.add(deviationForEOV);
                 addRow(row);
             }
         }
@@ -325,6 +339,25 @@ public class TableModel extends DefaultTableModel {
                         inputPoint.convertAngleMinSecFormat(inputPoint.getFi_WGS84()),
                         inputPoint.convertAngleMinSecFormat(inputPoint.getLambda_WGS84()),
                         inputPoint.getFormattedHForWGS84(), true};
+                addRow(row);
+            }
+        } else if ( dataType.startsWith("AutoCad")) {
+            for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+                displayedPointList.add(inputPoint);
+                Object[] row = new Object[]{inputPoint.getPointId(),
+                        inputPoint.getFormattedYForEOV(),
+                        inputPoint.getFormattedXForEOV(),
+                        inputPoint.getFormattedMForEOV(), true};
+                addRow(row);
+            }
+        }
+        else if ( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6]) ) {
+            for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+                displayedPointList.add(inputPoint);
+                Object[] row = new Object[]{inputPoint.getPointId(),
+                        inputPoint.getFormattedYForEOV(),
+                        inputPoint.getFormattedXForEOV(),
+                        inputPoint.getFormattedMForEOV(), true};
                 addRow(row);
             }
         }
@@ -388,6 +421,12 @@ public class TableModel extends DefaultTableModel {
                 6 > Arrays.asList(InputDataFileWindow.KML_DATA_TYPE).indexOf(dataType) ){
             columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
                     "[fok perc mperc]" , "[fok perc mperc]", "h", "Ment"};
+        }
+        else if( dataType.startsWith("AutoCad") ){
+            columNames = new String[]{"Pontszám", "Y", "X", "M", "Ment"};
+        }
+        else if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6]) ){
+            columNames = new String[]{"Pontszám", "Y", "X", "M", "Használ"};
         }
 
         if( columNames == null ){
@@ -487,7 +526,12 @@ public class TableModel extends DefaultTableModel {
                 6 > Arrays.asList(InputDataFileWindow.KML_DATA_TYPE).indexOf(dataType) ){
             pcs = KMLWrapperController.INPUT_POINTS.size();
         }
-
+        else if( dataType.startsWith("AutoCad") ){
+            pcs = KMLWrapperController.INPUT_POINTS.size();
+        }
+        else if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6]) ){
+            pcs = KMLWrapperController.INPUT_POINTS.size();
+        }
         return pcs;
     }
 
@@ -542,6 +586,13 @@ public class TableModel extends DefaultTableModel {
                 6 > Arrays.asList(InputDataFileWindow.KML_DATA_TYPE).indexOf(dataType) ){
             lastIndex = 6;
         }
+        else if( dataType.startsWith("AutoCad") ){
+            lastIndex = 4;
+        }
+        else if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6]) ){
+            lastIndex = 4;
+        }
+
 
         return lastIndex;
     }
