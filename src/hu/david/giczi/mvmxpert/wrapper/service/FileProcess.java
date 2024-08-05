@@ -89,7 +89,7 @@ public class FileProcess {
         int returnValue = jfc.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION ) {
             File selectedFile = jfc.getSelectedFile();
-            FOLDER_PATH = selectedFile.getParent();
+            FOLDER_PATH = selectedFile.getAbsolutePath();
         }
         else {
             FOLDER_PATH = null;
