@@ -73,6 +73,7 @@ public class KMLWrapperController {
 
     public void openKMLDataFile(){
         List<String> dataFromKML = fileProcess.getInputDataFromKML();
+        dataFromKML.forEach(System.out::println);
     }
 
     public void openAutoCadListDataFile() {

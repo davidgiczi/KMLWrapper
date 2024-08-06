@@ -172,7 +172,68 @@ public class FileProcess {
 
     public List<String> getInputDataFromKML(){
         List<String> resultData = new ArrayList<>();
+        StringBuilder container = new StringBuilder();
+        for (String row : INPUT_DATA_LIST) {
+            container.append(row);
+        }
+        List<Integer> startIndexList = getStartIndexList(container.toString(), "<coordinates>");
+        List<Integer> endIndexList = getEndIndexList(container.toString(), "</coordinates>");
+        for (int i = 0; i < startIndexList.size(); i++) {
+         String[] coords = container.substring(startIndexList.get(i), endIndexList.get(i)).trim().split("\\s+");
+         resultData.addAll(Arrays.asList(coords));
+        }
+
         return resultData;
+    }
+
+    private List<Integer> getStartIndexList(String containerString, String innerString){
+        List<Integer> startIndexes = new ArrayList<>();
+        int startIndex = 0;
+        int equality = 0;
+        for (int i = 0; i < containerString.length() - innerString.length(); i++) {
+
+                for (int j = 0; j < innerString.length(); j++) {
+
+                    if( equality == 0 && containerString.charAt(i) == innerString.charAt(0) ){
+                        startIndex = i;
+                    }
+                    if( containerString.charAt(i + j) == innerString.charAt(j) ){
+                        equality++;
+                    }
+            }
+            if( equality == innerString.length() ){
+                startIndexes.add( startIndex + innerString.length() );
+            }
+            equality = 0;
+            startIndex = 0;
+        }
+
+        return startIndexes;
+    }
+    private List<Integer> getEndIndexList(String containerString, String innerString){
+
+        List<Integer> endIndexes = new ArrayList<>();
+        int startIndex = 0;
+        int equality = 0;
+        for (int i = 0; i < containerString.length() - innerString.length(); i++) {
+
+            for (int j = 0; j < innerString.length(); j++) {
+
+                if( equality == 0 && containerString.charAt(i) == innerString.charAt(0) ){
+                    startIndex = i;
+                }
+                if( containerString.charAt(i + j) == innerString.charAt(j) ){
+                    equality++;
+                }
+            }
+            if( equality == innerString.length() ){
+                endIndexes.add( startIndex );
+            }
+            equality = 0;
+            startIndex = 0;
+        }
+
+        return endIndexes;
     }
 
     public void saveAutoCadDataFile(String fileName) throws IOException {
