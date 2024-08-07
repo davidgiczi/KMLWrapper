@@ -79,8 +79,8 @@ public class DataDisplayerWindow {
         table.setDefaultRenderer(String.class, tableCellRenderer);
         jFrame.add(new JScrollPane(table));
         jFrame.setSize(950,  tableModel.getTableRowsNumber() < 10 ?
-                80 + tableModel.getTableRowsNumber() * table.getRowHeight() :
-                80 + 10 * table.getRowHeight());
+                70 + tableModel.getTableRowsNumber() * table.getRowHeight() :
+                70 + 10 * table.getRowHeight());
         jFrame.setLocationRelativeTo(null);
         jFrame.setResizable(false);
         jFrame.setVisible(true);
@@ -96,10 +96,10 @@ public class DataDisplayerWindow {
         CalcData calc = new CalcData(usedForCalcPointList);
         MessagePane.getInfoMessage("Terület és távolság adatok",
                 "Felhasznált pontok:<br>" + calc.getUsedPointId() + "<br><br>" +
-                        "Távolság: " + calc.calcDistance() + "m<br>" +
-                        "Terület: " + calc.calcArea() + "m2<br>" +
-                        "Kerület: " + calc.calcPerimeter() + "m<br>" +
-                        "Magasságkülönbség: " + calc.calcElevation() + "m",
+                        "Távolság: " + calc.calcDistance() + " m<br>" +
+                        "Terület: " + calc.calcArea() + " m2<br>" +
+                        "Kerület: " + calc.calcPerimeter() + " m<br>" +
+                        "Magasságkülönbség: " + calc.calcElevation() + " m",
                 KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
     }
     private void removePointFromCalcPointList(String pointId){
