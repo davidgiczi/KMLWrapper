@@ -272,14 +272,10 @@ public class KMLWrapperController {
                     inputPoint.setPointId(pointId);
                 }
                 else {
-                    String id = (prefix.isEmpty() ? "" : prefix) +
-                            (pointIdValue) + (postfix.isEmpty() ? "" : postfix);
                     if (MessagePane.getYesNoOptionMessage("Beolvasott pont száma: " + inputPoint.getPointId(),
-                            "Cseréli a pont számát? Az új pontszám: " +
-                                    id, INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
-                        inputPoint.setPointId((prefix.isEmpty() ? "" : prefix) +
-                                (pointIdValue++) +
-                                (postfix.isEmpty() ? "" : postfix));
+                            "Cseréli a pont számát? Az új pontszám: " + pointId,
+                            INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
+                        inputPoint.setPointId(pointId);
                     }
                 }
             }
