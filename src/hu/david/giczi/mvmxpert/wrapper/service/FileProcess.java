@@ -175,11 +175,16 @@ public class FileProcess {
         StringBuilder container = new StringBuilder();
         for (String row : INPUT_DATA_LIST) {
             container.append(row);
+            if( row.endsWith("\n") ){
+                container.append("\n");
+            }
         }
-        List<Integer> startIndexList = getStartIndexList(container.toString(), "<coordinates>");
-        List<Integer> endIndexList = getEndIndexList(container.toString(), "</coordinates>");
-        for (int i = 0; i < startIndexList.size(); i++) {
-         String[] coords = container.substring(startIndexList.get(i), endIndexList.get(i)).trim().split("\\s+");
+        List<Integer> startCoordinatesList = getStartIndexList(container.toString(), "<coordinates>");
+        List<Integer> endCoordinatesList = getEndIndexList(container.toString(), "</coordinates>");
+        for (int i = 0; i < startCoordinatesList.size(); i++) {
+         String[] coords = container.substring(startCoordinatesList.get(i), endCoordinatesList.get(i))
+                 .trim().split("\\s+");
+
          resultData.addAll(Arrays.asList(coords));
         }
 
@@ -268,6 +273,33 @@ public void saveKMLDataFile(String selectedItem, String fileName) throws IOExcep
         writer.close();
         osw.close();
         fos.close();
+}
+public void saveCalcData(String fileName) throws  IOException{
+    File file = new File(FOLDER_PATH + "/" + fileName);
+    FileOutputStream fos = new FileOutputStream(file);
+    OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+    BufferedWriter writer = new BufferedWriter(osw);
+    writer.write("Felhasznált pontok:");
+    writer.newLine();
+    for (Point usedPointForCalc : KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.usedForCalcPointList) {
+        writer.write(usedPointForCalc.getPointId() + "," +
+                usedPointForCalc.getFormattedYForEOV() + "," +
+                usedPointForCalc.getFormattedXForEOV() + "," +
+                usedPointForCalc.getFormattedMForEOV());
+        writer.newLine();
+    }
+    CalcData calc = new CalcData(KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.usedForCalcPointList);
+    writer.write("Távolság: " + calc.calcDistance() + "m");
+    writer.newLine();
+    writer.write("Terület: " + calc.calcArea() + "m2");
+    writer.newLine();
+    writer.write("Kerület: " + calc.calcPerimeter() + "m");
+    writer.newLine();
+    writer.write("Magasságkülönbség: " + calc.calcElevation() + "m");
+    writer.newLine();
+    writer.close();
+    osw.close();
+    fos.close();
 }
     public void saveTXTDataFile(String selectedItem, String fileName) throws IOException{
         File file = new File(FOLDER_PATH + "/" + fileName);

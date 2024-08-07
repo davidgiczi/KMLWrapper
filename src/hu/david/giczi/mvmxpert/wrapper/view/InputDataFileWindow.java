@@ -207,7 +207,7 @@ public class InputDataFileWindow {
         optionMenu.addSeparator();
         optionMenu.add(exitProgramMenuItem);
         jMenuBar.add(optionMenu);
-        jMenuBar.add(transformationMenu);
+        //jMenuBar.add(transformationMenu);
         jFrame.setJMenuBar(jMenuBar);
     }
 

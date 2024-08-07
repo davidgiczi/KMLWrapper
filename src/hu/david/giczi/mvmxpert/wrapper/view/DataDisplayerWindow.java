@@ -2,7 +2,8 @@ package hu.david.giczi.mvmxpert.wrapper.view;
 
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
-
+import hu.david.giczi.mvmxpert.wrapper.domain.Point;
+import hu.david.giczi.mvmxpert.wrapper.service.CalcData;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
@@ -10,6 +11,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataDisplayerWindow {
 
@@ -17,12 +20,16 @@ public class DataDisplayerWindow {
     private TableModel tableModel;
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
+    public List<Point> usedForCalcPointList;
     public DataDisplayerWindow(String dataType) {
     displayData(dataType);
     }
 
 
     private void displayData(String dataType){
+        if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6]) ){
+            getCalcDataMessagePane();
+        }
         tableModel = new TableModel(dataType);
          if( tableModel.displayedPointList.isEmpty() &&
                  tableModel.toEOVParams == null && tableModel.toWGSParams == null &&
@@ -51,15 +58,15 @@ public class DataDisplayerWindow {
                     int row = target.getSelectedRow();
                     int col = target.getSelectedColumn();
                     if( col == tableModel.getLastIndexOfRow() ){
-                       MessagePane.getInfoMessage("Terület és távolság adatok",
-                               "Felhasznált pontok: " + target.getValueAt(row, 0) + "<br>" +
-                                       "Távolság:<br>" +
-                                       "Terület:<br>" +
-                                       "Kerület:<br>" +
-                                       "Magasságkülönbség:",
-                       KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                        String pointId = target.getModel().getValueAt(row, 0).toString();
+                        if( (boolean) target.getModel().getValueAt(row, col) ){
+                            addPointIntoCalcPointList(pointId);
+                        }
+                        else {
+                            removePointFromCalcPointList(pointId);
+                        }
+                        getCalcDataMessagePane();
                     }
-
                 }
 
             }
@@ -80,5 +87,29 @@ public class DataDisplayerWindow {
     }
     public TableModel getTableModel() {
         return tableModel;
+    }
+
+    public void getCalcDataMessagePane(){
+        if( usedForCalcPointList == null ){
+            usedForCalcPointList = new ArrayList<>(KMLWrapperController.INPUT_POINTS);
+        }
+        CalcData calc = new CalcData(usedForCalcPointList);
+        MessagePane.getInfoMessage("Terület és távolság adatok",
+                "Felhasznált pontok:<br>" + calc.getUsedPointId() + "<br><br>" +
+                        "Távolság: " + calc.calcDistance() + "m<br>" +
+                        "Terület: " + calc.calcArea() + "m2<br>" +
+                        "Kerület: " + calc.calcPerimeter() + "m<br>" +
+                        "Magasságkülönbség: " + calc.calcElevation() + "m",
+                KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+    }
+    private void removePointFromCalcPointList(String pointId){
+        usedForCalcPointList.removeIf(point -> point.getPointId().equals(pointId));
+    }
+    private void addPointIntoCalcPointList(String pointId){
+        for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+            if( inputPoint.getPointId().equals(pointId) ){
+                usedForCalcPointList.add(inputPoint);
+            }
+        }
     }
 }

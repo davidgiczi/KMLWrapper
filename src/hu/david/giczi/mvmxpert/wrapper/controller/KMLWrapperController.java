@@ -71,9 +71,23 @@ public class KMLWrapperController {
         }
     }
 
-    public void openKMLDataFile(){
+    public void openKMLDataFile() {
         List<String> dataFromKML = fileProcess.getInputDataFromKML();
-        dataFromKML.forEach(System.out::println);
+        if( dataFromKML.isEmpty() ){
+            MessagePane.getInfoMessage("Hiba a beolvasott fájlban",
+                    "KML fájl adatok nem olvashatók.", INPUT_DATA_FILE_WINDOW.jFrame);
+            return;
+        }
+        for (String kmlData : dataFromKML) {
+            String[] kmlInputData = kmlData.split(",");
+            try{
+                Validation.isValidManuallyInputDataForWGS84DecimalFormat
+                        (null, kmlInputData[1], kmlInputData[0], kmlInputData[2]);
+            }
+            catch (InvalidPreferencesFormatException e){
+                MessagePane.getInfoMessage("Hibás WGS84 földrajzi koordináta", e.getMessage(), INPUT_DATA_FILE_WINDOW.jFrame);
+            }
+        }
     }
 
     public void openAutoCadListDataFile() {
@@ -279,7 +293,33 @@ public class KMLWrapperController {
                         KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                 return;
             }
-        } else if (Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(selectedItem) > 0 &&
+        }
+        else if( selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[6]) ){
+            if (new File(FileProcess.FOLDER_PATH + "/" + fileName).exists()) {
+                if (MessagePane.getYesNoOptionMessage("Korábban mentett fájl", "Biztos, hogy felülírod?",
+                        INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
+                    try {
+                        fileProcess.saveCalcData(fileName);
+                    } catch (IOException e) {
+                        MessagePane.getInfoMessage("Fájl mentése sikertelen",
+                                FileProcess.FOLDER_PATH + "\\" + fileName,
+                                KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                        return;
+                    }
+                } else {
+                    return;
+                }
+            }
+            try {
+                fileProcess.saveCalcData(fileName);
+            } catch (IOException e) {
+                MessagePane.getInfoMessage("Fájl mentése sikertelen",
+                        FileProcess.FOLDER_PATH + "\\" + fileName,
+                        KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                return;
+            }
+        }
+        else if (Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(selectedItem) > 0 &&
                 16 > Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(selectedItem)) {
 
             if (new File(FileProcess.FOLDER_PATH + "/" + fileName).exists()) {

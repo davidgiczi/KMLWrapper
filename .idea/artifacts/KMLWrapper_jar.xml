@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="KMLWrapper:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/KMLWrapper_jar</output-path>
+    <root id="archive" name="KMLWrapper.jar">
+      <element id="module-output" name="KMLWrapper" />
+    </root>
+  </artifact>
+</component>

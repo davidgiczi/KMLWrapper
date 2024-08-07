@@ -7,7 +7,11 @@ import hu.david.giczi.mvmxpert.wrapper.domain.TransformationParam;
 import hu.david.giczi.mvmxpert.wrapper.service.ToEOV;
 import hu.david.giczi.mvmxpert.wrapper.service.ToWGS;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -78,6 +82,9 @@ public class TableModel extends DefaultTableModel {
                 }
             }
         }
+        else if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6])){
+            pcs = KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.usedForCalcPointList.size();
+        }
        else if( !displayedPointList.isEmpty() ) {
             for (Point displayedPoint : displayedPointList) {
                 if (displayedPoint.isSave()) {
@@ -103,6 +110,7 @@ public class TableModel extends DefaultTableModel {
        }
         return String.class;
     }
+
 
     private void addInputData(){
         displayedPointList = new ArrayList<>();
