@@ -236,23 +236,26 @@ public class KMLWrapperController {
                 return false;
             }
         }
-        int pcs = 0;
         for (Point inputPoint : INPUT_POINTS) {
-            if( inputPoint.getPointId() != null ){
-                pcs++;
+            if( inputPoint.getPointId() == null ){
+                inputPoint.setPointId(String.valueOf(pointIdValue));
             }
+            pointIdValue++;
         }
-        if( pcs == INPUT_POINTS.size() ){
-            if ( MessagePane.getYesNoOptionMessage("Pontszámozás",
-                    "Megtartja a pontok számát?", INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
-                return true;
-            }
+        if( inputPointId.isEmpty() ){
+            return true;
         }
+        inputPointId = INPUT_DATA_FILE_WINDOW.pointIdField.getText();
         String prefix = INPUT_DATA_FILE_WINDOW.pointPreIdField.getText();
         String postfix = INPUT_DATA_FILE_WINDOW.pointPostIdField.getText();
-        INPUT_DATA_FILE_WINDOW.pointIdField.setText(null);
-        INPUT_DATA_FILE_WINDOW.pointPreIdField.setText(null);
-        INPUT_DATA_FILE_WINDOW.pointPostIdField.setText(null);
+
+        try {
+            pointIdValue = Integer.parseInt(inputPointId);
+        } catch (NumberFormatException e) {
+            MessagePane.getInfoMessage("Hibás pontszám érték",
+                    "A pontszám érétke csak pozitív egész szám lehet.", INPUT_DATA_FILE_WINDOW.jFrame);
+            return false;
+        }
 
         if ( MessagePane.getYesNoOptionMessage("Pontszámozás",
                     "Cseréli az összes pont számát?", INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
@@ -264,10 +267,14 @@ public class KMLWrapperController {
                 return true;
             }
 
+        if ( MessagePane.getYesNoOptionMessage("Pontszámozás",
+                "Cseréli egyenként a pontok számát?", INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
+
             for (Point inputPoint : INPUT_POINTS) {
 
                 String pointId = (prefix.isEmpty() ? "" : prefix) + (pointIdValue++) + (postfix.isEmpty()
                         ? "" : postfix);
+
                 if (inputPoint.getPointId() == null) {
                     inputPoint.setPointId(pointId);
                 }
@@ -279,6 +286,7 @@ public class KMLWrapperController {
                     }
                 }
             }
+        }
 
         return true;
     }
