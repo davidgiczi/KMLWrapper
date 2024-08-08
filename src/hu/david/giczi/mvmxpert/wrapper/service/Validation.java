@@ -331,12 +331,10 @@ public class Validation {
         }
         try{
             h = Double.parseDouble(H.replace(",", "."));
-            if( 0 > h ){
-                throw new NumberFormatException();
-            }
+
         }
         catch (NumberFormatException e){
-            throw new InvalidPreferencesFormatException("A WGS84 magasság érték csak pozitív szám lehet.");
+            throw new InvalidPreferencesFormatException("A WGS84 magasság érték csak szám lehet.");
         }
         if( 45.74 > fi || 48.58 < fi ){
             throw new InvalidPreferencesFormatException("Hibás földrajzi szélesség fok érték. " +
