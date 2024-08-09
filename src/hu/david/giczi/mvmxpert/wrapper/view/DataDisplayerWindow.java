@@ -56,11 +56,15 @@ public class DataDisplayerWindow {
                 int col = table.columnAtPoint(e.getPoint());
                 String headerName = table.getColumnName(col);
                 if( e.getClickCount() == 2 && "Használ".equals(headerName)){
-                    for (int row = 0; row < KMLWrapperController.INPUT_POINTS.size(); row++) {
+                    for (int row = 0; row < tableModel.getTableRowsNumber(); row++) {
                         tableModel.setValueAt(false, row, tableModel.getTableColsNumber());
-                        if( usedForCalcPointList != null && !usedForCalcPointList.isEmpty() ){
-                            usedForCalcPointList.clear();
-                        }
+                    }
+                    usedForCalcPointList.clear();
+                }
+                else if( e.getClickCount() == 2 && "Ment".equals(headerName)){
+                    for (int row = 0; row < tableModel.getTableRowsNumber(); row++) {
+                        boolean saveValue = (boolean) tableModel.getValueAt(row, tableModel.getTableColsNumber());
+                        tableModel.setValueAt( !saveValue, row, tableModel.getTableColsNumber() );
                     }
                 }
             }
@@ -68,15 +72,13 @@ public class DataDisplayerWindow {
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
                 int col = table.columnAtPoint(e.getPoint());
-                String headerName = table.getColumnName(col);
-                if( col == tableModel.getTableColsNumber() && "Használ".equals(headerName)){
+                if( col == tableModel.getTableColsNumber() ){
                     table.getTableHeader().setCursor(new Cursor(Cursor.HAND_CURSOR));
                 }
                 else {
                     table.getTableHeader().setCursor(Cursor.getDefaultCursor());
                 }
             }
-
         });
         table.addMouseListener(new MouseAdapter() {
             @Override
