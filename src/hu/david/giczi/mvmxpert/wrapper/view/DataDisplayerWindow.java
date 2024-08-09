@@ -49,17 +49,45 @@ public class DataDisplayerWindow {
             }
         });
         JTable table = new JTable(tableModel);
+        table.getTableHeader().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                int col = table.columnAtPoint(e.getPoint());
+                String headerName = table.getColumnName(col);
+                if( e.getClickCount() == 2 && "Használ".equals(headerName)){
+                    for (int row = 0; row < KMLWrapperController.INPUT_POINTS.size(); row++) {
+                        tableModel.setValueAt(false, row, tableModel.getTableColsNumber());
+                        if( usedForCalcPointList != null && !usedForCalcPointList.isEmpty() ){
+                            usedForCalcPointList.clear();
+                        }
+                    }
+                }
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                int col = table.columnAtPoint(e.getPoint());
+                String headerName = table.getColumnName(col);
+                if( col == tableModel.getTableColsNumber() && "Használ".equals(headerName)){
+                    table.getTableHeader().setCursor(new Cursor(Cursor.HAND_CURSOR));
+                }
+                else {
+                    table.getTableHeader().setCursor(Cursor.getDefaultCursor());
+                }
+            }
+
+        });
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6])){
-                    JTable target = (JTable)e.getSource();
-                    int row = target.getSelectedRow();
-                    int col = target.getSelectedColumn();
-                    if( col == tableModel.getLastIndexOfRow() ){
-                        String pointId = target.getModel().getValueAt(row, 0).toString();
-                        if( (boolean) target.getModel().getValueAt(row, col) ){
+                    int row = table.getSelectedRow();
+                    int col = table.getSelectedColumn();
+                    if( col == tableModel.getTableColsNumber() ){
+                        String pointId = tableModel.getValueAt(row, 0).toString();
+                        if( (boolean) tableModel.getValueAt(row, col) ){
                             addPointIntoCalcPointList(pointId);
                         }
                         else {
@@ -68,13 +96,24 @@ public class DataDisplayerWindow {
                         getCalcDataMessagePane();
                     }
                 }
+            }
 
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                int col = table.columnAtPoint(e.getPoint());
+                if( col == tableModel.getTableColsNumber() ){
+                    table.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                }
+                else{
+                    table.setCursor(Cursor.getDefaultCursor());
+                }
             }
         });
         table.setRowHeight(30);
         table.setFont(plainFont);
         table.getTableHeader().setFont(boldFont);
-        DefaultTableCellRenderer tableCellRenderer = new DefaultTableCellRenderer();
+       DefaultTableCellRenderer tableCellRenderer = new DefaultTableCellRenderer();
         tableCellRenderer.setHorizontalAlignment( JLabel.CENTER );
         table.setDefaultRenderer(String.class, tableCellRenderer);
         jFrame.add(new JScrollPane(table));

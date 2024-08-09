@@ -7,11 +7,7 @@ import hu.david.giczi.mvmxpert.wrapper.domain.TransformationParam;
 import hu.david.giczi.mvmxpert.wrapper.service.ToEOV;
 import hu.david.giczi.mvmxpert.wrapper.service.ToWGS;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,27 +35,27 @@ public class TableModel extends DefaultTableModel {
         }
         if ( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ) {
             for (int row = 0; row < getTableRowsNumber(); row++) {
-                boolean isSaved = (boolean) getValueAt(row, getLastIndexOfRow());
+                boolean isSaved = (boolean) getValueAt(row, getTableColsNumber());
                 deviationListForWGS.get(row).setSave(isSaved);
             }
         }
         else if ( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ) {
             for (int row = 0; row < getTableRowsNumber(); row++) {
-                boolean isSaved = (boolean) getValueAt(row, getLastIndexOfRow());
+                boolean isSaved = (boolean) getValueAt(row, getTableColsNumber());
                 deviationListForEOV.get(row).setSave(isSaved);
             }
         }
         else if ( !displayedPointList.isEmpty()) {
                 for (int row = 0; row < getTableRowsNumber(); row++) {
-                    boolean isSaved = (boolean) getValueAt(row, getLastIndexOfRow());
+                    boolean isSaved = (boolean) getValueAt(row, getTableColsNumber());
                     displayedPointList.get(row).setSave(isSaved);
                 }
         }
         else if (toWGSParams != null) {
-                toWGSParams.setSave((boolean) getValueAt(0, getLastIndexOfRow()));
+                toWGSParams.setSave((boolean) getValueAt(0, getTableColsNumber()));
         }
         else if (toEOVParams != null) {
-                toEOVParams.setSave((boolean) getValueAt(0, getLastIndexOfRow()));
+                toEOVParams.setSave((boolean) getValueAt(0, getTableColsNumber()));
             }
 
             isAddedSave = true;
@@ -104,7 +100,7 @@ public class TableModel extends DefaultTableModel {
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-       int index = getLastIndexOfRow();
+       int index = getTableColsNumber();
        if( index > 1 && columnIndex == index ) {
            return Boolean.class;
        }
@@ -557,7 +553,7 @@ public class TableModel extends DefaultTableModel {
         return pcs;
     }
 
-    public int getLastIndexOfRow(){
+    public int getTableColsNumber(){
         int lastIndex = 0;
         if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[1]) ){
             lastIndex = 4;
