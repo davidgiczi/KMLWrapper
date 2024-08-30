@@ -24,6 +24,7 @@ public class InputDataFileWindow {
     public DataDisplayerWindow displayer;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
+    private static final String INVALID_CHARACTERS = "[\\\\/:*?\"<>|]";
     public static final String[] EOV_DATA_TYPE = {
             "Formátum választása",
             "EOV (Psz,Y,X,M)",
@@ -175,9 +176,19 @@ public class InputDataFileWindow {
         JMenu optionMenu = new JMenu("Opciók");
         optionMenu.setFont(boldFont);
         optionMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        JMenu transformationMenu = new JMenu("2D transzformáció");
-        transformationMenu.setFont(boldFont);
-        transformationMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JMenuItem transformationMenuItem = new JMenuItem("2D transzformáció");
+        transformationMenuItem.addActionListener( e -> {
+            jFrame.setVisible(false);
+            if( controller.TRANSFORMATION_2D_WINDOW == null ){
+                controller.TRANSFORMATION_2D_WINDOW = new Transformation2DWindow(controller);
+            }
+            else {
+                controller.TRANSFORMATION_2D_WINDOW.jFrame.setVisible(true);
+            }
+
+        });
+        transformationMenuItem.setFont(plainFont);
+        transformationMenuItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem manuallyInputMenuItem = new JMenuItem("Kézi adatbevitel");
         manuallyInputMenuItem.addActionListener(e -> {
             jFrame.setVisible(false);
@@ -204,10 +215,10 @@ public class InputDataFileWindow {
         exitProgramMenuItem.setFont(plainFont);
         exitProgramMenuItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         optionMenu.add(manuallyInputMenuItem);
+        optionMenu.add(transformationMenuItem);
         optionMenu.addSeparator();
         optionMenu.add(exitProgramMenuItem);
         jMenuBar.add(optionMenu);
-        //jMenuBar.add(transformationMenu);
         jFrame.setJMenuBar(jMenuBar);
     }
 
@@ -589,7 +600,7 @@ public class InputDataFileWindow {
 
     public String getOutputFileName() {
         String selectedOption = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
-        String addedFileNameByUser = saveFileNameField.getText();
+        String addedFileNameByUser = saveFileNameField.getText().trim().replaceAll(INVALID_CHARACTERS, "_");
         String fileName = null;
         if (selectedOption.equals(KML_DATA_TYPE[1])) {
             if (addedFileNameByUser.isEmpty()) {

@@ -37,6 +37,7 @@ public class ManuallyInputDataWindow {
     public JTextField z_WGS84_field;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
+    private final Color GREEN = new Color(193, 225, 193);
     private final Boolean[] IS_INPUT_DATA_TYPE = new Boolean[5];
 
     private static final String[] INPUT_DATA_TYPE = {
@@ -85,7 +86,9 @@ public class ManuallyInputDataWindow {
         addTitleForInputDataOptionPanel();
         addComboBoxForInputDataPanel(selectedItem);
         if( selectedItem.equals(INPUT_DATA_TYPE[0])) {
-            inputDataPanel.add(new JPanel());
+            JPanel initPanel = new JPanel();
+            initPanel.setBackground(GREEN);
+            inputDataPanel.add(initPanel);
             IS_INPUT_DATA_TYPE[0] = true;
         }
         else if (selectedItem.equals(INPUT_DATA_TYPE[1])){
@@ -111,6 +114,7 @@ public class ManuallyInputDataWindow {
 
     private void addTitleForInputDataOptionPanel() {
         JPanel panel = new JPanel();
+        panel.setBackground(GREEN);
         JLabel contentTitleLabel = new JLabel("Bemeneti adatok típusának megadása");
         contentTitleLabel.setFont(boldFont);
         contentTitleLabel.setBorder(new EmptyBorder(10,0,0,0));
@@ -120,6 +124,7 @@ public class ManuallyInputDataWindow {
 
     private void addComboBoxForInputDataPanel(String selectedItem){
         JPanel panel = new JPanel();
+        panel.setBackground(GREEN);
         inputDataTypeComboBox = new JComboBox<>(INPUT_DATA_TYPE);
         if( selectedItem != null ){
             inputDataTypeComboBox.setSelectedItem(selectedItem);
@@ -145,6 +150,7 @@ public class ManuallyInputDataWindow {
 
     private void getInputDataPanelForEOVData(){
         JPanel panel = new JPanel();
+        panel.setBackground(GREEN);
         JLabel pointIDLabel = new JLabel("Pontszám");
         pointIDLabel.setFont(boldFont);
         panel.add(pointIDLabel);
@@ -190,6 +196,7 @@ public class ManuallyInputDataWindow {
 
     private void getInputDataPanelForWGSDecimalFormat(){
         JPanel panel = new JPanel();
+        panel.setBackground(GREEN);
         JLabel pointIDLabel = new JLabel("Pontszám");
         pointIDLabel.setFont(boldFont);
         panel.add(pointIDLabel);
@@ -234,6 +241,7 @@ public class ManuallyInputDataWindow {
     }
     private void getInputDataPanelForWGSAngleSecMinFormat(){
         JPanel panel = new JPanel();
+        panel.setBackground(GREEN);
         pointIdFieldForWGS84AngleMinSecFormat = new JTextField();
         pointIdFieldForWGS84AngleMinSecFormat.setToolTipText("Pontszám");
         pointIdFieldForWGS84AngleMinSecFormat.setFont(boldFont);
@@ -311,6 +319,7 @@ public class ManuallyInputDataWindow {
 
     private void getInputDataPanelForWGSXYZFormat(){
         JPanel panel = new JPanel();
+        panel.setBackground(GREEN);
         JLabel pointIDLabel = new JLabel("Pontszám");
         pointIDLabel.setFont(boldFont);
         panel.add(pointIDLabel);
@@ -356,6 +365,7 @@ public class ManuallyInputDataWindow {
 
     private void addDataButton(){
         JPanel panel = new JPanel();
+        panel.setBackground(GREEN);
         JButton addBtn = new JButton("Hozzáad");
         addBtn.addActionListener(a -> onClickProcessForAddingInputDataByManually());
         addBtn.setFont(boldFont);

@@ -7,6 +7,7 @@ import hu.david.giczi.mvmxpert.wrapper.service.Validation;
 import hu.david.giczi.mvmxpert.wrapper.view.InputDataFileWindow;
 import hu.david.giczi.mvmxpert.wrapper.view.ManuallyInputDataWindow;
 import hu.david.giczi.mvmxpert.wrapper.view.MessagePane;
+import hu.david.giczi.mvmxpert.wrapper.view.Transformation2DWindow;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class KMLWrapperController {
 
     public static InputDataFileWindow INPUT_DATA_FILE_WINDOW;
     public static ManuallyInputDataWindow MANUALLY_INPUT_DATA_WINDOW;
+    public static Transformation2DWindow TRANSFORMATION_2D_WINDOW;
     public static Transformation TRANSFORMATION;
     public FileProcess fileProcess;
     public static List<Point> REFERENCE_POINTS;
