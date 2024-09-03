@@ -30,9 +30,11 @@ public class Transformation2DWindow {
     public JTextField point22YField;
     public JTextField point22XField;
     public JTextField point22ZField;
-    public JTextField distanceParamField;
+    public JTextField deltaDistance1ParamField;
+    public JTextField deltaDistance2ParamField;
     public JTextField rotationParamField;
     public JTextField scaleParamField;
+    public JTextField deltaElevationField;
     private KMLWrapperController controller;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
@@ -317,25 +319,36 @@ public class Transformation2DWindow {
     private void addTransformationDataPanel(){
         transformationDataPanel = new JPanel();
         transformationDataPanel.setLayout(new GridLayout(4, 1));
-        addTransformationParamsPanel();
+        addTransformationParam1Panel();
+        addTransformationParam2Panel();
         jFrame.add(transformationDataPanel);
     }
 
-    private void addTransformationParamsPanel(){
+    private void addTransformationParam1Panel(){
         JPanel panel = new JPanel();
         panel.setBackground(GREEN);
-        JLabel distanceParamText = new JLabel("Eltolás:");
-        distanceParamText.setFont(boldFont);
-        distanceParamField = new JTextField();
-        distanceParamField.setToolTipText("A 2. vonatkozási rendszer origójának távolsága " +
-                "az 1. vontakozási rendszer origójához képest");
-        distanceParamField.setFont(boldFont);
-        distanceParamField.setBackground(new Color(249, 249, 249));
-        distanceParamField.setHorizontalAlignment(SwingConstants.CENTER);
-        distanceParamField.setPreferredSize(new Dimension(100, 35));
-        distanceParamField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        JLabel distanceUnitText = new JLabel("m");
-        distanceUnitText.setFont(boldFont);
+        JLabel deltaDistance1ParamText = new JLabel("X eltolás:");
+        deltaDistance1ParamText.setFont(boldFont);
+        deltaDistance1ParamField = new JTextField();
+        deltaDistance1ParamField.setToolTipText("A 1-2. vonatkozási rendszerek origóinak X irányú távolsága");
+        deltaDistance1ParamField.setFont(boldFont);
+        deltaDistance1ParamField.setBackground(new Color(249, 249, 249));
+        deltaDistance1ParamField.setHorizontalAlignment(SwingConstants.CENTER);
+        deltaDistance1ParamField.setPreferredSize(new Dimension(100, 35));
+        deltaDistance1ParamField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JLabel deltaDistance2ParamText = new JLabel("Y eltolás:");
+        deltaDistance2ParamText.setFont(boldFont);
+        deltaDistance2ParamField = new JTextField();
+        deltaDistance2ParamField.setToolTipText("A 1-2. vonatkozási rendszerek origóinak Y irányú távolsága");
+        deltaDistance2ParamField.setFont(boldFont);
+        deltaDistance2ParamField.setBackground(new Color(249, 249, 249));
+        deltaDistance2ParamField.setHorizontalAlignment(SwingConstants.CENTER);
+        deltaDistance2ParamField.setPreferredSize(new Dimension(100, 35));
+        deltaDistance2ParamField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JLabel deltaDistance1UnitText = new JLabel("m");
+        deltaDistance1UnitText.setFont(boldFont);
+        JLabel deltaDistance2UnitText = new JLabel("m");
+        deltaDistance2UnitText.setFont(boldFont);
         JLabel rotationParamText = new JLabel("Elforgatás:");
         rotationParamText.setFont(boldFont);
         rotationParamField = new JTextField();
@@ -345,6 +358,22 @@ public class Transformation2DWindow {
         rotationParamField.setHorizontalAlignment(SwingConstants.CENTER);
         rotationParamField.setPreferredSize(new Dimension(200, 35));
         rotationParamField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(deltaDistance1ParamText);
+        panel.add(deltaDistance1ParamField);
+        panel.add(deltaDistance1UnitText);
+        panel.add(Box.createHorizontalStrut(70));
+        panel.add(deltaDistance2ParamText);
+        panel.add(deltaDistance2ParamField);
+        panel.add(deltaDistance2UnitText);
+        panel.add(Box.createHorizontalStrut(50));
+        panel.add(rotationParamText);
+        panel.add(rotationParamField);
+        transformationDataPanel.add(panel);
+    }
+
+    private void addTransformationParam2Panel(){
+        JPanel panel = new JPanel();
+        panel.setBackground(GREEN);
         JLabel scaleParamText = new JLabel("Méretarány:");
         scaleParamText.setFont(boldFont);
         scaleParamField = new JTextField();
@@ -354,16 +383,21 @@ public class Transformation2DWindow {
         scaleParamField.setHorizontalAlignment(SwingConstants.CENTER);
         scaleParamField.setPreferredSize(new Dimension(100, 35));
         scaleParamField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panel.add(distanceParamText);
-        panel.add(distanceParamField);
-        panel.add(distanceUnitText);
-        panel.add(Box.createHorizontalStrut(50));
-        panel.add(rotationParamText);
-        panel.add(rotationParamField);
-        panel.add(Box.createHorizontalStrut(120));
+        JLabel deltaElevationText = new JLabel("dMagasság:");
+        deltaElevationText.setFont(boldFont);
+        deltaElevationField = new JTextField();
+        deltaElevationField.setToolTipText("Az 1. és  2. vonatkozási rendszerek magasságkülönbségeinek különbsége");
+        deltaElevationField.setFont(boldFont);
+        deltaElevationField.setBackground(new Color(249, 249, 249));
+        deltaElevationField.setHorizontalAlignment(SwingConstants.CENTER);
+        deltaElevationField.setPreferredSize(new Dimension(100, 35));
+        deltaElevationField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(scaleParamText);
         panel.add(scaleParamField);
+        panel.add(Box.createHorizontalStrut(120));
+        panel.add(deltaElevationText);
+        panel.add(deltaElevationField);
         transformationDataPanel.add(panel);
-    }
 
+    }
 }
