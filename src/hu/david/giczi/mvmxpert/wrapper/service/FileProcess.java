@@ -174,19 +174,17 @@ public class FileProcess {
         List<String> resultData = new ArrayList<>();
         StringBuilder container = new StringBuilder();
         for (String row : INPUT_DATA_LIST) {
-            container.append(row);
-            if( row.endsWith("\n") ){
-                container.append("\n");
-            }
+            container.append(row.trim()).append("\n");;
         }
+
         List<Integer> startCoordinatesList = getStartIndexList(container.toString(), "<coordinates>");
         List<Integer> endCoordinatesList = getEndIndexList(container.toString(), "</coordinates>");
         for (int i = 0; i < startCoordinatesList.size(); i++) {
          String[] coords = container.substring(startCoordinatesList.get(i), endCoordinatesList.get(i))
-                 .trim().split("\\s+");
-
+                 .trim().split("\\r?\\n");
          resultData.addAll(Arrays.asList(coords));
         }
+
 
         return resultData;
     }

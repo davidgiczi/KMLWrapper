@@ -1,7 +1,6 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
-import hu.david.giczi.mvmxpert.wrapper.service.Transformation2D;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -14,6 +13,7 @@ public class Transformation2DWindow {
     public JFrame jFrame;
     private JPanel inputDataOptionPanel;
     private JPanel transformationDataPanel;
+    private JPanel transformDataPanel;
     public JTextField point11NumberField;
     public JTextField point11YField;
     public JTextField point11XField;
@@ -35,6 +35,11 @@ public class Transformation2DWindow {
     public JTextField rotationParamField;
     public JTextField scaleParamField;
     public JTextField deltaElevationField;
+    public JCheckBox useElevationCheckBox;
+    public JList<String> firstSystemDataList;
+    public DefaultListModel<String> firstSystemDataListModel;
+    public JList<String> secondSystemDataList;
+    public DefaultListModel<String> secondSystemDataListModel;
     private KMLWrapperController controller;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
@@ -61,7 +66,8 @@ public class Transformation2DWindow {
         addLogo();
         addMenu();
         addInputDataOptionPanel();
-        addTransformationDataPanel();
+        addTransformationParamsPanel();
+        addTransformDataPanel();
         jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         jFrame.setLayout(new GridLayout(3, 1));
         jFrame.setSize(1000, 750);
@@ -160,64 +166,16 @@ public class Transformation2DWindow {
         point11ZField.setHorizontalAlignment(SwingConstants.CENTER);
         point11ZField.setPreferredSize(new Dimension(80, 35));
         point11ZField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        point11ZField.setText("0");
         JButton exchangeBtn =
                 new JButton(new ImageIcon(iconImage.getScaledInstance(35, 30, Image.SCALE_DEFAULT)));
         exchangeBtn.addActionListener(e -> {
-
+            onClickExchangeCommonPointsDataButton();
         });
         exchangeBtn.setToolTipText("Pont adatok cseréje");
         exchangeBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JLabel point12Label = new JLabel("1. pont");
         point12Label.setFont(boldFont);
-        point12NumberField = new JTextField();
-        point12NumberField.setToolTipText("Pontszám");
-        point12NumberField.setFont(boldFont);
-        point12NumberField.setBackground(new Color(249, 249, 249));
-        point12NumberField.setHorizontalAlignment(SwingConstants.CENTER);
-        point12NumberField.setPreferredSize(new Dimension(50, 35));
-        point12NumberField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        point12YField = new JTextField();
-        point12YField.setToolTipText("1. koordináta");
-        point12YField.setFont(boldFont);
-        point12YField.setBackground(new Color(249, 249, 249));
-        point12YField.setHorizontalAlignment(SwingConstants.CENTER);
-        point12YField.setPreferredSize(new Dimension(100, 35));
-        point12YField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        point12XField = new JTextField();
-        point12XField.setToolTipText("2. koordináta");
-        point12XField.setFont(boldFont);
-        point12XField.setBackground(new Color(249, 249, 249));
-        point12XField.setHorizontalAlignment(SwingConstants.CENTER);
-        point12XField.setPreferredSize(new Dimension(100, 35));
-        point12XField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        point12ZField = new JTextField();
-        point12ZField.setToolTipText("Magasság");
-        point12ZField.setFont(boldFont);
-        point12ZField.setBackground(new Color(249, 249, 249));
-        point12ZField.setHorizontalAlignment(SwingConstants.CENTER);
-        point12ZField.setPreferredSize(new Dimension(80, 35));
-        point12ZField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panel.add(point11Label);
-        panel.add(point11NumberField);
-        panel.add(point11YField);
-        panel.add(point11XField);
-        panel.add(point11ZField);
-        panel.add(Box.createHorizontalStrut(35));
-        panel.add(exchangeBtn);
-        panel.add(Box.createHorizontalStrut(35));
-        panel.add(point12Label);
-        panel.add(point12NumberField);
-        panel.add(point12YField);
-        panel.add(point12XField);
-        panel.add(point12ZField);
-        inputDataOptionPanel.add(panel);
-    }
-
-    private void addSecondCommonPointsData(){
-        JPanel panel = new JPanel();
-        panel.setBackground(GREEN);
-        JLabel point21Label = new JLabel("2. pont");
-        point21Label.setFont(boldFont);
         point21NumberField = new JTextField();
         point21NumberField.setToolTipText("Pontszám");
         point21NumberField.setFont(boldFont);
@@ -246,13 +204,57 @@ public class Transformation2DWindow {
         point21ZField.setHorizontalAlignment(SwingConstants.CENTER);
         point21ZField.setPreferredSize(new Dimension(80, 35));
         point21ZField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        JButton exchangeBtn =
-                new JButton(new ImageIcon(iconImage.getScaledInstance(35, 30, Image.SCALE_DEFAULT)));
-        exchangeBtn.addActionListener(e -> {
+        point21ZField.setText("0");
+        panel.add(point11Label);
+        panel.add(point11NumberField);
+        panel.add(point11YField);
+        panel.add(point11XField);
+        panel.add(point11ZField);
+        panel.add(Box.createHorizontalStrut(35));
+        panel.add(exchangeBtn);
+        panel.add(Box.createHorizontalStrut(35));
+        panel.add(point12Label);
+        panel.add(point21NumberField);
+        panel.add(point21YField);
+        panel.add(point21XField);
+        panel.add(point21ZField);
+        inputDataOptionPanel.add(panel);
+    }
 
-        });
-        exchangeBtn.setToolTipText("Pont adatok cseréje");
-        exchangeBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    private void addSecondCommonPointsData(){
+        JPanel panel = new JPanel();
+        panel.setBackground(GREEN);
+        JLabel point21Label = new JLabel("2. pont");
+        point21Label.setFont(boldFont);
+        point12NumberField = new JTextField();
+        point12NumberField.setToolTipText("Pontszám");
+        point12NumberField.setFont(boldFont);
+        point12NumberField.setBackground(new Color(249, 249, 249));
+        point12NumberField.setHorizontalAlignment(SwingConstants.CENTER);
+        point12NumberField.setPreferredSize(new Dimension(50, 35));
+        point12NumberField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        point12YField = new JTextField();
+        point12YField.setToolTipText("1. koordináta");
+        point12YField.setFont(boldFont);
+        point12YField.setBackground(new Color(249, 249, 249));
+        point12YField.setHorizontalAlignment(SwingConstants.CENTER);
+        point12YField.setPreferredSize(new Dimension(100, 35));
+        point12YField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        point12XField = new JTextField();
+        point12XField.setToolTipText("2. koordináta");
+        point12XField.setFont(boldFont);
+        point12XField.setBackground(new Color(249, 249, 249));
+        point12XField.setHorizontalAlignment(SwingConstants.CENTER);
+        point12XField.setPreferredSize(new Dimension(100, 35));
+        point12XField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        point12ZField = new JTextField();
+        point12ZField.setToolTipText("Magasság");
+        point12ZField.setFont(boldFont);
+        point12ZField.setBackground(new Color(249, 249, 249));
+        point12ZField.setHorizontalAlignment(SwingConstants.CENTER);
+        point12ZField.setPreferredSize(new Dimension(80, 35));
+        point12ZField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        point12ZField.setText("0");
         JLabel point22Label = new JLabel("2. pont");
         point22Label.setFont(boldFont);
         point22NumberField = new JTextField();
@@ -283,14 +285,13 @@ public class Transformation2DWindow {
         point22ZField.setHorizontalAlignment(SwingConstants.CENTER);
         point22ZField.setPreferredSize(new Dimension(80, 35));
         point22ZField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        point22ZField.setText("0");
         panel.add(point21Label);
-        panel.add(point21NumberField);
-        panel.add(point21YField);
-        panel.add(point21XField);
-        panel.add(point21ZField);
-        panel.add(Box.createHorizontalStrut(35));
-        panel.add(exchangeBtn);
-        panel.add(Box.createHorizontalStrut(35));
+        panel.add(point12NumberField);
+        panel.add(point12YField);
+        panel.add(point12XField);
+        panel.add(point12ZField);
+        panel.add(Box.createHorizontalStrut(150));
         panel.add(point22Label);
         panel.add(point22NumberField);
         panel.add(point22YField);
@@ -299,16 +300,45 @@ public class Transformation2DWindow {
         inputDataOptionPanel.add(panel);
     }
 
+    private void onClickExchangeCommonPointsDataButton(){
+
+        if( MessagePane.getYesNoOptionMessage("Közös pontok cseréje",
+                "Biztos, hogy megcseréled a pontokat?", jFrame) == 1 ){
+            return;
+        }
+        String point11Id = point11NumberField.getText();
+        String point11Y = point11YField.getText();
+        String point11X = point11XField.getText();
+        String point11Z = point11ZField.getText();
+        String point12Id = point12NumberField.getText();
+        String point12Y = point12YField.getText();
+        String point12X = point12XField.getText();
+        String point12Z = point12ZField.getText();
+        point11NumberField.setText(point21NumberField.getText());
+        point11YField.setText(point21YField.getText());
+        point11XField.setText(point21XField.getText());
+        point11ZField.setText(point21ZField.getText());
+        point21NumberField.setText(point11Id);
+        point21YField.setText(point11Y);
+        point21XField.setText(point11X);
+        point21ZField.setText(point11Z);
+        point12NumberField.setText(point22NumberField.getText());
+        point12YField.setText(point22YField.getText());
+        point12XField.setText(point22XField.getText());
+        point12ZField.setText(point22ZField.getText());
+        point22NumberField.setText(point12Id);
+        point22YField.setText(point12Y);
+        point22XField.setText(point12X);
+        point22ZField.setText(point12Z);
+    }
+
     private void addSettingInputDataButton(){
         JPanel panel = new JPanel();
         panel.setBackground(GREEN);
         JButton countBtn = new JButton("Paraméterek számítása");
+
         countBtn.addActionListener(e -> {
-            new Transformation2D(
-            point11NumberField.getText(), point11YField.getText(), point11XField.getText(), point11ZField.getText(),
-            point12NumberField.getText(), point12YField.getText(), point12XField.getText(), point12ZField.getText(),
-            point21NumberField.getText(), point21YField.getText(), point21XField.getText(), point21ZField.getText(),
-            point22NumberField.getText(), point22YField.getText(), point22XField.getText(), point22ZField.getText());
+            controller.calcParamsForTransformation2D();
         });
         countBtn.setFont(boldFont);
         countBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -316,15 +346,15 @@ public class Transformation2DWindow {
         inputDataOptionPanel.add(panel);
     }
 
-    private void addTransformationDataPanel(){
+    private void addTransformationParamsPanel(){
         transformationDataPanel = new JPanel();
-        transformationDataPanel.setLayout(new GridLayout(4, 1));
-        addTransformationParam1Panel();
-        addTransformationParam2Panel();
+        transformationDataPanel.setLayout(new GridLayout(2, 2));
+        addTransformationParams1Panel();
+        addTransformationParams2Panel();
         jFrame.add(transformationDataPanel);
     }
 
-    private void addTransformationParam1Panel(){
+    private void addTransformationParams1Panel(){
         JPanel panel = new JPanel();
         panel.setBackground(GREEN);
         JLabel deltaDistance1ParamText = new JLabel("X eltolás:");
@@ -361,18 +391,19 @@ public class Transformation2DWindow {
         panel.add(deltaDistance1ParamText);
         panel.add(deltaDistance1ParamField);
         panel.add(deltaDistance1UnitText);
-        panel.add(Box.createHorizontalStrut(70));
+        panel.add(Box.createHorizontalStrut(90));
         panel.add(deltaDistance2ParamText);
+        panel.add(Box.createHorizontalStrut(10));
         panel.add(deltaDistance2ParamField);
         panel.add(deltaDistance2UnitText);
-        panel.add(Box.createHorizontalStrut(50));
+        panel.add(Box.createHorizontalStrut(70));
         panel.add(rotationParamText);
         panel.add(rotationParamField);
         transformationDataPanel.add(panel);
     }
 
-    private void addTransformationParam2Panel(){
-        JPanel panel = new JPanel();
+    private void addTransformationParams2Panel(){
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setBackground(GREEN);
         JLabel scaleParamText = new JLabel("Méretarány:");
         scaleParamText.setFont(boldFont);
@@ -383,7 +414,7 @@ public class Transformation2DWindow {
         scaleParamField.setHorizontalAlignment(SwingConstants.CENTER);
         scaleParamField.setPreferredSize(new Dimension(100, 35));
         scaleParamField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        JLabel deltaElevationText = new JLabel("dMagasság:");
+        JLabel deltaElevationText = new JLabel("dM:");
         deltaElevationText.setFont(boldFont);
         deltaElevationField = new JTextField();
         deltaElevationField.setToolTipText("Az 1. és  2. vonatkozási rendszerek magasságkülönbségeinek különbsége");
@@ -392,12 +423,61 @@ public class Transformation2DWindow {
         deltaElevationField.setHorizontalAlignment(SwingConstants.CENTER);
         deltaElevationField.setPreferredSize(new Dimension(100, 35));
         deltaElevationField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JLabel deltaElevationUnitText = new JLabel("m");
+        deltaElevationUnitText.setFont(boldFont);
+        useElevationCheckBox = new JCheckBox("Magasság átvitele");
+        useElevationCheckBox.setFont(boldFont);
+        useElevationCheckBox.setBackground(GREEN);
+        panel.add(Box.createHorizontalStrut(20));
         panel.add(scaleParamText);
         panel.add(scaleParamField);
-        panel.add(Box.createHorizontalStrut(120));
+        panel.add(Box.createHorizontalStrut(167));
         panel.add(deltaElevationText);
         panel.add(deltaElevationField);
+        panel.add(deltaElevationUnitText);
+        panel.add(Box.createHorizontalStrut(160));
+        panel.add(useElevationCheckBox);
         transformationDataPanel.add(panel);
-
+    }
+    private void addTransformDataPanel(){
+        transformDataPanel = new JPanel();
+        transformDataPanel.setLayout(new GridLayout(1, 3));
+        addSystemDataLists();
+        jFrame.add(transformDataPanel);
+    }
+    private void addSystemDataLists() {
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBackground(GREEN);
+        JPanel mediumPanel = new JPanel();
+        mediumPanel.setBackground(GREEN);
+        JPanel leftPanel = new JPanel();
+        leftPanel.setBackground(GREEN);
+        firstSystemDataListModel = new DefaultListModel<>();
+        firstSystemDataList = new JList<>(firstSystemDataListModel);
+        firstSystemDataList.setToolTipText("1. vonatkozási rendszerben meghatározott pontok");
+        firstSystemDataList.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        firstSystemDataList.setFont(plainFont);
+        secondSystemDataListModel = new DefaultListModel<>();
+        secondSystemDataList = new JList<>(secondSystemDataListModel);
+        secondSystemDataList.setToolTipText("2. vonatkozási rendszerbe transzformált pontok");
+        secondSystemDataList.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        secondSystemDataList.setFont(plainFont);
+        JButton calcPointBtn = new JButton("Számol");
+        calcPointBtn.setToolTipText("1. vonatkozási rendszer pontjainak " +
+                "transzformálása a 2. vonakozási rendszerbe");
+        calcPointBtn.setFont(boldFont);
+        calcPointBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JScrollPane employeeScrollPane = new JScrollPane(firstSystemDataList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        employeeScrollPane.setPreferredSize(new Dimension(260, 420));
+        leftPanel.add(employeeScrollPane);
+        transformDataPanel.add(leftPanel);
+        mediumPanel.add(calcPointBtn);
+        transformDataPanel.add(mediumPanel, BorderLayout.CENTER);
+        JScrollPane passengerScrollPane = new JScrollPane(secondSystemDataList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        passengerScrollPane.setPreferredSize(new Dimension(260, 420));
+        rightPanel.add(passengerScrollPane);
+        transformDataPanel.add(rightPanel);
     }
 }

@@ -3,6 +3,7 @@ package hu.david.giczi.mvmxpert.wrapper.controller;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
 import hu.david.giczi.mvmxpert.wrapper.service.Transformation;
+import hu.david.giczi.mvmxpert.wrapper.service.Transformation2D;
 import hu.david.giczi.mvmxpert.wrapper.service.Validation;
 import hu.david.giczi.mvmxpert.wrapper.view.InputDataFileWindow;
 import hu.david.giczi.mvmxpert.wrapper.view.ManuallyInputDataWindow;
@@ -410,4 +411,31 @@ public class KMLWrapperController {
                 "Fájl mentve az alábbi mappába:<br>" + FileProcess.FOLDER_PATH + "\\" + fileName,
                 INPUT_DATA_FILE_WINDOW.jFrame);
     }
+
+    public void calcParamsForTransformation2D(){
+   Transformation2D transformation2D = new Transformation2D(
+              TRANSFORMATION_2D_WINDOW.point11NumberField.getText(),
+              TRANSFORMATION_2D_WINDOW.point11YField.getText(),
+              TRANSFORMATION_2D_WINDOW.point11XField.getText(),
+              TRANSFORMATION_2D_WINDOW.point11ZField.getText(),
+              TRANSFORMATION_2D_WINDOW.point12NumberField.getText(),
+              TRANSFORMATION_2D_WINDOW.point12YField.getText(),
+              TRANSFORMATION_2D_WINDOW.point12XField.getText(),
+              TRANSFORMATION_2D_WINDOW.point12ZField.getText(),
+              TRANSFORMATION_2D_WINDOW.point21NumberField.getText(),
+              TRANSFORMATION_2D_WINDOW.point21YField.getText(),
+              TRANSFORMATION_2D_WINDOW.point21XField.getText(),
+              TRANSFORMATION_2D_WINDOW.point21ZField.getText(),
+              TRANSFORMATION_2D_WINDOW.point22NumberField.getText(),
+              TRANSFORMATION_2D_WINDOW.point22YField.getText(),
+              TRANSFORMATION_2D_WINDOW.point22XField.getText(),
+              TRANSFORMATION_2D_WINDOW.point22ZField.getText());
+
+   TRANSFORMATION_2D_WINDOW.deltaDistance1ParamField.setText(transformation2D.getDeltaDistanceXParam());
+   TRANSFORMATION_2D_WINDOW.deltaDistance2ParamField.setText(transformation2D.getDeltaDistanceYParam());
+   TRANSFORMATION_2D_WINDOW.rotationParamField.setText(transformation2D.getRotationParam());
+   TRANSFORMATION_2D_WINDOW.scaleParamField.setText(transformation2D.getScaleParam());
+   TRANSFORMATION_2D_WINDOW.deltaElevationField.setText(transformation2D.getDeltaElevation());
+    }
+
 }

@@ -31,6 +31,13 @@ public class Point {
     private Double h_WGS84;
     private DecimalFormat decimalFormat;
 
+    public Point(){};
+    public Point(String pointId, Double y_EOV, Double x_EOV, Double m_EOV) {
+        this.pointId = pointId;
+        this.y_EOV = y_EOV;
+        this.x_EOV = x_EOV;
+        M_EOV = m_EOV;
+    }
 
     public boolean isWGS() {
         return isWGS;
