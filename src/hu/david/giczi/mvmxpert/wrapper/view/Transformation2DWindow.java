@@ -73,7 +73,7 @@ public class Transformation2DWindow {
         addTransformDataPanel();
         jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         jFrame.setLayout(new BoxLayout(jFrame.getContentPane(), BoxLayout.Y_AXIS));
-        jFrame.setSize(1000, 870);
+        jFrame.setSize(1000, 850);
         jFrame.setLocationRelativeTo(null);
         jFrame.setResizable(false);
         jFrame.setVisible(true);
@@ -475,7 +475,7 @@ public class Transformation2DWindow {
                 "transzformálása a 2. vonatkozási rendszerbe");
         calcSecondSystemPointDataBtn.setFont(boldFont);
         calcSecondSystemPointDataBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        mediumPanel.add(Box.createVerticalStrut(450));
+        mediumPanel.add(Box.createVerticalStrut(440));
         mediumPanel.add(calcSecondSystemPointDataBtn);
         addInputDataAndSaveResultBtn = new JButton("Megnyitás");
         addInputDataAndSaveResultBtn.setToolTipText("1. vonatkozási rendszer pontjainak beolvasása");
