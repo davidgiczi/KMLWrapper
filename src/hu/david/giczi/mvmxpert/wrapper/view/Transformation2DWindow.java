@@ -40,7 +40,9 @@ public class Transformation2DWindow {
     public DefaultListModel<String> firstSystemDataListModel;
     public JList<String> secondSystemDataList;
     public DefaultListModel<String> secondSystemDataListModel;
-    private KMLWrapperController controller;
+    public JButton calcSecondSystemPointDataBtn;
+    public JButton addInputDataAndSaveResultBtn;
+    private final KMLWrapperController controller;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
     private final Color GREEN = new Color(193, 225, 193);
@@ -63,14 +65,15 @@ public class Transformation2DWindow {
                 KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame.setVisible(true);
             }
         });
+
         addLogo();
         addMenu();
         addInputDataOptionPanel();
         addTransformationParamsPanel();
         addTransformDataPanel();
         jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        jFrame.setLayout(new GridLayout(3, 1));
-        jFrame.setSize(1000, 750);
+        jFrame.setLayout(new BoxLayout(jFrame.getContentPane(), BoxLayout.Y_AXIS));
+        jFrame.setSize(1000, 870);
         jFrame.setLocationRelativeTo(null);
         jFrame.setResizable(false);
         jFrame.setVisible(true);
@@ -414,7 +417,7 @@ public class Transformation2DWindow {
         scaleParamField.setHorizontalAlignment(SwingConstants.CENTER);
         scaleParamField.setPreferredSize(new Dimension(100, 35));
         scaleParamField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        JLabel deltaElevationText = new JLabel("dM:");
+        JLabel deltaElevationText = new JLabel("dM2 - dM1:");
         deltaElevationText.setFont(boldFont);
         deltaElevationField = new JTextField();
         deltaElevationField.setToolTipText("Az 1. és  2. vonatkozási rendszerek magasságkülönbségeinek különbsége");
@@ -425,13 +428,15 @@ public class Transformation2DWindow {
         deltaElevationField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JLabel deltaElevationUnitText = new JLabel("m");
         deltaElevationUnitText.setFont(boldFont);
-        useElevationCheckBox = new JCheckBox("Magasság átvitele");
+        useElevationCheckBox = new JCheckBox("dM ráosztás");
+        useElevationCheckBox.setToolTipText("dM2 - dM1 különbség ráosztása a " +
+                "2. vonatkozási rendszer pontjainak magasságaira");
         useElevationCheckBox.setFont(boldFont);
         useElevationCheckBox.setBackground(GREEN);
         panel.add(Box.createHorizontalStrut(20));
         panel.add(scaleParamText);
         panel.add(scaleParamField);
-        panel.add(Box.createHorizontalStrut(167));
+        panel.add(Box.createHorizontalStrut(110));
         panel.add(deltaElevationText);
         panel.add(deltaElevationField);
         panel.add(deltaElevationUnitText);
@@ -441,16 +446,19 @@ public class Transformation2DWindow {
     }
     private void addTransformDataPanel(){
         transformDataPanel = new JPanel();
-        transformDataPanel.setLayout(new GridLayout(1, 3));
+        transformDataPanel.setBackground(GREEN);
         addSystemDataLists();
         jFrame.add(transformDataPanel);
     }
     private void addSystemDataLists() {
         JPanel rightPanel = new JPanel();
         rightPanel.setBackground(GREEN);
+        rightPanel.setPreferredSize(new Dimension(400, 600));
         JPanel mediumPanel = new JPanel();
+        mediumPanel.setPreferredSize(new Dimension(120, 600));
         mediumPanel.setBackground(GREEN);
         JPanel leftPanel = new JPanel();
+        leftPanel.setPreferredSize(new Dimension(400, 600));
         leftPanel.setBackground(GREEN);
         firstSystemDataListModel = new DefaultListModel<>();
         firstSystemDataList = new JList<>(firstSystemDataListModel);
@@ -462,22 +470,28 @@ public class Transformation2DWindow {
         secondSystemDataList.setToolTipText("2. vonatkozási rendszerbe transzformált pontok");
         secondSystemDataList.setCursor(new Cursor(Cursor.HAND_CURSOR));
         secondSystemDataList.setFont(plainFont);
-        JButton calcPointBtn = new JButton("Számol");
-        calcPointBtn.setToolTipText("1. vonatkozási rendszer pontjainak " +
-                "transzformálása a 2. vonakozási rendszerbe");
-        calcPointBtn.setFont(boldFont);
-        calcPointBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        JScrollPane employeeScrollPane = new JScrollPane(firstSystemDataList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+        calcSecondSystemPointDataBtn = new JButton("Számol");
+        calcSecondSystemPointDataBtn.setToolTipText("1. vonatkozási rendszer kijelölt pontjainak " +
+                "transzformálása a 2. vonatkozási rendszerbe");
+        calcSecondSystemPointDataBtn.setFont(boldFont);
+        calcSecondSystemPointDataBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        mediumPanel.add(Box.createVerticalStrut(450));
+        mediumPanel.add(calcSecondSystemPointDataBtn);
+        addInputDataAndSaveResultBtn = new JButton("Megnyitás");
+        addInputDataAndSaveResultBtn.setToolTipText("1. vonatkozási rendszer pontjainak beolvasása");
+        addInputDataAndSaveResultBtn.setFont(boldFont);
+        addInputDataAndSaveResultBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        mediumPanel.add(addInputDataAndSaveResultBtn);
+        JScrollPane firstSystemDataScrollPane = new JScrollPane(firstSystemDataList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        employeeScrollPane.setPreferredSize(new Dimension(260, 420));
-        leftPanel.add(employeeScrollPane);
+        firstSystemDataScrollPane.setPreferredSize(new Dimension(400, 450));
+        leftPanel.add(firstSystemDataScrollPane);
+        JScrollPane secondSystemScrollPane = new JScrollPane(secondSystemDataList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        secondSystemScrollPane.setPreferredSize(new Dimension(400, 450));
+        rightPanel.add(secondSystemScrollPane);
         transformDataPanel.add(leftPanel);
-        mediumPanel.add(calcPointBtn);
         transformDataPanel.add(mediumPanel, BorderLayout.CENTER);
-        JScrollPane passengerScrollPane = new JScrollPane(secondSystemDataList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        passengerScrollPane.setPreferredSize(new Dimension(260, 420));
-        rightPanel.add(passengerScrollPane);
         transformDataPanel.add(rightPanel);
     }
 }
