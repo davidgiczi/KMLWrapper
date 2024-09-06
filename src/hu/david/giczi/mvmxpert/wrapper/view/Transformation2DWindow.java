@@ -4,6 +4,8 @@ import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.PlainDocument;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -35,13 +37,14 @@ public class Transformation2DWindow {
     public JTextField rotationParamField;
     public JTextField scaleParamField;
     public JTextField deltaElevationField;
-    public JCheckBox useElevationCheckBox;
     public JList<String> firstSystemDataList;
     public DefaultListModel<String> firstSystemDataListModel;
     public JList<String> secondSystemDataList;
     public DefaultListModel<String> secondSystemDataListModel;
     public JButton calcSecondSystemPointDataBtn;
     public JButton addInputDataAndSaveResultBtn;
+    public JRadioButton firstSystemRadioBtn;
+    public JRadioButton secondSystemRadioBtn;
     private final KMLWrapperController controller;
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
@@ -420,7 +423,7 @@ public class Transformation2DWindow {
         JLabel deltaElevationText = new JLabel("dM2 - dM1:");
         deltaElevationText.setFont(boldFont);
         deltaElevationField = new JTextField();
-        deltaElevationField.setToolTipText("Az 1. és  2. vonatkozási rendszerek magasságkülönbségeinek különbsége");
+        deltaElevationField.setToolTipText("Az 1. és  2. vonatkozási rendszerek 1. és 2. pontjai magassákülönbségének különbsége");
         deltaElevationField.setFont(boldFont);
         deltaElevationField.setBackground(new Color(249, 249, 249));
         deltaElevationField.setHorizontalAlignment(SwingConstants.CENTER);
@@ -428,11 +431,22 @@ public class Transformation2DWindow {
         deltaElevationField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JLabel deltaElevationUnitText = new JLabel("m");
         deltaElevationUnitText.setFont(boldFont);
-        useElevationCheckBox = new JCheckBox("dM ráosztás");
-        useElevationCheckBox.setToolTipText("dM2 - dM1 különbség ráosztása a " +
-                "2. vonatkozási rendszer pontjainak magasságaira");
-        useElevationCheckBox.setFont(boldFont);
-        useElevationCheckBox.setBackground(GREEN);
+        firstSystemRadioBtn = new JRadioButton("1.r. Magasság");
+        firstSystemRadioBtn.setToolTipText("1. vonatkozási rendszerbeli pontok magasságát adja a " +
+                "2. vonatkozási rendszer pontjainak");
+        firstSystemRadioBtn.setBackground(GREEN);
+        firstSystemRadioBtn.setFont(boldFont);
+        firstSystemRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        secondSystemRadioBtn = new JRadioButton("2.r. Magasság");
+        secondSystemRadioBtn.setToolTipText("2. vonatkozási rendszerbeli 1. pont magasságához " +
+                "viszonyítva számítja a 2. vonatkozási rendszer pontjainak magasságát ");
+        secondSystemRadioBtn.setBackground(GREEN);
+        secondSystemRadioBtn.setFont(boldFont);
+        secondSystemRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        secondSystemRadioBtn.setSelected(true);
+        ButtonGroup group = new ButtonGroup();
+        group.add(firstSystemRadioBtn);
+        group.add(secondSystemRadioBtn);
         panel.add(Box.createHorizontalStrut(20));
         panel.add(scaleParamText);
         panel.add(scaleParamField);
@@ -440,8 +454,10 @@ public class Transformation2DWindow {
         panel.add(deltaElevationText);
         panel.add(deltaElevationField);
         panel.add(deltaElevationUnitText);
-        panel.add(Box.createHorizontalStrut(160));
-        panel.add(useElevationCheckBox);
+        panel.add(Box.createHorizontalStrut(70));
+        panel.add(firstSystemRadioBtn);
+        panel.add(Box.createHorizontalStrut(30));
+        panel.add(secondSystemRadioBtn);
         transformationDataPanel.add(panel);
     }
     private void addTransformDataPanel(){
