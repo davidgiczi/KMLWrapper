@@ -18,6 +18,7 @@ public class Transformation2D {
    private double deltaElevation;
    private DecimalFormat df;
    private List<Point> commonPointList;
+   private String delimiter;
 
 
    public Transformation2D(String point11Id, String point11Y, String point11X, String point11Z,
@@ -168,8 +169,8 @@ public class Transformation2D {
    }
 
    private void calcTransformation2DParams(){
-        deltaDistanceXParam = commonPointList.get(0).getY_EOV() - commonPointList.get(2).getX_EOV();
-        deltaDistanceYParam = commonPointList.get(0).getX_EOV() - commonPointList.get(2).getX_EOV();
+        deltaDistanceXParam = commonPointList.get(2).getY_EOV() - commonPointList.get(0).getX_EOV();
+        deltaDistanceYParam = commonPointList.get(2).getX_EOV() - commonPointList.get(0).getX_EOV();
         AzimuthAndDistance firstSystemData = new AzimuthAndDistance(commonPointList.get(0), commonPointList.get(1));
         AzimuthAndDistance secondSystemData = new AzimuthAndDistance(commonPointList.get(2), commonPointList.get(3));
         rotationParam = secondSystemData.calcAzimuth() - firstSystemData.calcAzimuth();
@@ -202,4 +203,166 @@ public class Transformation2D {
        df = new DecimalFormat("0.00");
         return df.format(deltaElevation).replace(",", ".");
     }
+
+    public void setDeltaDistanceXParam(String deltaDistanceX) throws InvalidPreferencesFormatException {
+       try{
+           this.deltaDistanceXParam = Double.parseDouble(deltaDistanceX.replace(",", "."));
+       }catch (NumberFormatException e){
+           throw new InvalidPreferencesFormatException("Az X eltolás értéke csak szám lehet.");
+       }
+    }
+
+    public void setDeltaDistanceYParam(String deltaDistanceY) throws InvalidPreferencesFormatException{
+        try{
+            this.deltaDistanceYParam = Double.parseDouble(deltaDistanceY.replace(",", "."));
+        }catch (NumberFormatException e){
+            throw new InvalidPreferencesFormatException("Az Y eltolás értéke csak szám lehet.");
+        }
+    }
+
+    public void setRotationParam(String rotation) throws InvalidPreferencesFormatException{
+            String[] rotationData = rotation.split("\\s+");
+            if( rotationData.length != 3 ){
+                throw new InvalidPreferencesFormatException("Az elforgatás formátuma hibás: " + rotationData[0]);
+            }
+            int angle;
+            try{
+                if( rotationData[0].contains("°") ){
+                    angle = Integer.parseInt(rotationData[0].substring(0, rotationData[0].indexOf("°")));
+                }
+                else{
+                    throw new NumberFormatException();
+                }
+                if( 0 > angle || angle > 359 ){
+                    throw new NumberFormatException();
+                }
+            }
+            catch (NumberFormatException e){
+                throw new InvalidPreferencesFormatException("Az elforgatás fok értéke hibás: " + rotationData[0]);
+            }
+        int sec;
+        try{
+            if( rotationData[1].contains("'") ){
+                sec = Integer.parseInt(rotationData[1].substring(0, rotationData[1].indexOf("'")));
+            }
+            else {
+                throw new NumberFormatException();
+            }
+
+            if( 0 > sec || sec > 59 ){
+                throw new NumberFormatException();
+            }
+        }
+        catch (NumberFormatException e){
+            throw new InvalidPreferencesFormatException("Az elforgatás perc értéke hibás: " + rotationData[1]);
+        }
+        double min;
+        try{
+            if( rotationData[2].contains("\"") ){
+                min = Double.parseDouble(rotationData[2]
+                        .substring(0, rotationData[2].indexOf("\"")).replace(",", "."));
+            }
+            else{
+                throw new NumberFormatException();
+            }
+            if( 0 > min || min > 59 ){
+                throw new NumberFormatException();
+            }
+        }
+        catch (NumberFormatException e){
+            throw new InvalidPreferencesFormatException("Az elforgatás másodperc értéke hibás: " + rotationData[2]);
+        }
+           this.rotationParam = Math.toRadians(angle + min / 60.0 + sec / 3600.0);
+    }
+
+    public void setScaleParam(String scale) throws InvalidPreferencesFormatException {
+        try{
+            this.scaleParam = Double.parseDouble(scale.replace(",", "."));
+        }catch (NumberFormatException e){
+            throw  new InvalidPreferencesFormatException("A méretarány értéke csak szám lehet.");
+        }
+    }
+
+    public void setDeltaElevation(String deltaElevation) throws InvalidPreferencesFormatException {
+        try{
+            this.deltaElevation = Double.parseDouble(deltaElevation.replace(",", "."));
+        }catch (NumberFormatException e){
+            throw  new InvalidPreferencesFormatException("A dM2-dM1 érték csak szám lehet.");
+        }
+    }
+
+    public String getDelimiter() {
+        return delimiter;
+    }
+
+    public void setDelimiter(String delimiter) {
+        if( " ".equals(delimiter) ){
+            delimiter = "\\s+";
+        }
+        this.delimiter = delimiter;
+    }
+
+    public List<Point> convertFirstSystemData(List<String> firstSystemData,
+                                              boolean is2ndSystem,
+                                              boolean isUsedCorrection)
+    throws InvalidPreferencesFormatException {
+       List<Point> convertedDataList = new ArrayList<>();
+        for (String inputRowData : firstSystemData) {
+            String[] rowData = inputRowData.split(delimiter);
+            if( 4 > rowData.length ){
+                continue;
+            }
+            double firstCoordinate;
+            try{
+                firstCoordinate = Double.parseDouble(rowData[1].replace(",", "."));
+            }catch (NumberFormatException n){
+                throw new InvalidPreferencesFormatException("Az 1. vonatkozási rendszer 1. koordinátája csak szám lehet.");
+            }
+            double secondCoordinate;
+            try{
+                secondCoordinate = Double.parseDouble(rowData[2].replace(",", "."));
+            }catch (NumberFormatException n){
+                throw new InvalidPreferencesFormatException("Az 1. vonatkozási rendszer 2. koordinátája csak szám lehet.");
+            }
+            double elevation;
+            try{
+                elevation = Double.parseDouble(rowData[3].replace(",", "."));
+            }catch (NumberFormatException n){
+                throw new InvalidPreferencesFormatException("Az 1. vonatkozási rendszer magassága csak szám lehet.");
+            }
+            convertedDataList.add(convertFirstSystemPointData(rowData[0], firstCoordinate,
+                    secondCoordinate, elevation, is2ndSystem, isUsedCorrection));
+        }
+
+       return convertedDataList;
+    }
+
+    private Point convertFirstSystemPointData(String pointId, double firstCoordinate,
+                                              double secondCoordinate, double elevationData,
+                                              boolean is2ndSystem,
+                                              boolean isUsedCorrection) {
+       Point point = new Point();
+       point.setPointId(pointId);
+       point.setY_EOV(deltaDistanceXParam +  scaleParam * (firstCoordinate * Math.cos(rotationParam) -
+               secondCoordinate * Math.sin(rotationParam)));
+        point.setX_EOV(deltaDistanceYParam + scaleParam * (firstCoordinate * Math.sin(rotationParam) +
+                secondCoordinate * Math.cos(rotationParam)));
+        if( is2ndSystem && isUsedCorrection ){
+            point.setM_EOV(commonPointList.get(2).getM_EOV() +
+                    elevationData - commonPointList.get(0).getM_EOV() + deltaElevation);
+        }
+        else if( !is2ndSystem && isUsedCorrection ){
+            point.setM_EOV(elevationData + deltaElevation);
+        }
+        else if( !is2ndSystem ){
+            point.setM_EOV(elevationData);
+        }
+        else {
+            point.setM_EOV(commonPointList.get(2).getM_EOV() + elevationData - commonPointList.get(0).getM_EOV());
+        }
+
+       return point;
+    }
+
+
 }

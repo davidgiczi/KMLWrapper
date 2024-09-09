@@ -1,12 +1,13 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.PlainDocument;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -32,8 +33,8 @@ public class Transformation2DWindow {
     public JTextField point22YField;
     public JTextField point22XField;
     public JTextField point22ZField;
-    public JTextField deltaDistance1ParamField;
-    public JTextField deltaDistance2ParamField;
+    public JTextField deltaDistanceXParamField;
+    public JTextField deltaDistanceYParamField;
     public JTextField rotationParamField;
     public JTextField scaleParamField;
     public JTextField deltaElevationField;
@@ -41,12 +42,13 @@ public class Transformation2DWindow {
     public DefaultListModel<String> firstSystemDataListModel;
     public JList<String> secondSystemDataList;
     public DefaultListModel<String> secondSystemDataListModel;
-    public JButton calcSecondSystemPointDataBtn;
-    public JButton addInputDataAndSaveResultBtn;
+    public JButton openFirstSystemPointDataBtn;
+    public JButton saveSecondSystemPointDataBtn;
     public JRadioButton firstSystemRadioBtn;
     public JRadioButton secondSystemRadioBtn;
+    public JRadioButton deltaElevationRadioBtn;
     private final KMLWrapperController controller;
-    private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
+    private final Font boldFont = new Font("Roboto",Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
     private final Color GREEN = new Color(193, 225, 193);
     private final Image iconImage = Toolkit.getDefaultToolkit()
@@ -76,7 +78,7 @@ public class Transformation2DWindow {
         addTransformDataPanel();
         jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         jFrame.setLayout(new BoxLayout(jFrame.getContentPane(), BoxLayout.Y_AXIS));
-        jFrame.setSize(1000, 850);
+        jFrame.setSize(1000, 860);
         jFrame.setLocationRelativeTo(null);
         jFrame.setResizable(false);
         jFrame.setVisible(true);
@@ -365,22 +367,22 @@ public class Transformation2DWindow {
         panel.setBackground(GREEN);
         JLabel deltaDistance1ParamText = new JLabel("X eltolás:");
         deltaDistance1ParamText.setFont(boldFont);
-        deltaDistance1ParamField = new JTextField();
-        deltaDistance1ParamField.setToolTipText("A 1-2. vonatkozási rendszerek origóinak X irányú távolsága");
-        deltaDistance1ParamField.setFont(boldFont);
-        deltaDistance1ParamField.setBackground(new Color(249, 249, 249));
-        deltaDistance1ParamField.setHorizontalAlignment(SwingConstants.CENTER);
-        deltaDistance1ParamField.setPreferredSize(new Dimension(100, 35));
-        deltaDistance1ParamField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        deltaDistanceXParamField = new JTextField();
+        deltaDistanceXParamField.setToolTipText("A 1-2. vonatkozási rendszerek origóinak X irányú távolsága");
+        deltaDistanceXParamField.setFont(boldFont);
+        deltaDistanceXParamField.setBackground(new Color(249, 249, 249));
+        deltaDistanceXParamField.setHorizontalAlignment(SwingConstants.CENTER);
+        deltaDistanceXParamField.setPreferredSize(new Dimension(100, 35));
+        deltaDistanceXParamField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JLabel deltaDistance2ParamText = new JLabel("Y eltolás:");
         deltaDistance2ParamText.setFont(boldFont);
-        deltaDistance2ParamField = new JTextField();
-        deltaDistance2ParamField.setToolTipText("A 1-2. vonatkozási rendszerek origóinak Y irányú távolsága");
-        deltaDistance2ParamField.setFont(boldFont);
-        deltaDistance2ParamField.setBackground(new Color(249, 249, 249));
-        deltaDistance2ParamField.setHorizontalAlignment(SwingConstants.CENTER);
-        deltaDistance2ParamField.setPreferredSize(new Dimension(100, 35));
-        deltaDistance2ParamField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        deltaDistanceYParamField = new JTextField();
+        deltaDistanceYParamField.setToolTipText("A 1-2. vonatkozási rendszerek origóinak Y irányú távolsága");
+        deltaDistanceYParamField.setFont(boldFont);
+        deltaDistanceYParamField.setBackground(new Color(249, 249, 249));
+        deltaDistanceYParamField.setHorizontalAlignment(SwingConstants.CENTER);
+        deltaDistanceYParamField.setPreferredSize(new Dimension(100, 35));
+        deltaDistanceYParamField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JLabel deltaDistance1UnitText = new JLabel("m");
         deltaDistance1UnitText.setFont(boldFont);
         JLabel deltaDistance2UnitText = new JLabel("m");
@@ -395,12 +397,12 @@ public class Transformation2DWindow {
         rotationParamField.setPreferredSize(new Dimension(200, 35));
         rotationParamField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(deltaDistance1ParamText);
-        panel.add(deltaDistance1ParamField);
+        panel.add(deltaDistanceXParamField);
         panel.add(deltaDistance1UnitText);
         panel.add(Box.createHorizontalStrut(90));
         panel.add(deltaDistance2ParamText);
         panel.add(Box.createHorizontalStrut(10));
-        panel.add(deltaDistance2ParamField);
+        panel.add(deltaDistanceYParamField);
         panel.add(deltaDistance2UnitText);
         panel.add(Box.createHorizontalStrut(70));
         panel.add(rotationParamText);
@@ -431,13 +433,13 @@ public class Transformation2DWindow {
         deltaElevationField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JLabel deltaElevationUnitText = new JLabel("m");
         deltaElevationUnitText.setFont(boldFont);
-        firstSystemRadioBtn = new JRadioButton("1.r. Magasság");
+        firstSystemRadioBtn = new JRadioButton("1.r. Mag.");
         firstSystemRadioBtn.setToolTipText("1. vonatkozási rendszerbeli pontok magasságát adja a " +
                 "2. vonatkozási rendszer pontjainak");
         firstSystemRadioBtn.setBackground(GREEN);
         firstSystemRadioBtn.setFont(boldFont);
         firstSystemRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        secondSystemRadioBtn = new JRadioButton("2.r. Magasság");
+        secondSystemRadioBtn = new JRadioButton("2.r. Mag.");
         secondSystemRadioBtn.setToolTipText("2. vonatkozási rendszerbeli 1. pont magasságához " +
                 "viszonyítva számítja a 2. vonatkozási rendszer pontjainak magasságát ");
         secondSystemRadioBtn.setBackground(GREEN);
@@ -447,6 +449,12 @@ public class Transformation2DWindow {
         ButtonGroup group = new ButtonGroup();
         group.add(firstSystemRadioBtn);
         group.add(secondSystemRadioBtn);
+        deltaElevationRadioBtn = new JRadioButton("dM javítás");
+        deltaElevationRadioBtn.setToolTipText("Adott értékkel javítja az 1. vonatkozási rendszer " +
+                "vagy a 2. vonatkozási rendszer pontjainak magasságát");
+        deltaElevationRadioBtn.setFont(boldFont);
+        deltaElevationRadioBtn.setBackground(GREEN);
+        deltaElevationRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(Box.createHorizontalStrut(20));
         panel.add(scaleParamText);
         panel.add(scaleParamField);
@@ -456,8 +464,10 @@ public class Transformation2DWindow {
         panel.add(deltaElevationUnitText);
         panel.add(Box.createHorizontalStrut(70));
         panel.add(firstSystemRadioBtn);
-        panel.add(Box.createHorizontalStrut(30));
+        panel.add(Box.createHorizontalStrut(10));
         panel.add(secondSystemRadioBtn);
+        panel.add(Box.createHorizontalStrut(10));
+        panel.add(deltaElevationRadioBtn);
         transformationDataPanel.add(panel);
     }
     private void addTransformDataPanel(){
@@ -471,13 +481,25 @@ public class Transformation2DWindow {
         rightPanel.setBackground(GREEN);
         rightPanel.setPreferredSize(new Dimension(400, 600));
         JPanel mediumPanel = new JPanel();
-        mediumPanel.setPreferredSize(new Dimension(120, 600));
+        mediumPanel.setLayout(new BoxLayout(mediumPanel, BoxLayout.Y_AXIS));
+        mediumPanel.setPreferredSize(new Dimension(100, 600));
         mediumPanel.setBackground(GREEN);
         JPanel leftPanel = new JPanel();
         leftPanel.setPreferredSize(new Dimension(400, 600));
         leftPanel.setBackground(GREEN);
         firstSystemDataListModel = new DefaultListModel<>();
         firstSystemDataList = new JList<>(firstSystemDataListModel);
+        firstSystemDataList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                if( SwingUtilities.isRightMouseButton(e) ){
+                    controller.transformFirstSystemData();
+                }
+
+                super.mouseClicked(e);
+            }
+        });
         firstSystemDataList.setToolTipText("1. vonatkozási rendszerben meghatározott pontok");
         firstSystemDataList.setCursor(new Cursor(Cursor.HAND_CURSOR));
         firstSystemDataList.setFont(plainFont);
@@ -486,26 +508,44 @@ public class Transformation2DWindow {
         secondSystemDataList.setToolTipText("2. vonatkozási rendszerbe transzformált pontok");
         secondSystemDataList.setCursor(new Cursor(Cursor.HAND_CURSOR));
         secondSystemDataList.setFont(plainFont);
-        calcSecondSystemPointDataBtn = new JButton("Számol");
-        calcSecondSystemPointDataBtn.setToolTipText("1. vonatkozási rendszer kijelölt pontjainak " +
-                "transzformálása a 2. vonatkozási rendszerbe");
-        calcSecondSystemPointDataBtn.setFont(boldFont);
-        calcSecondSystemPointDataBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        mediumPanel.add(Box.createVerticalStrut(440));
-        mediumPanel.add(calcSecondSystemPointDataBtn);
-        addInputDataAndSaveResultBtn = new JButton("Megnyitás");
-        addInputDataAndSaveResultBtn.setToolTipText("1. vonatkozási rendszer pontjainak beolvasása");
-        addInputDataAndSaveResultBtn.setFont(boldFont);
-        addInputDataAndSaveResultBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        mediumPanel.add(addInputDataAndSaveResultBtn);
+        openFirstSystemPointDataBtn = new JButton("Beolvas");
+        openFirstSystemPointDataBtn.setToolTipText("1. vonatkozási rendszer pontjainak beolvasása");
+        openFirstSystemPointDataBtn.setFont(boldFont);
+        openFirstSystemPointDataBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        openFirstSystemPointDataBtn.addActionListener(e -> {
+            controller.fileProcess.openInputDataFile();
+            if( FileProcess.FILE_NAME == null ){
+                return;
+            }
+            for (String inputData : FileProcess.INPUT_DATA_LIST) {
+                firstSystemDataListModel.addElement(inputData);
+            }
+        });
+        mediumPanel.add(Box.createVerticalStrut(5));
+        mediumPanel.add(openFirstSystemPointDataBtn);
+        saveSecondSystemPointDataBtn = new JButton("Mentés");
+        saveSecondSystemPointDataBtn.setToolTipText("2. vonatkozási rendszer pontjainak mentése");
+        saveSecondSystemPointDataBtn.setFont(boldFont);
+        saveSecondSystemPointDataBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        mediumPanel.add(Box.createVerticalStrut(380));
+        mediumPanel.add(saveSecondSystemPointDataBtn);
         JScrollPane firstSystemDataScrollPane = new JScrollPane(firstSystemDataList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         firstSystemDataScrollPane.setPreferredSize(new Dimension(400, 450));
         leftPanel.add(firstSystemDataScrollPane);
+        JButton deleteFirstSystemDataBtn = new JButton("Törlés");
+        deleteFirstSystemDataBtn.setToolTipText("1. vonatkozási rendszer adatainak törlése");
+        deleteFirstSystemDataBtn.setFont(boldFont);
+        deleteFirstSystemDataBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        leftPanel.add(deleteFirstSystemDataBtn);
         JScrollPane secondSystemScrollPane = new JScrollPane(secondSystemDataList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         secondSystemScrollPane.setPreferredSize(new Dimension(400, 450));
         rightPanel.add(secondSystemScrollPane);
+        JButton deleteSecondSystemDataBtn = new JButton("Törlés");
+        deleteSecondSystemDataBtn.setToolTipText("2. vonatkozási rendszer adatainak törlése");
+        deleteSecondSystemDataBtn.setFont(boldFont);
+        rightPanel.add(deleteSecondSystemDataBtn);
         transformDataPanel.add(leftPanel);
         transformDataPanel.add(mediumPanel, BorderLayout.CENTER);
         transformDataPanel.add(rightPanel);

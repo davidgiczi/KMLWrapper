@@ -20,4 +20,12 @@ public class MessagePane {
         return JOptionPane.showOptionDialog(frame, messageLabel, titleLabel.getText(),
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]) ;
     }
+
+    public static String getInputDataMessage(JFrame jFrame, String initData){
+        JLabel messageLabel = new JLabel("Elválasztó karakter:");
+        messageLabel.setFont(boldFont);
+                JLabel titleLabel = new JLabel("Elválasztó hozzáadása");
+        return (String) JOptionPane.showInputDialog(jFrame, messageLabel, titleLabel.getText(),
+                JOptionPane.QUESTION_MESSAGE, null, null, initData);
+    }
 }

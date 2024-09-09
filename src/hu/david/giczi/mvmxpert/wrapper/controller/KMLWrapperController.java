@@ -28,6 +28,7 @@ public class KMLWrapperController {
     public FileProcess fileProcess;
     public static List<Point> REFERENCE_POINTS;
     public static List<Point> INPUT_POINTS;
+    public Transformation2D transformation2D;
 
 
     public KMLWrapperController() {
@@ -413,7 +414,7 @@ public class KMLWrapperController {
     }
 
     public void calcParamsForTransformation2D(){
-   Transformation2D transformation2D = new Transformation2D(
+              transformation2D = new Transformation2D(
               TRANSFORMATION_2D_WINDOW.point11NumberField.getText(),
               TRANSFORMATION_2D_WINDOW.point11YField.getText(),
               TRANSFORMATION_2D_WINDOW.point11XField.getText(),
@@ -431,11 +432,74 @@ public class KMLWrapperController {
               TRANSFORMATION_2D_WINDOW.point22XField.getText(),
               TRANSFORMATION_2D_WINDOW.point22ZField.getText());
 
-   TRANSFORMATION_2D_WINDOW.deltaDistance1ParamField.setText(transformation2D.getDeltaDistanceXParam());
-   TRANSFORMATION_2D_WINDOW.deltaDistance2ParamField.setText(transformation2D.getDeltaDistanceYParam());
+   TRANSFORMATION_2D_WINDOW.deltaDistanceXParamField.setText(transformation2D.getDeltaDistanceXParam());
+   TRANSFORMATION_2D_WINDOW.deltaDistanceYParamField.setText(transformation2D.getDeltaDistanceYParam());
    TRANSFORMATION_2D_WINDOW.rotationParamField.setText(transformation2D.getRotationParam());
    TRANSFORMATION_2D_WINDOW.scaleParamField.setText(transformation2D.getScaleParam());
    TRANSFORMATION_2D_WINDOW.deltaElevationField.setText(transformation2D.getDeltaElevation());
+    }
+
+    public void transformFirstSystemData(){
+        if( transformation2D == null ){
+            return;
+        }
+        try {
+            transformation2D.setDeltaDistanceXParam(TRANSFORMATION_2D_WINDOW.deltaDistanceXParamField.getText());
+        } catch (InvalidPreferencesFormatException ex) {
+            MessagePane.getInfoMessage("Hibás X eltolás paraméter", ex.getMessage(), TRANSFORMATION_2D_WINDOW.jFrame);
+            return;
+        }
+        try {
+            transformation2D.setDeltaDistanceYParam(TRANSFORMATION_2D_WINDOW.deltaDistanceYParamField.getText());
+        } catch (InvalidPreferencesFormatException ex) {
+            MessagePane.getInfoMessage("Hibás Y eltolás paraméter", ex.getMessage(), TRANSFORMATION_2D_WINDOW.jFrame);
+            return;
+        }
+        try {
+            transformation2D.setRotationParam(TRANSFORMATION_2D_WINDOW.rotationParamField.getText());
+        } catch (InvalidPreferencesFormatException ex) {
+            MessagePane.getInfoMessage("Hibás elforgatás paraméter", ex.getMessage(), TRANSFORMATION_2D_WINDOW.jFrame);
+            return;
+        }
+        try {
+            transformation2D.setScaleParam(TRANSFORMATION_2D_WINDOW.scaleParamField.getText());
+        } catch (InvalidPreferencesFormatException ex) {
+            MessagePane.getInfoMessage("Hibás méretarány paraméter", ex.getMessage(), TRANSFORMATION_2D_WINDOW.jFrame);
+            return;
+        }
+        try {
+            transformation2D.setDeltaElevation(TRANSFORMATION_2D_WINDOW.deltaElevationField.getText());
+        } catch (InvalidPreferencesFormatException ex) {
+            MessagePane.getInfoMessage("Hibás dM2-dM1 paraméter", ex.getMessage(), TRANSFORMATION_2D_WINDOW.jFrame);
+            return;
+        }
+        String delimiter = MessagePane.getInputDataMessage(TRANSFORMATION_2D_WINDOW.jFrame,
+                transformation2D.getDelimiter());
+        transformation2D.setDelimiter(delimiter);
+        if( transformation2D.getDelimiter() == null ){
+            return;
+        }
+        List<String> selectedValues = TRANSFORMATION_2D_WINDOW.firstSystemDataList.getSelectedValuesList();
+        List<Point> secondSystemData;
+          try{
+           secondSystemData = transformation2D.convertFirstSystemData(selectedValues,
+                      TRANSFORMATION_2D_WINDOW.secondSystemRadioBtn.isSelected(),
+                      TRANSFORMATION_2D_WINDOW.deltaElevationRadioBtn.isSelected());
+          }
+           catch (InvalidPreferencesFormatException e){
+               MessagePane.getInfoMessage("Hibás bemeneti pont adat", e.getMessage(), TRANSFORMATION_2D_WINDOW.jFrame);
+              return;
+          }
+
+        if( !secondSystemData.isEmpty() ){
+            for (Point secondSystemPoint : secondSystemData) {
+                TRANSFORMATION_2D_WINDOW.secondSystemDataListModel.
+                        addElement(secondSystemPoint.getPointId() + transformation2D.getDelimiter() +
+                                secondSystemPoint.getFormattedYForEOV() + transformation2D.getDelimiter() +
+                                secondSystemPoint.getFormattedXForEOV() + transformation2D.getDelimiter() +
+                                secondSystemPoint.getFormattedMForEOV());
+            }
+        }
     }
 
 }
