@@ -7,6 +7,7 @@ import hu.david.giczi.mvmxpert.wrapper.view.MessagePane;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.prefs.InvalidPreferencesFormatException;
 
 public class Transformation2D {
@@ -18,7 +19,7 @@ public class Transformation2D {
    private double deltaElevation;
    private DecimalFormat df;
    private List<Point> commonPointList;
-   private String delimiter;
+
 
 
    public Transformation2D(String point11Id, String point11Y, String point11X, String point11Z,
@@ -63,6 +64,9 @@ public class Transformation2D {
 
        double firstSystemPoint1Z;
        try{
+           if( point11Z.isEmpty() ){
+               point11Z = "0";
+           }
            firstSystemPoint1Z =  Double.parseDouble(point11Z.trim().replace(",", "."));
        }
        catch (NumberFormatException e){
@@ -88,6 +92,9 @@ public class Transformation2D {
        }
        double firstSystemPoint2Z;
        try{
+           if( point12Z.isEmpty() ){
+               point12Z = "0";
+           }
            firstSystemPoint2Z =  Double.parseDouble(point12Z.trim().replace(",", "."));
        }
        catch (NumberFormatException e){
@@ -114,6 +121,10 @@ public class Transformation2D {
 
        double secondSystemPoint1Z;
        try{
+
+           if( point21Z.isEmpty() ){
+               point21Z = "0";
+           }
            secondSystemPoint1Z =  Double.parseDouble(point21Z.trim().replace(",", "."));
        }
        catch (NumberFormatException e){
@@ -139,6 +150,10 @@ public class Transformation2D {
 
        double secondSystemPoint2Z;
        try{
+
+           if( point22Z.isEmpty() ){
+               point22Z = "0";
+           }
            secondSystemPoint2Z =  Double.parseDouble(point22Z.trim().replace(",", "."));
        }
        catch (NumberFormatException e){
@@ -150,7 +165,6 @@ public class Transformation2D {
                        point12Id, firstSystemPoint2Y, firstSystemPoint2X, firstSystemPoint2Z,
                        point21Id, secondSystemPoint1Y, secondSystemPoint1X, secondSystemPoint1Z,
                        point22Id, secondSystemPoint2Y, secondSystemPoint2X, secondSystemPoint2Z);
-
    }
 
    private void addCommonPoints(String point11Id, double point11Y, double point11X, double point11Z,
@@ -169,7 +183,7 @@ public class Transformation2D {
    }
 
    private void calcTransformation2DParams(){
-        deltaDistanceXParam = commonPointList.get(2).getY_EOV() - commonPointList.get(0).getX_EOV();
+        deltaDistanceXParam = commonPointList.get(2).getY_EOV() - commonPointList.get(0).getY_EOV();
         deltaDistanceYParam = commonPointList.get(2).getX_EOV() - commonPointList.get(0).getX_EOV();
         AzimuthAndDistance firstSystemData = new AzimuthAndDistance(commonPointList.get(0), commonPointList.get(1));
         AzimuthAndDistance secondSystemData = new AzimuthAndDistance(commonPointList.get(2), commonPointList.get(3));
@@ -291,16 +305,7 @@ public class Transformation2D {
         }
     }
 
-    public String getDelimiter() {
-        return delimiter;
-    }
 
-    public void setDelimiter(String delimiter) {
-        if( " ".equals(delimiter) ){
-            delimiter = "\\s+";
-        }
-        this.delimiter = delimiter;
-    }
 
     public List<Point> convertFirstSystemData(List<String> firstSystemData,
                                               boolean is2ndSystem,
@@ -308,8 +313,13 @@ public class Transformation2D {
     throws InvalidPreferencesFormatException {
        List<Point> convertedDataList = new ArrayList<>();
         for (String inputRowData : firstSystemData) {
-            String[] rowData = inputRowData.split(delimiter);
+            String[] rowData = inputRowData.split(Objects.requireNonNull(KMLWrapperController.DELIMITER));
             if( 4 > rowData.length ){
+                String delimiter = MessagePane
+                        .getInputDataMessage(KMLWrapperController.TRANSFORMATION_2D_WINDOW.jFrame, null);
+                KMLWrapperController.setDelimiter(delimiter);
+            }
+            if( KMLWrapperController.DELIMITER == null ){
                 continue;
             }
             double firstCoordinate;

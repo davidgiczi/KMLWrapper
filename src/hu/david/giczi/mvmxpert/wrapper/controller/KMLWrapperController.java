@@ -29,6 +29,7 @@ public class KMLWrapperController {
     public static List<Point> REFERENCE_POINTS;
     public static List<Point> INPUT_POINTS;
     public Transformation2D transformation2D;
+    public static String DELIMITER;
 
 
     public KMLWrapperController() {
@@ -36,6 +37,13 @@ public class KMLWrapperController {
         INPUT_DATA_FILE_WINDOW = new InputDataFileWindow(this);
         INPUT_POINTS = new ArrayList<>();
         FileProcess.getReferencePoints();
+    }
+
+    public static void setDelimiter(String delimiter) {
+        if( " ".equals(delimiter)){
+            delimiter = "\\s+";
+        }
+        KMLWrapperController.DELIMITER = delimiter;
     }
 
     public void transformationInputPointData() {
@@ -473,10 +481,8 @@ public class KMLWrapperController {
             MessagePane.getInfoMessage("Hibás dM2-dM1 paraméter", ex.getMessage(), TRANSFORMATION_2D_WINDOW.jFrame);
             return;
         }
-        String delimiter = MessagePane.getInputDataMessage(TRANSFORMATION_2D_WINDOW.jFrame,
-                transformation2D.getDelimiter());
-        transformation2D.setDelimiter(delimiter);
-        if( transformation2D.getDelimiter() == null ){
+
+        if( DELIMITER == null ){
             return;
         }
         List<String> selectedValues = TRANSFORMATION_2D_WINDOW.firstSystemDataList.getSelectedValuesList();
@@ -494,9 +500,9 @@ public class KMLWrapperController {
         if( !secondSystemData.isEmpty() ){
             for (Point secondSystemPoint : secondSystemData) {
                 TRANSFORMATION_2D_WINDOW.secondSystemDataListModel.
-                        addElement(secondSystemPoint.getPointId() + transformation2D.getDelimiter() +
-                                secondSystemPoint.getFormattedYForEOV() + transformation2D.getDelimiter() +
-                                secondSystemPoint.getFormattedXForEOV() + transformation2D.getDelimiter() +
+                        addElement(secondSystemPoint.getPointId() + DELIMITER +
+                                secondSystemPoint.getFormattedYForEOV() + DELIMITER +
+                                secondSystemPoint.getFormattedXForEOV() + DELIMITER +
                                 secondSystemPoint.getFormattedMForEOV());
             }
         }

@@ -174,7 +174,6 @@ public class Transformation2DWindow {
         point11ZField.setHorizontalAlignment(SwingConstants.CENTER);
         point11ZField.setPreferredSize(new Dimension(80, 35));
         point11ZField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        point11ZField.setText("0");
         JButton exchangeBtn =
                 new JButton(new ImageIcon(iconImage.getScaledInstance(35, 30, Image.SCALE_DEFAULT)));
         exchangeBtn.addActionListener(e -> {
@@ -212,7 +211,6 @@ public class Transformation2DWindow {
         point21ZField.setHorizontalAlignment(SwingConstants.CENTER);
         point21ZField.setPreferredSize(new Dimension(80, 35));
         point21ZField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        point21ZField.setText("0");
         panel.add(point11Label);
         panel.add(point11NumberField);
         panel.add(point11YField);
@@ -262,7 +260,6 @@ public class Transformation2DWindow {
         point12ZField.setHorizontalAlignment(SwingConstants.CENTER);
         point12ZField.setPreferredSize(new Dimension(80, 35));
         point12ZField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        point12ZField.setText("0");
         JLabel point22Label = new JLabel("2. pont");
         point22Label.setFont(boldFont);
         point22NumberField = new JTextField();
@@ -293,7 +290,6 @@ public class Transformation2DWindow {
         point22ZField.setHorizontalAlignment(SwingConstants.CENTER);
         point22ZField.setPreferredSize(new Dimension(80, 35));
         point22ZField.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        point22ZField.setText("0");
         panel.add(point21Label);
         panel.add(point12NumberField);
         panel.add(point12YField);
@@ -517,7 +513,10 @@ public class Transformation2DWindow {
             if( FileProcess.FILE_NAME == null ){
                 return;
             }
+            String delimiter = MessagePane.getInputDataMessage(jFrame, null);
+            KMLWrapperController.setDelimiter(delimiter);
             for (String inputData : FileProcess.INPUT_DATA_LIST) {
+                setCommonPointDataById(inputData);
                 firstSystemDataListModel.addElement(inputData);
             }
         });
@@ -549,5 +548,35 @@ public class Transformation2DWindow {
         transformDataPanel.add(leftPanel);
         transformDataPanel.add(mediumPanel, BorderLayout.CENTER);
         transformDataPanel.add(rightPanel);
+    }
+
+    private void setCommonPointDataById(String inputData){
+        if( KMLWrapperController.DELIMITER == null ){
+            return;
+        }
+        String[] pointData = inputData.split(KMLWrapperController.DELIMITER);
+        if( 4 > pointData.length ){
+            return;
+        }
+        if( pointData[0].equals(point11NumberField.getText()) ){
+                point11XField.setText(pointData[1]);
+                point11YField.setText(pointData[2]);
+                point11ZField.setText(pointData[3]);
+        }
+        else if( pointData[0].equals(point12NumberField.getText()) ){
+                point12XField.setText(pointData[1]);
+                point12YField.setText(pointData[2]);
+                point12ZField.setText(pointData[3]);
+        }
+        else if( pointData[0].equals(point21NumberField.getText()) ){
+                point21XField.setText(pointData[1]);
+                point21YField.setText(pointData[2]);
+                point21ZField.setText(pointData[3]);
+        }
+        else if( pointData[0].equals(point22NumberField.getText()) ){
+                point22XField.setText(pointData[1]);
+                point22YField.setText(pointData[2]);
+                point22ZField.setText(pointData[3]);
+        }
     }
 }
