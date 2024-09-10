@@ -511,6 +511,7 @@ public class Transformation2DWindow {
             if( FileProcess.FILE_NAME == null ){
                 return;
             }
+            jFrame.setTitle(FileProcess.FILE_NAME);
             String delimiter = MessagePane.getInputDataMessage(jFrame, null);
             KMLWrapperController.setDelimiter(delimiter);
             for (String inputData : FileProcess.INPUT_DATA_LIST) {
@@ -532,6 +533,10 @@ public class Transformation2DWindow {
         leftPanel.add(firstSystemDataScrollPane);
         JButton deleteFirstSystemDataBtn = new JButton("Törlés");
         deleteFirstSystemDataBtn.addActionListener(e -> {
+        if( MessagePane.getYesNoOptionMessage("Beolvasott adatok törlése",
+                    "Biztos, hogy törlöd a kijelölt vagy az összes adatot?", jFrame) == 1 ){
+                return;
+            }
                 List<String> selectedItems = firstSystemDataList.getSelectedValuesList();
                 if( selectedItems.isEmpty() ){
                     firstSystemDataListModel.removeAllElements();
@@ -540,6 +545,9 @@ public class Transformation2DWindow {
                     for (String selectedItem : selectedItems) {
                         firstSystemDataListModel.removeElement(selectedItem);
                     }
+                }
+                if( firstSystemDataListModel.isEmpty() ){
+                    jFrame.setTitle("2D transzformáció");
                 }
         });
         deleteFirstSystemDataBtn.setToolTipText("1. vonatkozási rendszer kijelölt vagy összes adatainak törlése");
@@ -552,6 +560,10 @@ public class Transformation2DWindow {
         rightPanel.add(secondSystemScrollPane);
         JButton deleteSecondSystemDataBtn = new JButton("Törlés");
         deleteSecondSystemDataBtn.addActionListener(e -> {
+            if( MessagePane.getYesNoOptionMessage("Számított adatok törlése",
+                    "Biztos, hogy törlöd a kijelölt vagy az összes adatot?", jFrame) == 1 ){
+                return;
+            }
             List<String> selectedItems = secondSystemDataList.getSelectedValuesList();
             if( selectedItems.isEmpty() ){
                 secondSystemDataListModel.removeAllElements();

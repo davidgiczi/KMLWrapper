@@ -439,7 +439,6 @@ public class KMLWrapperController {
               TRANSFORMATION_2D_WINDOW.point22YField.getText(),
               TRANSFORMATION_2D_WINDOW.point22XField.getText(),
               TRANSFORMATION_2D_WINDOW.point22ZField.getText());
-
    TRANSFORMATION_2D_WINDOW.deltaDistanceXParamField.setText(transformation2D.getDeltaDistanceXParam());
    TRANSFORMATION_2D_WINDOW.deltaDistanceYParamField.setText(transformation2D.getDeltaDistanceYParam());
    TRANSFORMATION_2D_WINDOW.rotationParamField.setText(transformation2D.getRotationParam());
@@ -482,12 +481,11 @@ public class KMLWrapperController {
             return;
         }
         if( DELIMITER == null ){
-            String delimiter = MessagePane
-                    .getInputDataMessage(KMLWrapperController.TRANSFORMATION_2D_WINDOW.jFrame, null);
-            KMLWrapperController.setDelimiter(delimiter);
-        }
-        if( DELIMITER == null ){
-            return;
+            DELIMITER = MessagePane
+                      .getInputDataMessage(KMLWrapperController.TRANSFORMATION_2D_WINDOW.jFrame, null);
+            if( DELIMITER == null ){
+                return;
+            }
         }
         List<String> selectedValues = TRANSFORMATION_2D_WINDOW.firstSystemDataList.getSelectedValuesList();
         List<Point> secondSystemData;

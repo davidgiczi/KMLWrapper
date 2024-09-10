@@ -311,7 +311,9 @@ public class Point {
         int angle = (int) data;
         int min = (int) ((data - angle) * 60);
         double sec = ((int) (100000 * ((data - angle) * 3600 - min * 60))) / 100000.0;
-        return angle + "° " + (9 < min ? min : "0" + min) + "' " + (9 < sec ? sec : "0" + sec) + "\"";
+        return (0 > data ? "-" :  "") + Math.abs(angle) + "° "
+                + (9 < Math.abs(min) ? Math.abs(min) : "0" + Math.abs(min)) + "' "
+                + (9 < Math.abs(sec) ? Math.abs(sec) : "0" + Math.abs(sec)) + "\"";
     }
 
     @Override

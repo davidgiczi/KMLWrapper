@@ -14,7 +14,7 @@ public class Transformation2D {
 
    private double deltaDistanceXParam;
    private double deltaDistanceYParam;
-   private double rotationParam;
+   public double rotationParam;
    private double scaleParam;
    private double deltaElevation;
    private DecimalFormat df;
@@ -183,10 +183,8 @@ public class Transformation2D {
    }
 
    private void calcTransformation2DParams(){
-        deltaDistanceXParam =  (commonPointList.get(3).getY_EOV() + commonPointList.get(2).getY_EOV()) / 2.0 -
-                (commonPointList.get(0).getY_EOV() + commonPointList.get(1).getY_EOV()) / 2.0;
-        deltaDistanceYParam = (commonPointList.get(3).getX_EOV() + commonPointList.get(2).getX_EOV()) / 2.0 -
-                (commonPointList.get(0).getX_EOV() + commonPointList.get(1).getX_EOV()) / 2.0;
+        deltaDistanceXParam =  commonPointList.get(2).getY_EOV() - commonPointList.get(0).getY_EOV();
+        deltaDistanceYParam = commonPointList.get(2).getX_EOV() - commonPointList.get(0).getX_EOV();
         AzimuthAndDistance firstSystemData = new AzimuthAndDistance(commonPointList.get(0), commonPointList.get(1));
         AzimuthAndDistance secondSystemData = new AzimuthAndDistance(commonPointList.get(2), commonPointList.get(3));
         rotationParam = secondSystemData.calcAzimuth() - firstSystemData.calcAzimuth();
@@ -206,8 +204,7 @@ public class Transformation2D {
     }
 
     public String getRotationParam() {
-        return new Point().convertAngleMinSecFormat(0 > rotationParam ?
-                Math.toDegrees(rotationParam) + 360 : Math.toDegrees(rotationParam));
+        return new Point().convertAngleMinSecFormat(Math.toDegrees(rotationParam));
     }
 
     public String getScaleParam() {
@@ -249,46 +246,47 @@ public class Transformation2D {
                 else{
                     throw new NumberFormatException();
                 }
-                if( 0 > angle || angle > 359 ){
+                if( angle > 359 ){
                     throw new NumberFormatException();
                 }
             }
             catch (NumberFormatException e){
                 throw new InvalidPreferencesFormatException("Az elforgatás fok értéke hibás: " + rotationData[0]);
             }
-        int sec;
+        int min;
         try{
             if( rotationData[1].contains("'") ){
-                sec = Integer.parseInt(rotationData[1].substring(0, rotationData[1].indexOf("'")));
+                min = Integer.parseInt(rotationData[1].substring(0, rotationData[1].indexOf("'")));
             }
             else {
                 throw new NumberFormatException();
             }
 
-            if( 0 > sec || sec > 59 ){
+            if( 0 > min || min > 59 ){
                 throw new NumberFormatException();
             }
         }
         catch (NumberFormatException e){
             throw new InvalidPreferencesFormatException("Az elforgatás perc értéke hibás: " + rotationData[1]);
         }
-        double min;
+        double sec;
         try{
             if( rotationData[2].contains("\"") ){
-                min = Double.parseDouble(rotationData[2]
+                sec = Double.parseDouble(rotationData[2]
                         .substring(0, rotationData[2].indexOf("\"")).replace(",", "."));
             }
             else{
                 throw new NumberFormatException();
             }
-            if( 0 > min || min > 59 ){
+            if( 0 > sec || sec > 59 ){
                 throw new NumberFormatException();
             }
         }
         catch (NumberFormatException e){
             throw new InvalidPreferencesFormatException("Az elforgatás másodperc értéke hibás: " + rotationData[2]);
         }
-           this.rotationParam = Math.toRadians(angle + min / 60.0 + sec / 3600.0);
+           this.rotationParam = 0 > angle ? Math.toRadians(angle - min / 60.0 - sec / 3600.0) :
+                   Math.toRadians(angle + min / 60.0 + sec / 3600.0);
     }
 
     public void setScaleParam(String scale) throws InvalidPreferencesFormatException {
@@ -320,9 +318,9 @@ public class Transformation2D {
                 String delimiter = MessagePane
                         .getInputDataMessage(KMLWrapperController.TRANSFORMATION_2D_WINDOW.jFrame, null);
                 KMLWrapperController.setDelimiter(delimiter);
-            }
-            if( KMLWrapperController.DELIMITER == null ){
-                continue;
+                if( delimiter == null ){
+                    continue;
+                }
             }
             double firstCoordinate;
             try{
@@ -355,9 +353,9 @@ public class Transformation2D {
                                               boolean isUsedCorrection) {
        Point point = new Point();
        point.setPointId(pointId);
-       point.setY_EOV(deltaDistanceXParam +  scaleParam * (firstCoordinate * Math.cos(rotationParam) -
-                       secondCoordinate  * Math.sin(rotationParam)));
-       point.setX_EOV(deltaDistanceYParam + scaleParam * (firstCoordinate * Math.sin(rotationParam) +
+       point.setY_EOV(deltaDistanceXParam + scaleParam * (firstCoordinate * Math.cos(rotationParam) -
+                       secondCoordinate * Math.sin(rotationParam)));
+       point.setX_EOV(deltaDistanceYParam + scaleParam * (firstCoordinate  * Math.sin(rotationParam) +
                        secondCoordinate  * Math.cos(rotationParam)));
         if( is2ndSystem && isUsedCorrection ){
             point.setM_EOV(commonPointList.get(2).getM_EOV() +
