@@ -6,10 +6,8 @@ import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
+import java.util.List;
 
 public class Transformation2DWindow {
 
@@ -49,7 +47,7 @@ public class Transformation2DWindow {
     public JRadioButton deltaElevationRadioBtn;
     private final KMLWrapperController controller;
     private final Font boldFont = new Font("Roboto",Font.BOLD, 17);
-    private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
+    private final Font plainFont = new Font("Roboto", Font.PLAIN, 18);
     private final Color GREEN = new Color(193, 225, 193);
     private final Image iconImage = Toolkit.getDefaultToolkit()
             .getImage(getClass().getResource("/icon/transfer.png"));
@@ -529,20 +527,42 @@ public class Transformation2DWindow {
         mediumPanel.add(Box.createVerticalStrut(380));
         mediumPanel.add(saveSecondSystemPointDataBtn);
         JScrollPane firstSystemDataScrollPane = new JScrollPane(firstSystemDataList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         firstSystemDataScrollPane.setPreferredSize(new Dimension(400, 450));
         leftPanel.add(firstSystemDataScrollPane);
         JButton deleteFirstSystemDataBtn = new JButton("Törlés");
-        deleteFirstSystemDataBtn.setToolTipText("1. vonatkozási rendszer adatainak törlése");
+        deleteFirstSystemDataBtn.addActionListener(e -> {
+                List<String> selectedItems = firstSystemDataList.getSelectedValuesList();
+                if( selectedItems.isEmpty() ){
+                    firstSystemDataListModel.removeAllElements();
+                }
+                else{
+                    for (String selectedItem : selectedItems) {
+                        firstSystemDataListModel.removeElement(selectedItem);
+                    }
+                }
+        });
+        deleteFirstSystemDataBtn.setToolTipText("1. vonatkozási rendszer kijelölt vagy összes adatainak törlése");
         deleteFirstSystemDataBtn.setFont(boldFont);
         deleteFirstSystemDataBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         leftPanel.add(deleteFirstSystemDataBtn);
         JScrollPane secondSystemScrollPane = new JScrollPane(secondSystemDataList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         secondSystemScrollPane.setPreferredSize(new Dimension(400, 450));
         rightPanel.add(secondSystemScrollPane);
         JButton deleteSecondSystemDataBtn = new JButton("Törlés");
-        deleteSecondSystemDataBtn.setToolTipText("2. vonatkozási rendszer adatainak törlése");
+        deleteSecondSystemDataBtn.addActionListener(e -> {
+            List<String> selectedItems = secondSystemDataList.getSelectedValuesList();
+            if( selectedItems.isEmpty() ){
+                secondSystemDataListModel.removeAllElements();
+            }
+            else{
+                for (String selectedItem : selectedItems) {
+                    secondSystemDataListModel.removeElement(selectedItem);
+                }
+            }
+        });
+        deleteSecondSystemDataBtn.setToolTipText("2. vonatkozási rendszer kijelölt vagy összes adatainak törlése");
         deleteSecondSystemDataBtn.setFont(boldFont);
         rightPanel.add(deleteSecondSystemDataBtn);
         transformDataPanel.add(leftPanel);
@@ -559,24 +579,45 @@ public class Transformation2DWindow {
             return;
         }
         if( pointData[0].equals(point11NumberField.getText()) ){
-                point11XField.setText(pointData[1]);
-                point11YField.setText(pointData[2]);
+            if( !point11XField.getText().isEmpty() &&
+                   !point11YField.getText().isEmpty() &&
+                        !point11ZField.getText().isEmpty() ){
+                return;
+            }
+                point11YField.setText(pointData[1]);
+                point11XField.setText(pointData[2]);
                 point11ZField.setText(pointData[3]);
         }
         else if( pointData[0].equals(point12NumberField.getText()) ){
-                point12XField.setText(pointData[1]);
-                point12YField.setText(pointData[2]);
+            if( !point12XField.getText().isEmpty() &&
+                    !point12YField.getText().isEmpty() &&
+                        !point12ZField.getText().isEmpty() ){
+                return;
+            }
+                point12YField.setText(pointData[1]);
+                point12XField.setText(pointData[2]);
                 point12ZField.setText(pointData[3]);
         }
         else if( pointData[0].equals(point21NumberField.getText()) ){
-                point21XField.setText(pointData[1]);
-                point21YField.setText(pointData[2]);
+            if( !point21XField.getText().isEmpty() &&
+                    !point21YField.getText().isEmpty() &&
+                         !point21ZField.getText().isEmpty() ){
+                return;
+            }
+                point21YField.setText(pointData[1]);
+                point21XField.setText(pointData[2]);
                 point21ZField.setText(pointData[3]);
         }
         else if( pointData[0].equals(point22NumberField.getText()) ){
-                point22XField.setText(pointData[1]);
-                point22YField.setText(pointData[2]);
+            if( !point22XField.getText().isEmpty() &&
+                    !point22YField.getText().isEmpty() &&
+                        !point22ZField.getText().isEmpty() ){
+                return;
+            }
+                point22YField.setText(pointData[1]);
+                point22XField.setText(pointData[2]);
                 point22ZField.setText(pointData[3]);
+            }
         }
     }
-}
+

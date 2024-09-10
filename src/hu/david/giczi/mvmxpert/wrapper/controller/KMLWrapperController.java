@@ -481,7 +481,11 @@ public class KMLWrapperController {
             MessagePane.getInfoMessage("Hibás dM2-dM1 paraméter", ex.getMessage(), TRANSFORMATION_2D_WINDOW.jFrame);
             return;
         }
-
+        if( DELIMITER == null ){
+            String delimiter = MessagePane
+                    .getInputDataMessage(KMLWrapperController.TRANSFORMATION_2D_WINDOW.jFrame, null);
+            KMLWrapperController.setDelimiter(delimiter);
+        }
         if( DELIMITER == null ){
             return;
         }

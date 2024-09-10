@@ -183,8 +183,10 @@ public class Transformation2D {
    }
 
    private void calcTransformation2DParams(){
-        deltaDistanceXParam = commonPointList.get(2).getY_EOV() - commonPointList.get(0).getY_EOV();
-        deltaDistanceYParam = commonPointList.get(2).getX_EOV() - commonPointList.get(0).getX_EOV();
+        deltaDistanceXParam =  (commonPointList.get(3).getY_EOV() + commonPointList.get(2).getY_EOV()) / 2.0 -
+                (commonPointList.get(0).getY_EOV() + commonPointList.get(1).getY_EOV()) / 2.0;
+        deltaDistanceYParam = (commonPointList.get(3).getX_EOV() + commonPointList.get(2).getX_EOV()) / 2.0 -
+                (commonPointList.get(0).getX_EOV() + commonPointList.get(1).getX_EOV()) / 2.0;
         AzimuthAndDistance firstSystemData = new AzimuthAndDistance(commonPointList.get(0), commonPointList.get(1));
         AzimuthAndDistance secondSystemData = new AzimuthAndDistance(commonPointList.get(2), commonPointList.get(3));
         rotationParam = secondSystemData.calcAzimuth() - firstSystemData.calcAzimuth();
@@ -354,9 +356,9 @@ public class Transformation2D {
        Point point = new Point();
        point.setPointId(pointId);
        point.setY_EOV(deltaDistanceXParam +  scaleParam * (firstCoordinate * Math.cos(rotationParam) -
-               secondCoordinate * Math.sin(rotationParam)));
-        point.setX_EOV(deltaDistanceYParam + scaleParam * (firstCoordinate * Math.sin(rotationParam) +
-                secondCoordinate * Math.cos(rotationParam)));
+                       secondCoordinate  * Math.sin(rotationParam)));
+       point.setX_EOV(deltaDistanceYParam + scaleParam * (firstCoordinate * Math.sin(rotationParam) +
+                       secondCoordinate  * Math.cos(rotationParam)));
         if( is2ndSystem && isUsedCorrection ){
             point.setM_EOV(commonPointList.get(2).getM_EOV() +
                     elevationData - commonPointList.get(0).getM_EOV() + deltaElevation);
