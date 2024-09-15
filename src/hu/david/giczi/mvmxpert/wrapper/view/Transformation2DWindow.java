@@ -490,7 +490,6 @@ public class Transformation2DWindow {
                 if( SwingUtilities.isRightMouseButton(e) ){
                     controller.transformFirstSystemData();
                 }
-
                 super.mouseClicked(e);
             }
         });
