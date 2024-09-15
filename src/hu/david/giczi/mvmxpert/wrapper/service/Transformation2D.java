@@ -3,7 +3,6 @@ package hu.david.giczi.mvmxpert.wrapper.service;
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.view.MessagePane;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +25,7 @@ public class Transformation2D {
                            String point12Id, String point12Y, String point12X, String point12Z,
                            String point21Id, String point21Y, String point21X, String point21Z,
                            String point22Id, String point22Y, String point22X, String point22Z){
+       commonPointList = new ArrayList<>();
     try {
         isValidInputData(point11Id, point11Y, point11X, point11Z,
                          point12Id, point12Y, point12X, point12Z,
@@ -171,7 +171,6 @@ public class Transformation2D {
                                 String point12Id, double point12Y, double point12X, double point12Z,
                                 String point21Id, double point21Y, double point21X, double point21Z,
                                 String point22Id, double point22Y, double point22X, double point22Z ){
-       commonPointList = new ArrayList<>();
        Point point11 = new Point( point11Id.isEmpty() ? "11": point11Id, point11Y, point11X, point11Z);
        commonPointList.add(point11);
        Point point12 = new Point( point12Id.isEmpty() ? "12": point12Id, point12Y, point12X, point12Z);
@@ -342,6 +341,12 @@ public class Transformation2D {
             try{
                 elevation = Double.parseDouble(rowData[3].replace(",", "."));
             }catch (NumberFormatException n){
+                if( KMLWrapperController.TRANSFORMATION_2D_WINDOW
+                        .deltaElevationField.getText().equalsIgnoreCase("x") ){
+                    convertedDataList.add(convertFirstSystemPointData(rowData[0], firstCoordinate,
+                            secondCoordinate, Double.NaN, is2ndSystem, isUsedCorrection));
+                   continue;
+                }
                 throw new InvalidPreferencesFormatException("Az 1. vonatkozási rendszer magassága csak szám lehet.");
             }
             convertedDataList.add(convertFirstSystemPointData(rowData[0], firstCoordinate,
@@ -361,7 +366,12 @@ public class Transformation2D {
                        secondCoordinate * Math.sin(rotationParam))));
        point.setX_EOV(scaleParam * (deltaDistanceYParam + (firstCoordinate  * Math.sin(rotationParam) +
                        secondCoordinate  * Math.cos(rotationParam))));
-        if( is2ndSystem && isUsedCorrection ){
+
+
+       if(Double.isNaN(elevationData)){
+
+       }
+       else if( commonPointList.size() > 2 && is2ndSystem && isUsedCorrection ){
             point.setM_EOV(commonPointList.get(2).getM_EOV() +
                     elevationData - commonPointList.get(0).getM_EOV() + deltaElevation);
         }
@@ -371,12 +381,11 @@ public class Transformation2D {
         else if( !is2ndSystem ){
             point.setM_EOV(elevationData);
         }
-        else {
+        else if( commonPointList.size() > 2) {
             point.setM_EOV(commonPointList.get(2).getM_EOV() + elevationData - commonPointList.get(0).getM_EOV());
         }
 
        return point;
     }
-
 
 }
