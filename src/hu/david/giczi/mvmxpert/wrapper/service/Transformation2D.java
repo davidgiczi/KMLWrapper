@@ -17,7 +17,7 @@ public class Transformation2D {
    private double scaleParam;
    private double deltaElevation;
    private DecimalFormat df;
-   private List<Point> commonPointList;
+   private final List<Point> commonPointList;
 
 
 
@@ -182,8 +182,6 @@ public class Transformation2D {
    }
 
    private void calcTransformation2DParams(){
-        deltaDistanceXParam =  commonPointList.get(2).getY_EOV() - commonPointList.get(0).getY_EOV();
-        deltaDistanceYParam = commonPointList.get(2).getX_EOV() - commonPointList.get(0).getX_EOV();
         AzimuthAndDistance firstSystemData = new AzimuthAndDistance(commonPointList.get(0), commonPointList.get(1));
         AzimuthAndDistance secondSystemData = new AzimuthAndDistance(commonPointList.get(2), commonPointList.get(3));
         rotationParam = Math.acos(((commonPointList.get(1).getY_EOV() - commonPointList.get(0).getY_EOV()) *
@@ -192,6 +190,12 @@ public class Transformation2D {
                         (commonPointList.get(3).getX_EOV() - commonPointList.get(2).getX_EOV())) /
                 (firstSystemData.calcDistance() * secondSystemData.calcDistance()));
         scaleParam = secondSystemData.calcDistance() / firstSystemData.calcDistance();
+        deltaDistanceXParam = commonPointList.get(2).getY_EOV() - scaleParam *
+                (commonPointList.get(0).getY_EOV() * Math.cos(rotationParam) -
+                        commonPointList.get(0).getX_EOV() * Math.sin(rotationParam));
+       deltaDistanceYParam = commonPointList.get(2).getX_EOV() - scaleParam *
+               (commonPointList.get(0).getY_EOV() * Math.sin(rotationParam) +
+                       commonPointList.get(0).getX_EOV() * Math.cos(rotationParam));
         deltaElevation = commonPointList.get(3).getM_EOV() - commonPointList.get(2).getM_EOV() -
                 commonPointList.get(1).getM_EOV() + commonPointList.get(0).getM_EOV();
     }
@@ -304,6 +308,9 @@ public class Transformation2D {
         try{
             this.deltaElevation = Double.parseDouble(deltaElevation.replace(",", "."));
         }catch (NumberFormatException e){
+            if( deltaElevation.equalsIgnoreCase("x") ){
+               return;
+            }
             throw  new InvalidPreferencesFormatException("A dM2-dM1 érték csak szám lehet.");
         }
     }
@@ -341,12 +348,6 @@ public class Transformation2D {
             try{
                 elevation = Double.parseDouble(rowData[3].replace(",", "."));
             }catch (NumberFormatException n){
-                if( KMLWrapperController.TRANSFORMATION_2D_WINDOW
-                        .deltaElevationField.getText().equalsIgnoreCase("x") ){
-                    convertedDataList.add(convertFirstSystemPointData(rowData[0], firstCoordinate,
-                            secondCoordinate, Double.NaN, is2ndSystem, isUsedCorrection));
-                   continue;
-                }
                 throw new InvalidPreferencesFormatException("Az 1. vonatkozási rendszer magassága csak szám lehet.");
             }
             convertedDataList.add(convertFirstSystemPointData(rowData[0], firstCoordinate,
@@ -362,15 +363,15 @@ public class Transformation2D {
                                               boolean isUsedCorrection) {
        Point point = new Point();
        point.setPointId(pointId);
-       point.setY_EOV(scaleParam *(deltaDistanceXParam + (firstCoordinate * Math.cos(rotationParam) -
-                       secondCoordinate * Math.sin(rotationParam))));
-       point.setX_EOV(scaleParam * (deltaDistanceYParam + (firstCoordinate  * Math.sin(rotationParam) +
-                       secondCoordinate  * Math.cos(rotationParam))));
+       point.setY_EOV(deltaDistanceXParam + scaleParam * (firstCoordinate * Math.cos(rotationParam) -
+                       secondCoordinate * Math.sin(rotationParam)));
+       point.setX_EOV(deltaDistanceYParam + scaleParam * (firstCoordinate  * Math.sin(rotationParam) +
+                       secondCoordinate  * Math.cos(rotationParam)));
 
-
-       if(Double.isNaN(elevationData)){
-
-       }
+        if( KMLWrapperController.TRANSFORMATION_2D_WINDOW.
+                deltaElevationField.getText().equalsIgnoreCase("x") ){
+            point.setM_EOV(0d);
+        }
        else if( commonPointList.size() > 2 && is2ndSystem && isUsedCorrection ){
             point.setM_EOV(commonPointList.get(2).getM_EOV() +
                     elevationData - commonPointList.get(0).getM_EOV() + deltaElevation);

@@ -464,4 +464,21 @@ public void saveCalcData(String fileName) throws  IOException{
         fos.close();
     }
 
+    public void saveTransformation2Data(List<String> secondSystemDataList) throws IOException{
+        File file = new File(FOLDER_PATH + "/" + FILE_NAME.substring(0, FILE_NAME.indexOf(".")) + "_tr2D.txt");
+        FileOutputStream fos = new FileOutputStream(file);
+        OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+        BufferedWriter writer = new BufferedWriter(osw);
+        for (String secondSystemData : secondSystemDataList) {
+            writer.write(secondSystemData);
+            writer.newLine();
+        }
+        writer.close();
+        osw.close();
+        fos.close();
+        MessagePane.getInfoMessage("Adatok mentése",
+                "A transzformált pontok mentve az alábbi mappába:<br>" + file.getAbsolutePath()
+                        , KMLWrapperController.TRANSFORMATION_2D_WINDOW.jFrame);
+    }
+
 }

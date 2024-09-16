@@ -28,4 +28,5 @@ public class MessagePane {
         return (String) JOptionPane.showInputDialog(jFrame, messageLabel, titleLabel.getText(),
                 JOptionPane.QUESTION_MESSAGE, null, null, initData);
     }
+
 }

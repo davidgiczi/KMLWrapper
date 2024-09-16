@@ -521,6 +521,9 @@ public class Transformation2DWindow {
         mediumPanel.add(Box.createVerticalStrut(5));
         mediumPanel.add(openFirstSystemPointDataBtn);
         saveSecondSystemPointDataBtn = new JButton("Mentés");
+        saveSecondSystemPointDataBtn.addActionListener(e -> {
+            controller.saveSecondSystemData();
+        });
         saveSecondSystemPointDataBtn.setToolTipText("2. vonatkozási rendszer pontjainak mentése");
         saveSecondSystemPointDataBtn.setFont(boldFont);
         saveSecondSystemPointDataBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));

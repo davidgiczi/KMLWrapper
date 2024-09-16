@@ -510,4 +510,37 @@ public class KMLWrapperController {
         }
     }
 
+    public void saveSecondSystemData(){
+      if( TRANSFORMATION_2D_WINDOW.secondSystemDataListModel.isEmpty() ){
+          return;
+      }
+      List<String> selectedItems = TRANSFORMATION_2D_WINDOW.secondSystemDataList.getSelectedValuesList();
+      fileProcess.openDirectory();
+      if( FileProcess.FOLDER_PATH == null ){
+          return;
+      }
+        if( selectedItems.isEmpty() ){
+            List<String> allItems = new ArrayList<>();
+            for (int i = 0; i < TRANSFORMATION_2D_WINDOW.secondSystemDataList.getModel().getSize(); i++) {
+                allItems.add(TRANSFORMATION_2D_WINDOW.secondSystemDataList.getModel().getElementAt(i));
+            }
+            try {
+                fileProcess.saveTransformation2Data(allItems);
+            } catch (IOException e) {
+                e.printStackTrace();
+                MessagePane.getInfoMessage("Adatok mentése",
+                        "A transzformált pontok mentése sikertelen." , TRANSFORMATION_2D_WINDOW.jFrame);
+            }
+        }
+        else {
+            try {
+                fileProcess.saveTransformation2Data(selectedItems);
+            } catch (IOException e) {
+                e.printStackTrace();
+                MessagePane.getInfoMessage("Adatok mentése",
+                        "A transzformált pontok mentése sikertelen." , TRANSFORMATION_2D_WINDOW.jFrame);
+            }
+        }
+    }
+
 }
