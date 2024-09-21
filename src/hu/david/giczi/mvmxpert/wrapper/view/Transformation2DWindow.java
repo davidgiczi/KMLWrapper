@@ -118,6 +118,34 @@ public class Transformation2DWindow {
 
     private void addInputDataOptionPanel(){
         inputDataOptionPanel = new JPanel();
+        inputDataOptionPanel.addMouseListener(new MouseAdapter() {
+            @Overridegit
+            public void mouseClicked(MouseEvent e) {
+                if( SwingUtilities.isRightMouseButton(e) ){
+                    if( MessagePane.getYesNoOptionMessage("Pont adatok törlése",
+                            "Biztos, hogy törlöd a vonatkozási rendszerek pontjainak adatait?", jFrame) == 1 ){
+                        return;
+                    }
+                    point11NumberField.setText(null);
+                    point11XField.setText(null);
+                    point11YField.setText(null);
+                    point11ZField.setText(null);
+                    point12NumberField.setText(null);
+                    point12XField.setText(null);
+                    point12YField.setText(null);
+                    point12ZField.setText(null);
+                    point21NumberField.setText(null);
+                    point21XField.setText(null);
+                    point21YField.setText(null);
+                    point21ZField.setText(null);
+                    point22NumberField.setText(null);
+                    point22XField.setText(null);
+                    point22YField.setText(null);
+                    point22ZField.setText(null);
+                }
+                super.mouseClicked(e);
+            }
+        });
         inputDataOptionPanel.setLayout(new GridLayout(4, 1));
         addTitleForInputDataOptionPanel();
         addFirstCommonPointsData();
