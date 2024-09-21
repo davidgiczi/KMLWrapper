@@ -119,7 +119,7 @@ public class Transformation2DWindow {
     private void addInputDataOptionPanel(){
         inputDataOptionPanel = new JPanel();
         inputDataOptionPanel.addMouseListener(new MouseAdapter() {
-            @Overridegit
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if( SwingUtilities.isRightMouseButton(e) ){
                     if( MessagePane.getYesNoOptionMessage("Pont adatok törlése",
