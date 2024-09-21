@@ -40,9 +40,6 @@ public class KMLWrapperController {
     }
 
     public static void setDelimiter(String delimiter) {
-        if( " ".equals(delimiter)){
-            delimiter = "\\s+";
-        }
         KMLWrapperController.DELIMITER = delimiter;
     }
 
@@ -519,6 +516,11 @@ public class KMLWrapperController {
       if( FileProcess.FOLDER_PATH == null ){
           return;
       }
+      String fileName = MessagePane.getFileNameMessage(TRANSFORMATION_2D_WINDOW.jFrame);
+      if( fileName == null ){
+          return;
+      }
+      FileProcess.FILE_NAME = fileName;
         if( selectedItems.isEmpty() ){
             List<String> allItems = new ArrayList<>();
             for (int i = 0; i < TRANSFORMATION_2D_WINDOW.secondSystemDataList.getModel().getSize(); i++) {
@@ -542,5 +544,6 @@ public class KMLWrapperController {
             }
         }
     }
+
 
 }

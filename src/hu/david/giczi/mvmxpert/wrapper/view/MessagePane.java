@@ -29,4 +29,27 @@ public class MessagePane {
                 JOptionPane.QUESTION_MESSAGE, null, null, initData);
     }
 
+    public static String getWhatTextReplaceMessage(JFrame jFrame){
+        JLabel messageLabel = new JLabel("Melyik szövegrészt cseréli:");
+        messageLabel.setFont(boldFont);
+        JLabel titleLabel = new JLabel("Karakterek cseréje");
+        return (String) JOptionPane.showInputDialog(jFrame, messageLabel, titleLabel.getText(),
+                JOptionPane.QUESTION_MESSAGE, null, null, null);
+    }
+
+    public static String getWhichTextReplaceWithMessage(JFrame jFrame){
+        JLabel messageLabel = new JLabel("Milyen szövegrészre cseréli:");
+        messageLabel.setFont(boldFont);
+        JLabel titleLabel = new JLabel("Karakterek cseréje");
+        return (String) JOptionPane.showInputDialog(jFrame, messageLabel, titleLabel.getText(),
+                JOptionPane.QUESTION_MESSAGE, null, null, null);
+    }
+
+    public static String getFileNameMessage(JFrame jFrame){
+        JLabel messageLabel = new JLabel("Fájlnév megadása:");
+        messageLabel.setFont(boldFont);
+        JLabel titleLabel = new JLabel("Fájl mentése");
+        return (String) JOptionPane.showInputDialog(jFrame, messageLabel, titleLabel.getText(),
+                JOptionPane.QUESTION_MESSAGE, null, null, null);
+    }
 }

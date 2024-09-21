@@ -323,14 +323,16 @@ public class Transformation2D {
     throws InvalidPreferencesFormatException {
        List<Point> convertedDataList = new ArrayList<>();
         for (String inputRowData : firstSystemData) {
-            String[] rowData = inputRowData.split(Objects.requireNonNull(KMLWrapperController.DELIMITER));
+            String[] rowData = inputRowData.split(Objects.
+                    requireNonNull(KMLWrapperController.DELIMITER).equals(" ") ? "\\s+" :
+                    KMLWrapperController.DELIMITER);
             if( 4 > rowData.length ){
                 String delimiter = MessagePane
                         .getInputDataMessage(KMLWrapperController.TRANSFORMATION_2D_WINDOW.jFrame, null);
                 KMLWrapperController.setDelimiter(delimiter);
-                if( delimiter == null ){
-                    continue;
-                }
+            }
+            if( KMLWrapperController.DELIMITER == null || KMLWrapperController.DELIMITER.isEmpty() ){
+                continue;
             }
             double firstCoordinate;
             try{
@@ -384,6 +386,9 @@ public class Transformation2D {
         }
         else if( commonPointList.size() > 2) {
             point.setM_EOV(commonPointList.get(2).getM_EOV() + elevationData - commonPointList.get(0).getM_EOV());
+        }
+        else {
+            point.setM_EOV(elevationData);
         }
 
        return point;

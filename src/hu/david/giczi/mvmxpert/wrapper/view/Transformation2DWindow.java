@@ -174,9 +174,7 @@ public class Transformation2DWindow {
         point11ZField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JButton exchangeBtn =
                 new JButton(new ImageIcon(iconImage.getScaledInstance(35, 30, Image.SCALE_DEFAULT)));
-        exchangeBtn.addActionListener(e -> {
-            onClickExchangeCommonPointsDataButton();
-        });
+        exchangeBtn.addActionListener(e -> onClickExchangeCommonPointsDataButton());
         exchangeBtn.setToolTipText("Pont adatok cseréje");
         exchangeBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JLabel point12Label = new JLabel("1. pont");
@@ -339,9 +337,7 @@ public class Transformation2DWindow {
         panel.setBackground(GREEN);
         JButton countBtn = new JButton("Paraméterek számítása");
 
-        countBtn.addActionListener(e -> {
-            controller.calcParamsForTransformation2D();
-        });
+        countBtn.addActionListener(e -> controller.calcParamsForTransformation2D());
         countBtn.setFont(boldFont);
         countBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(countBtn);
@@ -498,6 +494,32 @@ public class Transformation2DWindow {
         firstSystemDataList.setFont(plainFont);
         secondSystemDataListModel = new DefaultListModel<>();
         secondSystemDataList = new JList<>(secondSystemDataListModel);
+        secondSystemDataList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                if( SwingUtilities.isRightMouseButton(e) ){
+
+                   if( secondSystemDataList.getModel().getSize() == 0 ){
+                       return;
+                   }
+                   String witchText = MessagePane.getWhatTextReplaceMessage(jFrame);
+                   if( witchText == null ){
+                       return;
+                   }
+                   String witchTextWith = MessagePane.getWhichTextReplaceWithMessage(jFrame);
+                   if( witchTextWith == null ){
+                       return;
+                   }
+                    for (int i = 0; i < secondSystemDataList.getModel().getSize(); i++) {
+                        String replacedRow = secondSystemDataList.getModel()
+                                .getElementAt(i).replaceAll(witchText, witchTextWith);
+                        secondSystemDataListModel.set(i, replacedRow);
+                    }
+                }
+                super.mouseClicked(e);
+            }
+        });
         secondSystemDataList.setToolTipText("2. vonatkozási rendszerbe transzformált pontok");
         secondSystemDataList.setCursor(new Cursor(Cursor.HAND_CURSOR));
         secondSystemDataList.setFont(plainFont);
@@ -521,9 +543,7 @@ public class Transformation2DWindow {
         mediumPanel.add(Box.createVerticalStrut(5));
         mediumPanel.add(openFirstSystemPointDataBtn);
         saveSecondSystemPointDataBtn = new JButton("Mentés");
-        saveSecondSystemPointDataBtn.addActionListener(e -> {
-            controller.saveSecondSystemData();
-        });
+        saveSecondSystemPointDataBtn.addActionListener(e -> controller.saveSecondSystemData());
         saveSecondSystemPointDataBtn.setToolTipText("2. vonatkozási rendszer pontjainak mentése");
         saveSecondSystemPointDataBtn.setFont(boldFont);
         saveSecondSystemPointDataBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));

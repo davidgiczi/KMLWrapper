@@ -23,6 +23,7 @@ public class FileProcess {
     public static String FILE_NAME;
     public static String FOLDER_PATH;
     public static List<String> INPUT_DATA_LIST;
+    private static final String INVALID_CHARACTERS = "[\\\\/:*?\"<>|]";
 
 
     public void openInputDataFile() {
@@ -174,7 +175,7 @@ public class FileProcess {
         List<String> resultData = new ArrayList<>();
         StringBuilder container = new StringBuilder();
         for (String row : INPUT_DATA_LIST) {
-            container.append(row.trim()).append("\n");;
+            container.append(row.trim()).append("\n");
         }
 
         List<Integer> startCoordinatesList = getStartIndexList(container.toString(), "<coordinates>");
@@ -465,7 +466,8 @@ public void saveCalcData(String fileName) throws  IOException{
     }
 
     public void saveTransformation2Data(List<String> secondSystemDataList) throws IOException{
-        File file = new File(FOLDER_PATH + "/" + FILE_NAME.substring(0, FILE_NAME.indexOf(".")) + "_tr2D.txt");
+        File file = new File(FOLDER_PATH + "/" +
+                FILE_NAME.replaceAll(INVALID_CHARACTERS, "_") + "_tr2D.txt");
         FileOutputStream fos = new FileOutputStream(file);
         OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
         BufferedWriter writer = new BufferedWriter(osw);

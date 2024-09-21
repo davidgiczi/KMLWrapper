@@ -179,11 +179,11 @@ public class InputDataFileWindow {
         JMenuItem transformationMenuItem = new JMenuItem("2D transzformáció");
         transformationMenuItem.addActionListener( e -> {
             jFrame.setVisible(false);
-            if( controller.TRANSFORMATION_2D_WINDOW == null ){
-                controller.TRANSFORMATION_2D_WINDOW = new Transformation2DWindow(controller);
+            if( KMLWrapperController.TRANSFORMATION_2D_WINDOW == null ){
+                KMLWrapperController.TRANSFORMATION_2D_WINDOW = new Transformation2DWindow(controller);
             }
             else {
-                controller.TRANSFORMATION_2D_WINDOW.jFrame.setVisible(true);
+                KMLWrapperController.TRANSFORMATION_2D_WINDOW.jFrame.setVisible(true);
             }
 
         });
