@@ -597,6 +597,7 @@ public class Transformation2DWindow {
             }
         });
         deleteSecondSystemDataBtn.setToolTipText("2. vonatkozási rendszer kijelölt vagy összes adatainak törlése");
+        deleteSecondSystemDataBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         deleteSecondSystemDataBtn.setFont(boldFont);
         rightPanel.add(deleteSecondSystemDataBtn);
         transformDataPanel.add(leftPanel);
