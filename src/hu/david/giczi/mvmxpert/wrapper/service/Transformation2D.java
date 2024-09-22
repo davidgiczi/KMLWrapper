@@ -189,6 +189,9 @@ public class Transformation2D {
                 (commonPointList.get(1).getX_EOV() - commonPointList.get(0).getX_EOV()) *
                         (commonPointList.get(3).getX_EOV() - commonPointList.get(2).getX_EOV())) /
                 (firstSystemData.calcDistance() * secondSystemData.calcDistance()));
+        if( Double.isNaN(rotationParam) ){
+            rotationParam = 0.0;
+        }
         scaleParam = secondSystemData.calcDistance() / firstSystemData.calcDistance();
         deltaDistanceXParam = commonPointList.get(2).getY_EOV() - scaleParam *
                 (commonPointList.get(0).getY_EOV() * Math.cos(rotationParam) -
@@ -363,6 +366,7 @@ public class Transformation2D {
                                               double secondCoordinate, double elevationData,
                                               boolean is2ndSystem,
                                               boolean isUsedCorrection) {
+
        Point point = new Point();
        point.setPointId(pointId);
        point.setY_EOV(deltaDistanceXParam + scaleParam * (firstCoordinate * Math.cos(rotationParam) -
