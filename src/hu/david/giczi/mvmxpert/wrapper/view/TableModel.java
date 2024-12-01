@@ -383,7 +383,7 @@ public class TableModel extends DefaultTableModel {
     }
 
     public void setCommonPointsDeviationData(){
-        if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
+         if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
             if( KMLWrapperController.TRANSFORMATION.toWGS == null ){
                 throw new IllegalArgumentException("Hozzáadott EOV pont nem található");
             }
@@ -421,7 +421,6 @@ public class TableModel extends DefaultTableModel {
             setCommonPointsDisplayedData();
             deviationListForEOV = new ArrayList<>();
             for (Point commonPoint : displayedPointList) {
-
                 new ToEOV(commonPoint.getX_WGS84(),
                         commonPoint.getY_WGS84(),
                         commonPoint.getZ_WGS84(),

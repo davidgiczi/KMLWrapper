@@ -171,6 +171,8 @@ public class ToEOV {
     }
 
     private void createMatrixA() {
+
+        if( !referencePoints.get(0).isLeftOut() ){
         MATRIX_A[0][0] = 1.0;
         MATRIX_A[0][1] = 0.0;
         MATRIX_A[0][2] = 0.0;
@@ -194,7 +196,8 @@ public class ToEOV {
         MATRIX_A[2][4] = -1 * referencePoints.get(0).getY_WGS84();
         MATRIX_A[2][5] = referencePoints.get(0).getX_WGS84();
         MATRIX_A[2][6] = 0.0;
-
+    }
+    if( !referencePoints.get(1).isLeftOut() ){
         MATRIX_A[3][0] = 1.0;
         MATRIX_A[3][1] = 0.0;
         MATRIX_A[3][2] = 0.0;
@@ -218,176 +221,199 @@ public class ToEOV {
         MATRIX_A[5][4] = -1 * referencePoints.get(1).getY_WGS84();
         MATRIX_A[5][5] = referencePoints.get(1).getX_WGS84();
         MATRIX_A[5][6] = 0.0;
+    }
+        if( !referencePoints.get(2).isLeftOut() ) {
+            MATRIX_A[6][0] = 1.0;
+            MATRIX_A[6][1] = 0.0;
+            MATRIX_A[6][2] = 0.0;
+            MATRIX_A[6][3] = referencePoints.get(2).getX_WGS84();
+            MATRIX_A[6][4] = 0.0;
+            MATRIX_A[6][5] = -1 * referencePoints.get(2).getZ_WGS84();
+            MATRIX_A[6][6] = referencePoints.get(2).getY_WGS84();
 
-        MATRIX_A[6][0] = 1.0;
-        MATRIX_A[6][1] = 0.0;
-        MATRIX_A[6][2] = 0.0;
-        MATRIX_A[6][3] = referencePoints.get(2).getX_WGS84();
-        MATRIX_A[6][4] = 0.0;
-        MATRIX_A[6][5] = -1 * referencePoints.get(2).getZ_WGS84();
-        MATRIX_A[6][6] = referencePoints.get(2).getY_WGS84();
+            MATRIX_A[7][0] = 0.0;
+            MATRIX_A[7][1] = 1.0;
+            MATRIX_A[7][2] = 0.0;
+            MATRIX_A[7][3] = referencePoints.get(2).getY_WGS84();
+            MATRIX_A[7][4] = referencePoints.get(2).getZ_WGS84();
+            MATRIX_A[7][5] = 0.0;
+            MATRIX_A[7][6] = -1 * referencePoints.get(2).getX_WGS84();
 
-        MATRIX_A[7][0] = 0.0;
-        MATRIX_A[7][1] = 1.0;
-        MATRIX_A[7][2] = 0.0;
-        MATRIX_A[7][3] = referencePoints.get(2).getY_WGS84();
-        MATRIX_A[7][4] = referencePoints.get(2).getZ_WGS84();
-        MATRIX_A[7][5] = 0.0;
-        MATRIX_A[7][6] = -1 * referencePoints.get(2).getX_WGS84();
+            MATRIX_A[8][0] = 0.0;
+            MATRIX_A[8][1] = 0.0;
+            MATRIX_A[8][2] = 1.0;
+            MATRIX_A[8][3] = referencePoints.get(2).getZ_WGS84();
+            MATRIX_A[8][4] = -1 * referencePoints.get(2).getY_WGS84();
+            MATRIX_A[8][5] = referencePoints.get(2).getX_WGS84();
+            MATRIX_A[8][6] = 0.0;
+        }
+        if( !referencePoints.get(3).isLeftOut() ) {
+            MATRIX_A[9][0] = 1.0;
+            MATRIX_A[9][1] = 0.0;
+            MATRIX_A[9][2] = 0.0;
+            MATRIX_A[9][3] = referencePoints.get(3).getX_WGS84();
+            MATRIX_A[9][4] = 0.0;
+            MATRIX_A[9][5] = -1 * referencePoints.get(3).getZ_WGS84();
+            MATRIX_A[9][6] = referencePoints.get(3).getY_WGS84();
 
-        MATRIX_A[8][0] = 0.0;
-        MATRIX_A[8][1] = 0.0;
-        MATRIX_A[8][2] = 1.0;
-        MATRIX_A[8][3] = referencePoints.get(2).getZ_WGS84();
-        MATRIX_A[8][4] = -1 * referencePoints.get(2).getY_WGS84();
-        MATRIX_A[8][5] = referencePoints.get(2).getX_WGS84();
-        MATRIX_A[8][6] = 0.0;
+            MATRIX_A[10][0] = 0.0;
+            MATRIX_A[10][1] = 1.0;
+            MATRIX_A[10][2] = 0.0;
+            MATRIX_A[10][3] = referencePoints.get(3).getY_WGS84();
+            MATRIX_A[10][4] = referencePoints.get(3).getZ_WGS84();
+            MATRIX_A[10][5] = 0.0;
+            MATRIX_A[10][6] = -1 * referencePoints.get(3).getX_WGS84();
 
-        MATRIX_A[9][0] = 1.0;
-        MATRIX_A[9][1] = 0.0;
-        MATRIX_A[9][2] = 0.0;
-        MATRIX_A[9][3] = referencePoints.get(3).getX_WGS84();
-        MATRIX_A[9][4] = 0.0;
-        MATRIX_A[9][5] = -1 * referencePoints.get(3).getZ_WGS84();
-        MATRIX_A[9][6] = referencePoints.get(3).getY_WGS84();
+            MATRIX_A[11][0] = 0.0;
+            MATRIX_A[11][1] = 0.0;
+            MATRIX_A[11][2] = 1.0;
+            MATRIX_A[11][3] = referencePoints.get(3).getZ_WGS84();
+            MATRIX_A[11][4] = -1 * referencePoints.get(3).getY_WGS84();
+            MATRIX_A[11][5] = referencePoints.get(3).getX_WGS84();
+            MATRIX_A[11][6] = 0.0;
+        }
+        if( !referencePoints.get(4).isLeftOut() ) {
+            MATRIX_A[12][0] = 1.0;
+            MATRIX_A[12][1] = 0.0;
+            MATRIX_A[12][2] = 0.0;
+            MATRIX_A[12][3] = referencePoints.get(4).getX_WGS84();
+            MATRIX_A[12][4] = 0.0;
+            MATRIX_A[12][5] = -1 * referencePoints.get(4).getZ_WGS84();
+            MATRIX_A[12][6] = referencePoints.get(4).getY_WGS84();
 
-        MATRIX_A[10][0] = 0.0;
-        MATRIX_A[10][1] = 1.0;
-        MATRIX_A[10][2] = 0.0;
-        MATRIX_A[10][3] = referencePoints.get(3).getY_WGS84();
-        MATRIX_A[10][4] = referencePoints.get(3).getZ_WGS84();
-        MATRIX_A[10][5] = 0.0;
-        MATRIX_A[10][6] = -1 * referencePoints.get(3).getX_WGS84();
+            MATRIX_A[13][0] = 0.0;
+            MATRIX_A[13][1] = 1.0;
+            MATRIX_A[13][2] = 0.0;
+            MATRIX_A[13][3] = referencePoints.get(4).getY_WGS84();
+            MATRIX_A[13][4] = referencePoints.get(4).getZ_WGS84();
+            MATRIX_A[13][5] = 0.0;
+            MATRIX_A[13][6] = -1 * referencePoints.get(4).getX_WGS84();
 
-        MATRIX_A[11][0] = 0.0;
-        MATRIX_A[11][1] = 0.0;
-        MATRIX_A[11][2] = 1.0;
-        MATRIX_A[11][3] = referencePoints.get(3).getZ_WGS84();
-        MATRIX_A[11][4] = -1 * referencePoints.get(3).getY_WGS84();
-        MATRIX_A[11][5] = referencePoints.get(3).getX_WGS84();
-        MATRIX_A[11][6] = 0.0;
+            MATRIX_A[14][0] = 0.0;
+            MATRIX_A[14][1] = 0.0;
+            MATRIX_A[14][2] = 1.0;
+            MATRIX_A[14][3] = referencePoints.get(4).getZ_WGS84();
+            MATRIX_A[14][4] = -1 * referencePoints.get(4).getY_WGS84();
+            MATRIX_A[14][5] = referencePoints.get(4).getX_WGS84();
+            MATRIX_A[14][6] = 0.0;
+        }
+        if( !referencePoints.get(5).isLeftOut() ) {
+            MATRIX_A[15][0] = 1.0;
+            MATRIX_A[15][1] = 0.0;
+            MATRIX_A[15][2] = 0.0;
+            MATRIX_A[15][3] = referencePoints.get(5).getX_WGS84();
+            MATRIX_A[15][4] = 0.0;
+            MATRIX_A[15][5] = -1 * referencePoints.get(5).getZ_WGS84();
+            MATRIX_A[15][6] = referencePoints.get(5).getY_WGS84();
 
-        MATRIX_A[12][0] = 1.0;
-        MATRIX_A[12][1] = 0.0;
-        MATRIX_A[12][2] = 0.0;
-        MATRIX_A[12][3] = referencePoints.get(4).getX_WGS84();
-        MATRIX_A[12][4] = 0.0;
-        MATRIX_A[12][5] = -1 * referencePoints.get(4).getZ_WGS84();
-        MATRIX_A[12][6] = referencePoints.get(4).getY_WGS84();
+            MATRIX_A[16][0] = 0.0;
+            MATRIX_A[16][1] = 1.0;
+            MATRIX_A[16][2] = 0.0;
+            MATRIX_A[16][3] = referencePoints.get(5).getY_WGS84();
+            MATRIX_A[16][4] = referencePoints.get(5).getZ_WGS84();
+            MATRIX_A[16][5] = 0.0;
+            MATRIX_A[16][6] = -1 * referencePoints.get(5).getX_WGS84();
 
-        MATRIX_A[13][0] = 0.0;
-        MATRIX_A[13][1] = 1.0;
-        MATRIX_A[13][2] = 0.0;
-        MATRIX_A[13][3] = referencePoints.get(4).getY_WGS84();
-        MATRIX_A[13][4] = referencePoints.get(4).getZ_WGS84();
-        MATRIX_A[13][5] = 0.0;
-        MATRIX_A[13][6] = -1 * referencePoints.get(4).getX_WGS84();
+            MATRIX_A[17][0] = 0.0;
+            MATRIX_A[17][1] = 0.0;
+            MATRIX_A[17][2] = 1.0;
+            MATRIX_A[17][3] = referencePoints.get(5).getZ_WGS84();
+            MATRIX_A[17][4] = -1 * referencePoints.get(5).getY_WGS84();
+            MATRIX_A[17][5] = referencePoints.get(5).getX_WGS84();
+            MATRIX_A[17][6] = 0.0;
+        }
+        if( !referencePoints.get(6).isLeftOut() ) {
+            MATRIX_A[18][0] = 1.0;
+            MATRIX_A[18][1] = 0.0;
+            MATRIX_A[18][2] = 0.0;
+            MATRIX_A[18][3] = referencePoints.get(6).getX_WGS84();
+            MATRIX_A[18][4] = 0.0;
+            MATRIX_A[18][5] = -1 * referencePoints.get(6).getZ_WGS84();
+            MATRIX_A[18][6] = referencePoints.get(6).getY_WGS84();
 
-        MATRIX_A[14][0] = 0.0;
-        MATRIX_A[14][1] = 0.0;
-        MATRIX_A[14][2] = 1.0;
-        MATRIX_A[14][3] = referencePoints.get(4).getZ_WGS84();
-        MATRIX_A[14][4] = -1 * referencePoints.get(4).getY_WGS84();
-        MATRIX_A[14][5] = referencePoints.get(4).getX_WGS84();
-        MATRIX_A[14][6] = 0.0;
+            MATRIX_A[19][0] = 0.0;
+            MATRIX_A[19][1] = 1.0;
+            MATRIX_A[19][2] = 0.0;
+            MATRIX_A[19][3] = referencePoints.get(6).getY_WGS84();
+            MATRIX_A[19][4] = referencePoints.get(6).getZ_WGS84();
+            MATRIX_A[19][5] = 0.0;
+            MATRIX_A[19][6] = -1 * referencePoints.get(6).getX_WGS84();
 
-        MATRIX_A[15][0] = 1.0;
-        MATRIX_A[15][1] = 0.0;
-        MATRIX_A[15][2] = 0.0;
-        MATRIX_A[15][3] = referencePoints.get(5).getX_WGS84();
-        MATRIX_A[15][4] = 0.0;
-        MATRIX_A[15][5] = -1 * referencePoints.get(5).getZ_WGS84();
-        MATRIX_A[15][6] = referencePoints.get(5).getY_WGS84();
+            MATRIX_A[20][0] = 0.0;
+            MATRIX_A[20][1] = 0.0;
+            MATRIX_A[20][2] = 1.0;
+            MATRIX_A[20][3] = referencePoints.get(6).getZ_WGS84();
+            MATRIX_A[20][4] = -1 * referencePoints.get(6).getY_WGS84();
+            MATRIX_A[20][5] = referencePoints.get(6).getX_WGS84();
+            MATRIX_A[20][6] = 0.0;
+        }
+        if( !referencePoints.get(7).isLeftOut() ) {
+            MATRIX_A[21][0] = 1.0;
+            MATRIX_A[21][1] = 0.0;
+            MATRIX_A[21][2] = 0.0;
+            MATRIX_A[21][3] = referencePoints.get(7).getX_WGS84();
+            MATRIX_A[21][4] = 0.0;
+            MATRIX_A[21][5] = -1 * referencePoints.get(7).getZ_WGS84();
+            MATRIX_A[21][6] = referencePoints.get(7).getY_WGS84();
 
-        MATRIX_A[16][0] = 0.0;
-        MATRIX_A[16][1] = 1.0;
-        MATRIX_A[16][2] = 0.0;
-        MATRIX_A[16][3] = referencePoints.get(5).getY_WGS84();
-        MATRIX_A[16][4] = referencePoints.get(5).getZ_WGS84();
-        MATRIX_A[16][5] = 0.0;
-        MATRIX_A[16][6] = -1 * referencePoints.get(5).getX_WGS84();
+            MATRIX_A[22][0] = 0.0;
+            MATRIX_A[22][1] = 1.0;
+            MATRIX_A[22][2] = 0.0;
+            MATRIX_A[22][3] = referencePoints.get(7).getY_WGS84();
+            MATRIX_A[22][4] = referencePoints.get(7).getZ_WGS84();
+            MATRIX_A[22][5] = 0.0;
+            MATRIX_A[22][6] = -1 * referencePoints.get(7).getX_WGS84();
 
-        MATRIX_A[17][0] = 0.0;
-        MATRIX_A[17][1] = 0.0;
-        MATRIX_A[17][2] = 1.0;
-        MATRIX_A[17][3] = referencePoints.get(5).getZ_WGS84();
-        MATRIX_A[17][4] = -1 * referencePoints.get(5).getY_WGS84();
-        MATRIX_A[17][5] = referencePoints.get(5).getX_WGS84();
-        MATRIX_A[17][6] = 0.0;
-
-        MATRIX_A[18][0] = 1.0;
-        MATRIX_A[18][1] = 0.0;
-        MATRIX_A[18][2] = 0.0;
-        MATRIX_A[18][3] = referencePoints.get(6).getX_WGS84();
-        MATRIX_A[18][4] = 0.0;
-        MATRIX_A[18][5] = -1 * referencePoints.get(6).getZ_WGS84();
-        MATRIX_A[18][6] = referencePoints.get(6).getY_WGS84();
-
-        MATRIX_A[19][0] = 0.0;
-        MATRIX_A[19][1] = 1.0;
-        MATRIX_A[19][2] = 0.0;
-        MATRIX_A[19][3] = referencePoints.get(6).getY_WGS84();
-        MATRIX_A[19][4] = referencePoints.get(6).getZ_WGS84();
-        MATRIX_A[19][5] = 0.0;
-        MATRIX_A[19][6] = -1 * referencePoints.get(6).getX_WGS84();
-
-        MATRIX_A[20][0] = 0.0;
-        MATRIX_A[20][1] = 0.0;
-        MATRIX_A[20][2] = 1.0;
-        MATRIX_A[20][3] = referencePoints.get(6).getZ_WGS84();
-        MATRIX_A[20][4] = -1 * referencePoints.get(6).getY_WGS84();
-        MATRIX_A[20][5] = referencePoints.get(6).getX_WGS84();
-        MATRIX_A[20][6] = 0.0;
-
-        MATRIX_A[21][0] = 1.0;
-        MATRIX_A[21][1] = 0.0;
-        MATRIX_A[21][2] = 0.0;
-        MATRIX_A[21][3] = referencePoints.get(7).getX_WGS84();
-        MATRIX_A[21][4] = 0.0;
-        MATRIX_A[21][5] = -1 * referencePoints.get(7).getZ_WGS84();
-        MATRIX_A[21][6] = referencePoints.get(7).getY_WGS84();
-
-        MATRIX_A[22][0] = 0.0;
-        MATRIX_A[22][1] = 1.0;
-        MATRIX_A[22][2] = 0.0;
-        MATRIX_A[22][3] = referencePoints.get(7).getY_WGS84();
-        MATRIX_A[22][4] = referencePoints.get(7).getZ_WGS84();
-        MATRIX_A[22][5] = 0.0;
-        MATRIX_A[22][6] = -1 * referencePoints.get(7).getX_WGS84();
-
-        MATRIX_A[23][0] = 0.0;
-        MATRIX_A[23][1] = 0.0;
-        MATRIX_A[23][2] = 1.0;
-        MATRIX_A[23][3] = referencePoints.get(7).getZ_WGS84();
-        MATRIX_A[23][4] = -1 * referencePoints.get(7).getY_WGS84();
-        MATRIX_A[23][5] = referencePoints.get(7).getX_WGS84();
-        MATRIX_A[23][6] = 0.0;
+            MATRIX_A[23][0] = 0.0;
+            MATRIX_A[23][1] = 0.0;
+            MATRIX_A[23][2] = 1.0;
+            MATRIX_A[23][3] = referencePoints.get(7).getZ_WGS84();
+            MATRIX_A[23][4] = -1 * referencePoints.get(7).getY_WGS84();
+            MATRIX_A[23][5] = referencePoints.get(7).getX_WGS84();
+            MATRIX_A[23][6] = 0.0;
+        }
     }
 
     private void createMatrix_l() {
-        MATRIX_l[0][0] = referencePoints.get(0).getX_IUGG67();
-        MATRIX_l[1][0] = referencePoints.get(0).getY_IUGG67();
-        MATRIX_l[2][0] = referencePoints.get(0).getZ_IUGG67();
-        MATRIX_l[3][0] = referencePoints.get(1).getX_IUGG67();
-        MATRIX_l[4][0] = referencePoints.get(1).getY_IUGG67();
-        MATRIX_l[5][0] = referencePoints.get(1).getZ_IUGG67();
-        MATRIX_l[6][0] = referencePoints.get(2).getX_IUGG67();
-        MATRIX_l[7][0] = referencePoints.get(2).getY_IUGG67();
-        MATRIX_l[8][0] = referencePoints.get(2).getZ_IUGG67();
-        MATRIX_l[9][0] = referencePoints.get(3).getX_IUGG67();
-        MATRIX_l[10][0] = referencePoints.get(3).getY_IUGG67();
-        MATRIX_l[11][0] = referencePoints.get(3).getZ_IUGG67();
-        MATRIX_l[12][0] = referencePoints.get(4).getX_IUGG67();
-        MATRIX_l[13][0] = referencePoints.get(4).getY_IUGG67();
-        MATRIX_l[14][0] = referencePoints.get(4).getZ_IUGG67();
-        MATRIX_l[15][0] = referencePoints.get(5).getX_IUGG67();
-        MATRIX_l[16][0] = referencePoints.get(5).getY_IUGG67();
-        MATRIX_l[17][0] = referencePoints.get(5).getZ_IUGG67();
-        MATRIX_l[18][0] = referencePoints.get(6).getX_IUGG67();
-        MATRIX_l[19][0] = referencePoints.get(6).getY_IUGG67();
-        MATRIX_l[20][0] = referencePoints.get(6).getZ_IUGG67();
-        MATRIX_l[21][0] = referencePoints.get(7).getX_IUGG67();
-        MATRIX_l[22][0] = referencePoints.get(7).getY_IUGG67();
-        MATRIX_l[23][0] = referencePoints.get(7).getZ_IUGG67();
+        if( !referencePoints.get(0).isLeftOut() ) {
+            MATRIX_l[0][0] = referencePoints.get(0).getX_IUGG67();
+            MATRIX_l[1][0] = referencePoints.get(0).getY_IUGG67();
+            MATRIX_l[2][0] = referencePoints.get(0).getZ_IUGG67();
+        }
+        if( !referencePoints.get(1).isLeftOut() ) {
+            MATRIX_l[3][0] = referencePoints.get(1).getX_IUGG67();
+            MATRIX_l[4][0] = referencePoints.get(1).getY_IUGG67();
+            MATRIX_l[5][0] = referencePoints.get(1).getZ_IUGG67();
+        }
+        if( !referencePoints.get(2).isLeftOut() ) {
+            MATRIX_l[6][0] = referencePoints.get(2).getX_IUGG67();
+            MATRIX_l[7][0] = referencePoints.get(2).getY_IUGG67();
+            MATRIX_l[8][0] = referencePoints.get(2).getZ_IUGG67();
+        }
+        if( !referencePoints.get(3).isLeftOut() ) {
+            MATRIX_l[9][0] = referencePoints.get(3).getX_IUGG67();
+            MATRIX_l[10][0] = referencePoints.get(3).getY_IUGG67();
+            MATRIX_l[11][0] = referencePoints.get(3).getZ_IUGG67();
+        }
+        if( !referencePoints.get(4).isLeftOut() ) {
+            MATRIX_l[12][0] = referencePoints.get(4).getX_IUGG67();
+            MATRIX_l[13][0] = referencePoints.get(4).getY_IUGG67();
+            MATRIX_l[14][0] = referencePoints.get(4).getZ_IUGG67();
+        }
+        if( !referencePoints.get(5).isLeftOut() ) {
+            MATRIX_l[15][0] = referencePoints.get(5).getX_IUGG67();
+            MATRIX_l[16][0] = referencePoints.get(5).getY_IUGG67();
+            MATRIX_l[17][0] = referencePoints.get(5).getZ_IUGG67();
+        }
+        if( !referencePoints.get(6).isLeftOut() ) {
+            MATRIX_l[18][0] = referencePoints.get(6).getX_IUGG67();
+            MATRIX_l[19][0] = referencePoints.get(6).getY_IUGG67();
+            MATRIX_l[20][0] = referencePoints.get(6).getZ_IUGG67();
+        }
+        if( !referencePoints.get(7).isLeftOut() ) {
+            MATRIX_l[21][0] = referencePoints.get(7).getX_IUGG67();
+            MATRIX_l[22][0] = referencePoints.get(7).getY_IUGG67();
+            MATRIX_l[23][0] = referencePoints.get(7).getZ_IUGG67();
+        }
     }
 }
