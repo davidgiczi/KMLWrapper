@@ -390,7 +390,7 @@ public class InputDataFileWindow {
             if( isOkDisplayData("AutoCad") && controller.setIdForInputDataPoints() ){
                 try{
                     controller.transformationInputPointData();
-                    displayer = new DataDisplayerWindow("AutoCad scr fájl");
+                    displayer = new DataDisplayerWindow("AutoCad scr fájl", controller);
                 }
                 catch (IllegalArgumentException a){
                     MessagePane.getInfoMessage(a.getMessage(),
@@ -428,7 +428,7 @@ public class InputDataFileWindow {
                 if( isOkDisplayData(selectedItem) && controller.setIdForInputDataPoints() ){
                     try{
                         controller.transformationInputPointData();
-                        displayer = new DataDisplayerWindow(selectedItem);
+                        displayer = new DataDisplayerWindow(selectedItem,  controller);
                     }
                     catch (IllegalArgumentException a){
                         MessagePane.getInfoMessage(a.getMessage(),

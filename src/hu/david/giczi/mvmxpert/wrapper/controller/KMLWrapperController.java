@@ -5,10 +5,7 @@ import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
 import hu.david.giczi.mvmxpert.wrapper.service.Transformation;
 import hu.david.giczi.mvmxpert.wrapper.service.Transformation2D;
 import hu.david.giczi.mvmxpert.wrapper.service.Validation;
-import hu.david.giczi.mvmxpert.wrapper.view.InputDataFileWindow;
-import hu.david.giczi.mvmxpert.wrapper.view.ManuallyInputDataWindow;
-import hu.david.giczi.mvmxpert.wrapper.view.MessagePane;
-import hu.david.giczi.mvmxpert.wrapper.view.Transformation2DWindow;
+import hu.david.giczi.mvmxpert.wrapper.view.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +42,24 @@ public class KMLWrapperController {
 
     public void transformationInputPointData() {
         TRANSFORMATION = new Transformation();
+    }
+    public void reTransformationInputPointData(String dataType, String pointId, boolean isLeftOut){
+        if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14])){
+            for (Point eovToWgsReferencePoint : TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS) {
+                if( eovToWgsReferencePoint.getPointId().equals(pointId) ){
+                    eovToWgsReferencePoint.setLeftOut(!isLeftOut);
+
+                }
+            }
+        }
+        else  if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15])){
+            for (Point wgsToEovReferencePoint : TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS) {
+                if( wgsToEovReferencePoint.getPointId().equals(pointId) ){
+                    wgsToEovReferencePoint.setLeftOut(!isLeftOut);
+                }
+            }
+        }
+    KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().setCommonPointsDeviationData();
     }
 
     public void openInputDataFile() {

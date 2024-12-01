@@ -75,7 +75,7 @@ public class ToKMLFormat {
         kmlDataList.add("<Folder>");
         kmlDataList.add("<name>Points</name>");
         for (Point point : KMLWrapperController.INPUT_POINTS) {
-            if( point.isSave() ){
+            if( point.isLeftOut() ){
                 wrapPoint(point);
             }
         }
@@ -107,7 +107,7 @@ public class ToKMLFormat {
         kmlDataList.add("<tessellate>1</tessellate>");
         kmlDataList.add("<coordinates>");
         for (Point point : KMLWrapperController.INPUT_POINTS) {
-            if( point.isSave() ){
+            if( point.isLeftOut() ){
                 kmlDataList.add(point.getFormattedDecimalLambdaForWGS84() + ","
                         + point.getFormattedDecimalFiForWGS84() + "," + point.getFormattedHForWGS84());
             }
@@ -131,13 +131,13 @@ public class ToKMLFormat {
         kmlDataList.add("<tessellate>1</tessellate>");
         kmlDataList.add("<coordinates>");
         for (Point point : KMLWrapperController.INPUT_POINTS) {
-            if( point.isSave() ){
+            if( point.isLeftOut() ){
                 kmlDataList.add(point.getFormattedDecimalLambdaForWGS84() + ","
                         + point.getFormattedDecimalFiForWGS84() + "," + point.getFormattedHForWGS84());
             }
         }
         for (Point point : KMLWrapperController.INPUT_POINTS) {
-            if ( point.isSave()) {
+            if ( point.isLeftOut()) {
                 kmlDataList.add(point.getFormattedDecimalLambdaForWGS84() + ","
                         + point.getFormattedDecimalFiForWGS84() + "," + point.getFormattedHForWGS84());
                 break;

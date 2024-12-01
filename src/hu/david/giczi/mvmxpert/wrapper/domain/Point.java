@@ -12,7 +12,7 @@ public class Point {
 
     private boolean isWGS;
     private boolean isXYZ;
-    private boolean isSave;
+    private boolean isLeftOut;
     private String pointId;
     private Double y_EOV;
     private Double x_EOV;
@@ -55,12 +55,12 @@ public class Point {
         isXYZ = XYZ;
     }
 
-    public boolean isSave() {
-        return isSave;
+    public boolean isLeftOut() {
+        return isLeftOut;
     }
 
-    public void setSave(boolean save) {
-        isSave = save;
+    public void setLeftOut(boolean leftOut) {
+        isLeftOut = leftOut;
     }
 
     public String getPointId() {

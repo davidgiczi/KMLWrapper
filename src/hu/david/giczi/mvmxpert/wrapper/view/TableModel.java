@@ -48,7 +48,7 @@ public class TableModel extends DefaultTableModel {
         else if ( !displayedPointList.isEmpty()) {
                 for (int row = 0; row < getTableRowsNumber(); row++) {
                     boolean isSaved = (boolean) getValueAt(row, getTableColsNumber());
-                    displayedPointList.get(row).setSave(isSaved);
+                    displayedPointList.get(row).setLeftOut(isSaved);
                 }
         }
         else if (toWGSParams != null) {
@@ -83,7 +83,7 @@ public class TableModel extends DefaultTableModel {
         }
        else if( !displayedPointList.isEmpty() ) {
             for (Point displayedPoint : displayedPointList) {
-                if (displayedPoint.isSave()) {
+                if (displayedPoint.isLeftOut()) {
                     pcs++;
                 }
             }
@@ -311,8 +311,8 @@ public class TableModel extends DefaultTableModel {
                         deviationForWGS.getXDeviation(),
                         deviationForWGS.getYDeviation(),
                         deviationForWGS.getZDeviation(),
-                        true};
-                addRow(row);
+                        !commonPoint.isLeftOut()};
+                    addRow(row);
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
@@ -340,7 +340,7 @@ public class TableModel extends DefaultTableModel {
                         deviationForEOV.getXDeviation(),
                         deviationForEOV.getYDeviation(),
                         deviationForEOV.getZDeviation(),
-                        true};
+                        !commonPoint.isLeftOut()};
                 deviationListForEOV.add(deviationForEOV);
                 addRow(row);
             }
@@ -380,6 +380,72 @@ public class TableModel extends DefaultTableModel {
             }
         }
 
+    }
+
+    public void setCommonPointsDeviationData(){
+        if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
+            if( KMLWrapperController.TRANSFORMATION.toWGS == null ){
+                throw new IllegalArgumentException("Hozzáadott EOV pont nem található");
+            }
+            setCommonPointsDisplayedData();
+            deviationListForWGS = new ArrayList<>();
+            for (Point commonPoint : displayedPointList) {
+                new ToWGS(commonPoint.getX_IUGG67(),
+                        commonPoint.getY_IUGG67(),
+                        commonPoint.getZ_IUGG67(),
+                        KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS);
+                Deviation deviationForWGS = new Deviation(
+                        commonPoint.getPointId(),
+                        commonPoint.getX_WGS84(),
+                        commonPoint.getY_WGS84(),
+                        commonPoint.getZ_WGS84(),
+                        ToWGS.X_WGS84,
+                        ToWGS.Y_WGS84,
+                        ToWGS.Z_WGS84);
+                deviationListForWGS.add(deviationForWGS);
+                Object[] row = new Object[]{
+                        deviationForWGS.getPointId(),
+                        deviationForWGS.getXDeviation(),
+                        deviationForWGS.getYDeviation(),
+                        deviationForWGS.getZDeviation(),
+                        !commonPoint.isLeftOut()};
+                for (int i = 0; i < row.length; i++) {
+                    setValueAt(row[i], displayedPointList.indexOf(commonPoint), i);
+                }
+            }
+        }
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ) {
+            if (KMLWrapperController.TRANSFORMATION.toEOV == null) {
+                throw new IllegalArgumentException("Hozzáadott WGS84 pont nem található");
+            }
+            setCommonPointsDisplayedData();
+            deviationListForEOV = new ArrayList<>();
+            for (Point commonPoint : displayedPointList) {
+
+                new ToEOV(commonPoint.getX_WGS84(),
+                        commonPoint.getY_WGS84(),
+                        commonPoint.getZ_WGS84(),
+                        KMLWrapperController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS);
+                Deviation deviationForEOV = new Deviation(
+                        commonPoint.getPointId(),
+                        commonPoint.getY_EOV(),
+                        commonPoint.getX_EOV(),
+                        commonPoint.getM_EOV(),
+                        ToEOV.Y_EOV,
+                        ToEOV.X_EOV,
+                        ToEOV.M_EOV);
+                Object[] row = new Object[]{
+                        deviationForEOV.getPointId(),
+                        deviationForEOV.getXDeviation(),
+                        deviationForEOV.getYDeviation(),
+                        deviationForEOV.getZDeviation(),
+                        !commonPoint.isLeftOut()};
+                deviationListForEOV.add(deviationForEOV);
+                for (int i = 0; i < row.length; i++) {
+                    setValueAt(row[i], displayedPointList.indexOf(commonPoint), i);
+                }
+            }
+        }
     }
 
     private void setColumNames(){
@@ -430,10 +496,10 @@ public class TableModel extends DefaultTableModel {
                     "Méretarány" , "X forgatás", "Y forgatás", "Z forgatás", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
-            columNames = new String[]{"Pontszám", "dX", "dY", "dZ", "Ment"};
+            columNames = new String[]{"Pontszám", "dX", "dY", "dZ", "Számol és ment"};
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
-            columNames = new String[]{"Pontszám", "dY", "dX", "dM", "Ment"};
+            columNames = new String[]{"Pontszám", "dY", "dX", "dM", "Számol és ment"};
         }
         else if( Arrays.asList(InputDataFileWindow.KML_DATA_TYPE).indexOf(dataType) > 0  &&
                 6 > Arrays.asList(InputDataFileWindow.KML_DATA_TYPE).indexOf(dataType) ){

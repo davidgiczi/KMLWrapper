@@ -20,9 +20,11 @@ public class DataDisplayerWindow {
     private TableModel tableModel;
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
+    private final KMLWrapperController controller;
     public List<Point> usedForCalcPointList;
-    public DataDisplayerWindow(String dataType) {
-    displayData(dataType);
+    public DataDisplayerWindow(String dataType, KMLWrapperController controller) {
+        this.controller = controller;
+        displayData(dataType);
     }
 
 
@@ -49,6 +51,7 @@ public class DataDisplayerWindow {
             }
         });
         JTable table = new JTable(tableModel);
+
         table.getTableHeader().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -98,6 +101,24 @@ public class DataDisplayerWindow {
                         getCalcDataMessagePane();
                     }
                 }
+                else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14])){
+                    int row = table.getSelectedRow();
+                    int col = table.getSelectedColumn();
+                    if( col == tableModel.getTableColsNumber() ){
+                        String pointId = tableModel.getValueAt(row, 0).toString();
+                        boolean isLeftOut = (boolean) tableModel.getValueAt(row, tableModel.getTableColsNumber());
+                        controller.reTransformationInputPointData(dataType, pointId, isLeftOut);
+                    }
+                }
+                else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15])){
+                    int row = table.getSelectedRow();
+                    int col = table.getSelectedColumn();
+                    if( col == tableModel.getTableColsNumber() ){
+                        String pointId = tableModel.getValueAt(row, 0).toString();
+                        boolean isLeftOut = (boolean) tableModel.getValueAt(row, tableModel.getTableColsNumber());
+                        controller.reTransformationInputPointData(dataType, pointId, isLeftOut);
+                    }
+                }
             }
 
             @Override
@@ -115,7 +136,7 @@ public class DataDisplayerWindow {
         table.setRowHeight(30);
         table.setFont(plainFont);
         table.getTableHeader().setFont(boldFont);
-       DefaultTableCellRenderer tableCellRenderer = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer tableCellRenderer = new DefaultTableCellRenderer();
         tableCellRenderer.setHorizontalAlignment( JLabel.CENTER );
         table.setDefaultRenderer(String.class, tableCellRenderer);
         jFrame.add(new JScrollPane(table));

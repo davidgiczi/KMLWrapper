@@ -78,6 +78,7 @@ public class Transformation {
             }
         }
         for (Point sortedPoint : KMLWrapperController.REFERENCE_POINTS) {
+
             for (int j = 0; j < EOV_TO_WGS_REFERENCE_POINTS.size(); j++) {
                 if (EOV_TO_WGS_REFERENCE_POINTS.get(j) == null) {
                     if (!EOV_TO_WGS_REFERENCE_POINTS.contains(sortedPoint)) {
@@ -86,6 +87,7 @@ public class Transformation {
                 }
             }
         }
+
         sortEOVPointsByAscDistance(EOV_TO_WGS_REFERENCE_POINTS);
     }
 

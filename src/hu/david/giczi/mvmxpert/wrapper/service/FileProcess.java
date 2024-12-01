@@ -248,7 +248,7 @@ public class FileProcess {
         writer.write("_MULTIPLE _POINT");
         writer.newLine();
         for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
-            if( inputPoint.isSave() ){
+            if( inputPoint.isLeftOut() ){
                 writer.write(inputPoint.getFormattedYForEOV() + "," +
                         inputPoint.getFormattedXForEOV() + "," + inputPoint.getFormattedMForEOV());
             }
@@ -311,7 +311,7 @@ public void saveCalcData(String fileName) throws  IOException{
                     .getTableModel().displayedPointList;
             for (Point displayedPoint : displayedPointList) {
 
-                if (!displayedPoint.isSave()) {
+                if (!displayedPoint.isLeftOut()) {
                     continue;
                 }
 
@@ -377,7 +377,7 @@ public void saveCalcData(String fileName) throws  IOException{
         else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[9])) {
             for (Point wgsToEovReferencePoint : KMLWrapperController.
                     INPUT_DATA_FILE_WINDOW.displayer.getTableModel().displayedPointList) {
-                if( wgsToEovReferencePoint.isSave() ){
+                if( wgsToEovReferencePoint.isLeftOut() ){
                 writer.write(wgsToEovReferencePoint.getPointId() + "," +
                         wgsToEovReferencePoint.getFormattedYForEOV() + "," +
                         wgsToEovReferencePoint.getFormattedXForEOV() + "," +
@@ -388,7 +388,7 @@ public void saveCalcData(String fileName) throws  IOException{
         } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[10])) {
             for (Point eovToWgsReferencePoint : KMLWrapperController.
                     INPUT_DATA_FILE_WINDOW.displayer.getTableModel().displayedPointList) {
-                if( eovToWgsReferencePoint.isSave() ) {
+                if( eovToWgsReferencePoint.isLeftOut() ) {
                     writer.write(eovToWgsReferencePoint.getPointId() + "," +
                             eovToWgsReferencePoint.getFormattedXForWGS84() + "," +
                             eovToWgsReferencePoint.getFormattedYForWGS84() + "," +
@@ -399,7 +399,7 @@ public void saveCalcData(String fileName) throws  IOException{
         } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[11])) {
             for (Point eovToWgsReferencePoint : KMLWrapperController.
                     INPUT_DATA_FILE_WINDOW.displayer.getTableModel().displayedPointList) {
-                if( eovToWgsReferencePoint.isSave() ) {
+                if( eovToWgsReferencePoint.isLeftOut() ) {
                         writer.write(eovToWgsReferencePoint.getPointId() + "," +
                                 eovToWgsReferencePoint.getFormattedDecimalFiForWGS84() + "," +
                                 eovToWgsReferencePoint.getFormattedDecimalLambdaForWGS84() + "," +
@@ -443,6 +443,9 @@ public void saveCalcData(String fileName) throws  IOException{
                             deviation.getYDeviation() + "," +
                             deviation.getZDeviation());
                 }
+                else{
+                    continue;
+                }
                 writer.newLine();
             }
         }
@@ -455,6 +458,9 @@ public void saveCalcData(String fileName) throws  IOException{
                             deviation.getXDeviation() + "," +
                             deviation.getYDeviation() + "," +
                             deviation.getZDeviation());
+                }
+                else{
+                    continue;
                 }
                 writer.newLine();
             }
