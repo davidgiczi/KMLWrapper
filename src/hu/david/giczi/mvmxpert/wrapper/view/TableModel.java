@@ -132,7 +132,7 @@ public class TableModel extends DefaultTableModel {
                 addRow(row);
             }
         }
-        else  if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[3]) ){
+        else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[3]) ){
             for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
                 displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
@@ -382,8 +382,8 @@ public class TableModel extends DefaultTableModel {
 
     }
 
-    public void setCommonPointsDeviationData(){
-         if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
+    public void displayPointData(){
+              if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
             if( KMLWrapperController.TRANSFORMATION.toWGS == null ){
                 throw new IllegalArgumentException("Hozzáadott EOV pont nem található");
             }

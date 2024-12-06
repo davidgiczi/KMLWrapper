@@ -52,4 +52,12 @@ public class MessagePane {
         return (String) JOptionPane.showInputDialog(jFrame, messageLabel, titleLabel.getText(),
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
     }
+
+    public static String setPointIdMessage(String title, JFrame jFrame){
+        JLabel messageLabel = new JLabel("Új pontszám megadása:");
+        messageLabel.setFont(boldFont);
+        JLabel titleLabel = new JLabel(title);
+        return (String) JOptionPane.showInputDialog(jFrame, messageLabel, titleLabel.getText(),
+                JOptionPane.QUESTION_MESSAGE, null, null, null);
+    }
 }

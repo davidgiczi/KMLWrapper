@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DataDisplayerWindow {
@@ -87,7 +88,15 @@ public class DataDisplayerWindow {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6])){
+                if( e.getClickCount() == 2 &&
+                      0 < Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(dataType) &&
+                      9 > Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(dataType) ){
+                    int row = table.getSelectedRow();
+                    String pointId = tableModel.getValueAt(row, 0).toString();
+                    controller.deleteInputPointData(dataType, pointId);
+
+                }
+                else if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6])){
                     int row = table.getSelectedRow();
                     int col = table.getSelectedColumn();
                     if( col == tableModel.getTableColsNumber() ){
@@ -107,7 +116,7 @@ public class DataDisplayerWindow {
                     if( col == tableModel.getTableColsNumber() ){
                         String pointId = tableModel.getValueAt(row, 0).toString();
                         boolean isLeftOut = (boolean) tableModel.getValueAt(row, tableModel.getTableColsNumber());
-                        controller.reTransformationInputPointData(dataType, pointId, isLeftOut);
+                        controller.reCalculationReferencePointData(dataType, pointId, isLeftOut);
                     }
                 }
                 else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15])){
@@ -116,7 +125,7 @@ public class DataDisplayerWindow {
                     if( col == tableModel.getTableColsNumber() ){
                         String pointId = tableModel.getValueAt(row, 0).toString();
                         boolean isLeftOut = (boolean) tableModel.getValueAt(row, tableModel.getTableColsNumber());
-                        controller.reTransformationInputPointData(dataType, pointId, isLeftOut);
+                        controller.reCalculationReferencePointData(dataType, pointId, isLeftOut);
                     }
                 }
             }

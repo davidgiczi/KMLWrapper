@@ -43,23 +43,49 @@ public class KMLWrapperController {
     public void transformationInputPointData() {
         TRANSFORMATION = new Transformation();
     }
-    public void reTransformationInputPointData(String dataType, String pointId, boolean isLeftOut){
-        if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14])){
+    public void reCalculationReferencePointData(String dataType, String pointId, boolean isLeftOut){
+        if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
             for (Point eovToWgsReferencePoint : TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS) {
                 if( eovToWgsReferencePoint.getPointId().equals(pointId) ){
                     eovToWgsReferencePoint.setLeftOut(!isLeftOut);
-
                 }
             }
         }
-        else  if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15])){
+        else  if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
             for (Point wgsToEovReferencePoint : TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS) {
                 if( wgsToEovReferencePoint.getPointId().equals(pointId) ){
                     wgsToEovReferencePoint.setLeftOut(!isLeftOut);
                 }
             }
         }
-    KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().setCommonPointsDeviationData();
+    KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().displayPointData();
+    }
+
+    public void deleteInputPointData(String dataType, String pointId){
+        if( pointId == null ){
+            return;
+        }
+        for (int i = INPUT_POINTS.size() - 1; i >= 0; i--) {
+
+            if( INPUT_POINTS.get(i).getPointId() == null ){
+                continue;
+            }
+            if( INPUT_POINTS.get(i).getPointId().equals(pointId) ){
+              if( MessagePane.getYesNoOptionMessage( pointId + ". pont törlése",
+                      "Biztos, hogy véglegesen törli a pontot?", INPUT_DATA_FILE_WINDOW.jFrame) == 0 ){
+                  INPUT_POINTS.remove(i);
+                  transformationInputPointData();
+                  INPUT_DATA_FILE_WINDOW.displayer.jFrame.setVisible(false);
+                  try {
+                      INPUT_DATA_FILE_WINDOW.displayer = new DataDisplayerWindow(dataType, this);
+                  }
+                  catch (IllegalArgumentException e){
+                      MessagePane.getInfoMessage(e.getMessage(),
+                              "Hozzáadott pont nem található.", INPUT_DATA_FILE_WINDOW.jFrame);
+                  }
+              }
+            }
+        }
     }
 
     public void openInputDataFile() {
@@ -295,23 +321,19 @@ public class KMLWrapperController {
                 "Cseréli egyenként a pontok számát?", INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
 
             for (Point inputPoint : INPUT_POINTS) {
-
-                String pointId = (prefix.isEmpty() ? "" : prefix) + (pointIdValue++) + (postfix.isEmpty()
+            String genPointId = (prefix.isEmpty() ? "" : prefix) + (pointIdValue++) + (postfix.isEmpty()
                         ? "" : postfix);
-
-                if (inputPoint.getPointId() == null) {
-                    inputPoint.setPointId(pointId);
-                }
-                else {
-                    if (MessagePane.getYesNoOptionMessage("Beolvasott pont száma: " + inputPoint.getPointId(),
-                            "Cseréli a pont számát? Az új pontszám: " + pointId,
-                            INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
-                        inputPoint.setPointId(pointId);
-                    }
+            String addedPointId = MessagePane.setPointIdMessage(
+                    INPUT_POINTS.size() + " db pont/" + (INPUT_POINTS.indexOf(inputPoint) + 1) + ". pont száma: " + inputPoint.getPointId(),
+                       INPUT_DATA_FILE_WINDOW.jFrame);
+            if( addedPointId != null && !addedPointId.isEmpty() ){
+                inputPoint.setPointId(addedPointId);
+            }
+            else{
+                inputPoint.setPointId(genPointId);
                 }
             }
         }
-
         return true;
     }
 
