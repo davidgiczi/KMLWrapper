@@ -274,7 +274,11 @@ public class KMLWrapperController {
         return null;
     }
 
-    public boolean setIdForInputDataPoints() {
+    public boolean setIdForInputDataPoints(String selectedItem) {
+        if( 8 < Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(selectedItem) &&
+                16 > Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(selectedItem) ){
+            return true;
+        }
         String inputPointId = INPUT_DATA_FILE_WINDOW.pointIdField.getText();
         int pointIdValue = 1;
         if ( !inputPointId.isEmpty() ) {

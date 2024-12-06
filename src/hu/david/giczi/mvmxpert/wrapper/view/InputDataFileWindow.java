@@ -387,7 +387,7 @@ public class InputDataFileWindow {
             outputDataTypeComboBox.setForeground(Color.BLACK);
             saveBtn.setEnabled(false);
             createFileNameForSaveOutputFile();
-            if( isOkDisplayData("AutoCad") && controller.setIdForInputDataPoints() ){
+            if( isOkDisplayData("AutoCad") && controller.setIdForInputDataPoints("AutoCad") ){
                 try{
                     controller.transformationInputPointData();
                     displayer = new DataDisplayerWindow("AutoCad scr fájl", controller);
@@ -425,7 +425,7 @@ public class InputDataFileWindow {
             else  {
                 outputDataTypeComboBox.setForeground(Color.BLACK);
                 createFileNameForSaveOutputFile();
-                if( isOkDisplayData(selectedItem) && controller.setIdForInputDataPoints() ){
+                if( isOkDisplayData(selectedItem) && controller.setIdForInputDataPoints(selectedItem) ){
                     try{
                         controller.transformationInputPointData();
                         displayer = new DataDisplayerWindow(selectedItem,  controller);
