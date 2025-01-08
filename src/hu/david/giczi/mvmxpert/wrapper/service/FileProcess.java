@@ -6,7 +6,6 @@ import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.domain.TransformationParam;
 import hu.david.giczi.mvmxpert.wrapper.view.InputDataFileWindow;
 import hu.david.giczi.mvmxpert.wrapper.view.MessagePane;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;

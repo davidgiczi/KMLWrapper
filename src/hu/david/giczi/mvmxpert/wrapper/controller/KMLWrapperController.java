@@ -76,6 +76,7 @@ public class KMLWrapperController {
                   INPUT_POINTS.remove(i);
                   transformationInputPointData();
                   INPUT_DATA_FILE_WINDOW.displayer.jFrame.setVisible(false);
+                  setWindowTitle();
                   try {
                       INPUT_DATA_FILE_WINDOW.displayer = new DataDisplayerWindow(dataType, this);
                   }
