@@ -10,7 +10,7 @@ public class MessagePane {
         JOptionPane.showMessageDialog(frame, "<html><h3>" + message + "</h3></html>", title, JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public static int getYesNoOptionMessage(String title, String message, JFrame frame) {
+    public static int getYesNoOptionMessage(String title, String message, JFrame frame)  {
         Object[] options = {"<html><b style=font-size:11px>Igen</b></html>",
                 "<html><b style=font-size:11px>Nem</b></html>"};
         JLabel messageLabel = new JLabel(message);
@@ -18,7 +18,7 @@ public class MessagePane {
         JLabel titleLabel = new JLabel(title);
         messageLabel.setFont(boldFont);
         return JOptionPane.showOptionDialog(frame, messageLabel, titleLabel.getText(),
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]) ;
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
     }
 
     public static String getInputDataMessage(JFrame jFrame, String initData){
@@ -53,11 +53,51 @@ public class MessagePane {
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
     }
 
-    public static String setPointIdMessage(String title, JFrame jFrame){
-        JLabel messageLabel = new JLabel("Új pontszám megadása:");
+    public static String setPointIdMessage(String title, JFrame jFrame) {
+        JLabel messageLabel = new JLabel("Egyedi pontszám megadása:");
         messageLabel.setFont(boldFont);
         JLabel titleLabel = new JLabel(title);
-        return (String) JOptionPane.showInputDialog(jFrame, messageLabel, titleLabel.getText(),
-                JOptionPane.QUESTION_MESSAGE, null, null, null);
+        JDialog dialog = new JDialog(jFrame, titleLabel.getText(), true);
+        dialog.setPreferredSize(new Dimension(450, 165));
+        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        JTextField textField = new JTextField(20);
+        textField.setFont(boldFont);
+        JButton yesButton = new JButton("Igen");
+        yesButton.setFont(boldFont);
+        JButton noButton = new JButton("Nem");
+        noButton.setFont(boldFont);
+        JButton cancelButton = new JButton("Mégse");
+        cancelButton.setFont(boldFont);
+        noButton.setFont(boldFont);
+        final String[] inputResult = {null};
+        yesButton.addActionListener(e -> {
+            inputResult[0] = textField.getText().trim();
+            dialog.dispose();
+        });
+        noButton.addActionListener(e -> {
+            inputResult[0] = "NO";
+            dialog.dispose();
+        });
+        cancelButton.addActionListener(e ->{
+            inputResult[0] = "EXIT";
+            dialog.dispose();
+        });
+
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel.add(messageLabel, BorderLayout.NORTH);
+        panel.add(textField, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(yesButton);
+        buttonPanel.add(noButton);
+        buttonPanel.add(cancelButton);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+
+        dialog.getContentPane().add(panel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(jFrame);
+        dialog.setVisible(true);
+        return inputResult[0];
     }
 }

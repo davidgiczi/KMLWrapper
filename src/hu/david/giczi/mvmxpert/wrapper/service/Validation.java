@@ -277,7 +277,7 @@ public class Validation {
     }
 
     public static void isValidInputDataForEOV(String pointId, String Y_EOV, String X_EOV, String M_EOV)
-    throws InvalidPreferencesFormatException {
+            throws InvalidPreferencesFormatException, NumberFormatException {
         double Y;
         double X;
         double M;
@@ -313,7 +313,7 @@ public class Validation {
         KMLWrapperController.addValidInputPoint(pointEOV);
     }
     public static void isValidManuallyInputDataForWGS84DecimalFormat(String pointId, String Fi, String Lambda, String H)
-    throws  InvalidPreferencesFormatException{
+            throws InvalidPreferencesFormatException {
     double fi;
     double lambda;
     double h;
@@ -355,7 +355,7 @@ public class Validation {
     }
     public static void isValidManuallyInputDataForWGS84AngleMinSecFormat(String pointId, String Fi_angle, String Fi_min, String Fi_sec,
          String Lambda_angle, String Lambda_min, String Lambda_sec, String H)
-    throws InvalidPreferencesFormatException{
+            throws NumberFormatException, InvalidPreferencesFormatException {
         double fi_angle;
         double fi_min;
         double fi_sec;
@@ -456,7 +456,7 @@ public class Validation {
         KMLWrapperController.addValidInputPoint(pointWGS84);
     }
     public static void isValidManuallyInputDataForWGS84XYZFormat(String pointId, String X, String Y, String Z)
-    throws InvalidPreferencesFormatException{
+            throws InvalidPreferencesFormatException {
     double x;
     double y;
     double z;

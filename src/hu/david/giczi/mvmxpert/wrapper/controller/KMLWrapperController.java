@@ -6,7 +6,6 @@ import hu.david.giczi.mvmxpert.wrapper.service.Transformation;
 import hu.david.giczi.mvmxpert.wrapper.service.Transformation2D;
 import hu.david.giczi.mvmxpert.wrapper.service.Validation;
 import hu.david.giczi.mvmxpert.wrapper.view.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -132,8 +131,11 @@ public class KMLWrapperController {
         for (String kmlData : dataFromKML) {
             String[] kmlInputData = kmlData.split(",");
             try{
-                Validation.isValidManuallyInputDataForWGS84DecimalFormat
-                        (null, kmlInputData[1], kmlInputData[0], kmlInputData[2]);
+                    Validation.isValidManuallyInputDataForWGS84DecimalFormat
+                            (null, kmlInputData[1], kmlInputData[0], kmlInputData[2]);
+            }
+            catch (IllegalArgumentException i){
+                break;
             }
             catch (InvalidPreferencesFormatException e){
                 MessagePane.getInfoMessage("Hibás WGS84 földrajzi koordináta", e.getMessage(), INPUT_DATA_FILE_WINDOW.jFrame);
@@ -230,7 +232,7 @@ public class KMLWrapperController {
         }
     }
 
-    public static void addValidInputPoint(Point validPoint) {
+    public static void addValidInputPoint(Point validPoint) throws IllegalArgumentException {
         if (KMLWrapperController.INPUT_POINTS.isEmpty()) {
             KMLWrapperController.INPUT_POINTS.add(validPoint);
             return;
@@ -241,12 +243,16 @@ public class KMLWrapperController {
                     String.valueOf(INPUT_POINTS.size() + 1) : validPoint.getPointId());
             KMLWrapperController.INPUT_POINTS.add(validPoint);
         } else {
-            if (MessagePane.getYesNoOptionMessage("Hozzáadott pont: " + addedPoint.getPointId(),
+            int option = MessagePane.getYesNoOptionMessage("Hozzáadott pont: " + addedPoint.getPointId(),
                     "Korábban már beolvasott pont, biztosan újra hozzáadja?",
-                    INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
-                validPoint.setPointId(addedPoint.getPointId());
-                KMLWrapperController.INPUT_POINTS.add(validPoint);
-            }
+                    INPUT_DATA_FILE_WINDOW.jFrame);
+                if ( option == 0 ) {
+                    validPoint.setPointId(addedPoint.getPointId());
+                    KMLWrapperController.INPUT_POINTS.add(validPoint);
+                }
+                else if( option == -1 ){
+                    throw new IllegalArgumentException();
+                }
         }
         setWindowTitle();
     }
@@ -311,9 +317,12 @@ public class KMLWrapperController {
                     "A pontszám érétke csak pozitív egész szám lehet.", INPUT_DATA_FILE_WINDOW.jFrame);
             return false;
         }
-
-        if ( MessagePane.getYesNoOptionMessage("Pontszámozás",
-                    "Cseréli az összes pont számát?", INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
+    int option = MessagePane.getYesNoOptionMessage("Pontszámozás",
+            "Cseréli az összes pont számát?", INPUT_DATA_FILE_WINDOW.jFrame);
+        if ( option == -1 ){
+            return false;
+        }
+      else if ( option == 0) {
                 for (Point point : INPUT_POINTS) {
                     String pointId = (prefix.isEmpty() ? "" : prefix) + (pointIdValue++) + (postfix.isEmpty()
                             ? "" : postfix);
@@ -321,21 +330,34 @@ public class KMLWrapperController {
                 }
                 return true;
             }
-
-        if ( MessagePane.getYesNoOptionMessage("Pontszámozás",
-                "Cseréli egyenként a pontok számát?", INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
+    option = MessagePane.getYesNoOptionMessage("Pontszámozás",
+            "Cseréli egyenként a pontok számát?", INPUT_DATA_FILE_WINDOW.jFrame);
+        if( option == -1 ){
+            return false;
+        }
+        else if ( option == 0) {
 
             for (Point inputPoint : INPUT_POINTS) {
-            String genPointId = (prefix.isEmpty() ? "" : prefix) + (pointIdValue++) + (postfix.isEmpty()
+            String nextPointId = (prefix.isEmpty() ? "" : prefix) + (pointIdValue) + (postfix.isEmpty()
                         ? "" : postfix);
-            String addedPointId = MessagePane.setPointIdMessage(
-                    INPUT_POINTS.size() + " db pont/" + (INPUT_POINTS.indexOf(inputPoint) + 1) + ". pont száma: " + inputPoint.getPointId(),
-                       INPUT_DATA_FILE_WINDOW.jFrame);
-            if( addedPointId != null && !addedPointId.isEmpty() ){
-                inputPoint.setPointId(addedPointId);
-            }
-            else{
-                inputPoint.setPointId(genPointId);
+                String inputId = MessagePane.setPointIdMessage(
+                        INPUT_POINTS.size() + " db pont/" +
+                             (INPUT_POINTS.indexOf(inputPoint) + 1) + ". pont száma: " + inputPoint.getPointId() +
+                        ", új száma: " + nextPointId,
+                                INPUT_DATA_FILE_WINDOW.jFrame);
+
+             if("NO".equals(inputId) ){
+                    continue;
+             }
+             else if( "EXIT".equals(inputId) ){
+                 return true;
+             }
+            if( inputId != null && !inputId.isEmpty() ){
+                inputPoint.setPointId(inputId);
+                }
+            else {
+                inputPoint.setPointId(nextPointId);
+                pointIdValue++;
                 }
             }
         }
