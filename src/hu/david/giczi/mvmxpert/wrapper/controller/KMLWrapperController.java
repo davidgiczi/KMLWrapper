@@ -243,7 +243,8 @@ public class KMLWrapperController {
                     String.valueOf(INPUT_POINTS.size() + 1) : validPoint.getPointId());
             KMLWrapperController.INPUT_POINTS.add(validPoint);
         } else {
-            int option = MessagePane.getYesNoOptionMessage("Hozzáadott pont: " + addedPoint.getPointId(),
+            int option = MessagePane.getYesNoOptionMessage("Hozzáadott pont: " +
+                            (addedPoint.getPointId() == null ? " - " : addedPoint.getPointId()),
                     "Korábban már beolvasott pont, biztosan újra hozzáadja?",
                     INPUT_DATA_FILE_WINDOW.jFrame);
                 if ( option == 0 ) {
@@ -286,7 +287,9 @@ public class KMLWrapperController {
                 16 > Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(selectedItem) ){
             return true;
         }
+        String prefix = INPUT_DATA_FILE_WINDOW.pointPreIdField.getText();
         String inputPointId = INPUT_DATA_FILE_WINDOW.pointIdField.getText();
+        String postfix = INPUT_DATA_FILE_WINDOW.pointPostIdField.getText();
         int pointIdValue = 1;
         if ( !inputPointId.isEmpty() ) {
             try {
@@ -297,27 +300,25 @@ public class KMLWrapperController {
                 return false;
             }
         }
+
         for (Point inputPoint : INPUT_POINTS) {
-            if( inputPoint.getPointId() == null ){
+            if( inputPoint.getPointId() == null && prefix.isEmpty() && postfix.isEmpty() ){
                 inputPoint.setPointId(String.valueOf(pointIdValue));
+            }
+            else if( inputPoint.getPointId() != null && (!prefix.isEmpty() || !postfix.isEmpty()) ){
+                inputPoint.setPointId(prefix + inputPoint.getPointId() + postfix);
             }
             pointIdValue++;
         }
+
         if( inputPointId.isEmpty() ){
             return true;
         }
-        inputPointId = INPUT_DATA_FILE_WINDOW.pointIdField.getText();
-        String prefix = INPUT_DATA_FILE_WINDOW.pointPreIdField.getText();
-        String postfix = INPUT_DATA_FILE_WINDOW.pointPostIdField.getText();
 
-        try {
-            pointIdValue = Integer.parseInt(inputPointId);
-        } catch (NumberFormatException e) {
-            MessagePane.getInfoMessage("Hibás pontszám érték",
-                    "A pontszám érétke csak pozitív egész szám lehet.", INPUT_DATA_FILE_WINDOW.jFrame);
-            return false;
-        }
-    int option = MessagePane.getYesNoOptionMessage("Pontszámozás",
+        inputPointId = INPUT_DATA_FILE_WINDOW.pointIdField.getText();
+        pointIdValue = inputPointId.isEmpty() ? 1 : Integer.parseInt(inputPointId);
+
+        int option = MessagePane.getYesNoOptionMessage("Pontszámozás",
             "Cseréli az összes pont számát?", INPUT_DATA_FILE_WINDOW.jFrame);
         if ( option == -1 ){
             return false;
