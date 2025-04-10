@@ -302,10 +302,10 @@ public class KMLWrapperController {
         }
 
         for (Point inputPoint : INPUT_POINTS) {
-            if( inputPoint.getPointId() == null && prefix.isEmpty() && postfix.isEmpty() ){
-                inputPoint.setPointId(String.valueOf(pointIdValue));
+            if( inputPoint.getPointId() == null ){
+                inputPoint.setPointId(prefix + pointIdValue + postfix);
             }
-            else if( inputPoint.getPointId() != null && (!prefix.isEmpty() || !postfix.isEmpty()) ){
+            else {
                 inputPoint.setPointId(prefix + inputPoint.getPointId() + postfix);
             }
             pointIdValue++;
@@ -325,8 +325,7 @@ public class KMLWrapperController {
         }
       else if ( option == 0) {
                 for (Point point : INPUT_POINTS) {
-                    String pointId = (prefix.isEmpty() ? "" : prefix) + (pointIdValue++) + (postfix.isEmpty()
-                            ? "" : postfix);
+                    String pointId = prefix + (pointIdValue++) + postfix;
                     point.setPointId(pointId);
                 }
                 return true;
@@ -339,12 +338,11 @@ public class KMLWrapperController {
         else if ( option == 0) {
 
             for (Point inputPoint : INPUT_POINTS) {
-            String nextPointId = (prefix.isEmpty() ? "" : prefix) + (pointIdValue) + (postfix.isEmpty()
-                        ? "" : postfix);
+            String nextPointId = prefix + pointIdValue + postfix;
                 String inputId = MessagePane.setPointIdMessage(
                         INPUT_POINTS.size() + " db pont/" +
-                             (INPUT_POINTS.indexOf(inputPoint) + 1) + ". pont száma: " + inputPoint.getPointId() +
-                        ", új száma: " + nextPointId,
+                             (INPUT_POINTS.indexOf(inputPoint) + 1) + ". pont száma: " +
+                                inputPoint.getPointId() + ", új száma: " + nextPointId,
                                 INPUT_DATA_FILE_WINDOW.jFrame);
 
              if("NO".equals(inputId) ){
