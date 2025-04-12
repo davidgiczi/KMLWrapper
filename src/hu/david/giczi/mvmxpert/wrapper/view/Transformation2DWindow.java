@@ -564,7 +564,12 @@ public class Transformation2DWindow {
             String delimiter = MessagePane.getInputDataMessage(jFrame, null);
             KMLWrapperController.setDelimiter(delimiter);
             for (String inputData : FileProcess.INPUT_DATA_LIST) {
-                setCommonPointDataById(inputData);
+                if( !setCommonPointDataById(inputData) ){
+                    MessagePane.getInfoMessage("Hibás bemeneti adat: " + inputData,
+                            "A beolvasott pontok formátuma: Psz" +
+                                    delimiter + "Y" + delimiter + "X" + delimiter + "M", jFrame);
+                    continue;
+                }
                 firstSystemDataListModel.addElement(inputData);
             }
         });
@@ -633,19 +638,19 @@ public class Transformation2DWindow {
         transformDataPanel.add(rightPanel);
     }
 
-    private void setCommonPointDataById(String inputData){
+    private boolean setCommonPointDataById(String inputData){
         if( KMLWrapperController.DELIMITER == null ){
-            return;
+            return false;
         }
         String[] pointData = inputData.split(KMLWrapperController.DELIMITER);
         if( 4 > pointData.length ){
-            return;
+            return false;
         }
         if( pointData[0].equals(point11NumberField.getText()) ){
             if( !point11XField.getText().isEmpty() &&
                    !point11YField.getText().isEmpty() &&
                         !point11ZField.getText().isEmpty() ){
-                return;
+                return false;
             }
                 point11YField.setText(pointData[1]);
                 point11XField.setText(pointData[2]);
@@ -655,7 +660,7 @@ public class Transformation2DWindow {
             if( !point12XField.getText().isEmpty() &&
                     !point12YField.getText().isEmpty() &&
                         !point12ZField.getText().isEmpty() ){
-                return;
+                return false;
             }
                 point12YField.setText(pointData[1]);
                 point12XField.setText(pointData[2]);
@@ -665,7 +670,7 @@ public class Transformation2DWindow {
             if( !point21XField.getText().isEmpty() &&
                     !point21YField.getText().isEmpty() &&
                          !point21ZField.getText().isEmpty() ){
-                return;
+                return false;
             }
                 point21YField.setText(pointData[1]);
                 point21XField.setText(pointData[2]);
@@ -675,12 +680,14 @@ public class Transformation2DWindow {
             if( !point22XField.getText().isEmpty() &&
                     !point22YField.getText().isEmpty() &&
                         !point22ZField.getText().isEmpty() ){
-                return;
+                return false;
             }
                 point22YField.setText(pointData[1]);
                 point22XField.setText(pointData[2]);
                 point22ZField.setText(pointData[3]);
             }
+        return true;
         }
+
     }
 
