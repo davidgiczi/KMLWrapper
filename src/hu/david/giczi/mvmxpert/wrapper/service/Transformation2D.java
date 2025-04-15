@@ -288,7 +288,7 @@ public class Transformation2D {
             else{
                 throw new NumberFormatException();
             }
-            if( 0 > sec || sec > 59 ){
+            if( 0 > sec || sec >= 60 ){
                 throw new NumberFormatException();
             }
         }
