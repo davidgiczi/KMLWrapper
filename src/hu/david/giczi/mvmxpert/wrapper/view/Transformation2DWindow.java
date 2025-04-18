@@ -1,6 +1,7 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
 
 import javax.swing.*;
@@ -358,6 +359,7 @@ public class Transformation2DWindow {
         point22YField.setText(point12Y);
         point22XField.setText(point12X);
         point22ZField.setText(point12Z);
+        controller.transformation2D.exchangeCommonPoints();
     }
 
     private void addSettingInputDataButton(){
