@@ -20,11 +20,14 @@ public class Transformation2D {
    private final List<Point> commonPointList;
 
 
+    public List<Point> getCommonPointList() {
+        return commonPointList;
+    }
 
-   public Transformation2D(String point11Id, String point11Y, String point11X, String point11Z,
-                           String point12Id, String point12Y, String point12X, String point12Z,
-                           String point21Id, String point21Y, String point21X, String point21Z,
-                           String point22Id, String point22Y, String point22X, String point22Z){
+    public Transformation2D(String point11Id, String point11Y, String point11X, String point11Z,
+                            String point12Id, String point12Y, String point12X, String point12Z,
+                            String point21Id, String point21Y, String point21X, String point21Z,
+                            String point22Id, String point22Y, String point22X, String point22Z){
        commonPointList = new ArrayList<>();
     try {
         isValidInputData(point11Id, point11Y, point11X, point11Z,
@@ -197,15 +200,15 @@ public class Transformation2D {
         AzimuthAndDistance firstSystemData = new AzimuthAndDistance(commonPointList.get(0), commonPointList.get(1));
         AzimuthAndDistance secondSystemData = new AzimuthAndDistance(commonPointList.get(2), commonPointList.get(3));
        double det = ( commonPointList.get(1).getY_EOV() - commonPointList.get(0).getY_EOV() ) *
-               ( commonPointList.get(2).getX_EOV() - commonPointList.get(3).getX_EOV() ) -
+               ( commonPointList.get(3).getX_EOV() - commonPointList.get(2).getX_EOV() ) -
                ( commonPointList.get(1).getX_EOV() - commonPointList.get(0).getX_EOV() ) *
-               ( commonPointList.get(2).getY_EOV() - commonPointList.get(3).getY_EOV() );
+               ( commonPointList.get(3).getY_EOV() - commonPointList.get(2).getY_EOV() );
         rotationParam =  Math.acos(((commonPointList.get(1).getY_EOV() - commonPointList.get(0).getY_EOV()) *
                 (commonPointList.get(3).getY_EOV() - commonPointList.get(2).getY_EOV()) +
                 (commonPointList.get(1).getX_EOV() - commonPointList.get(0).getX_EOV()) *
                 (commonPointList.get(3).getX_EOV() - commonPointList.get(2).getX_EOV())) /
                 (firstSystemData.calcDistance() * secondSystemData.calcDistance()));
-        rotationParam = (det >= 0 ? - rotationParam : rotationParam);
+        rotationParam = ( 0 > det ? - rotationParam : rotationParam);
         if( Double.isNaN(rotationParam) ){
             rotationParam = 0.0;
         }

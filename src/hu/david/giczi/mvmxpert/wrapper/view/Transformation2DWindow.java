@@ -1,9 +1,7 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
-import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -43,6 +41,7 @@ public class Transformation2DWindow {
     public DefaultListModel<String> secondSystemDataListModel;
     public JButton openFirstSystemPointDataBtn;
     public JButton saveSecondSystemPointDataBtn;
+    private JButton countBtn;
     public JRadioButton firstSystemRadioBtn;
     public JRadioButton secondSystemRadioBtn;
     public JRadioButton deltaElevationRadioBtn;
@@ -335,6 +334,9 @@ public class Transformation2DWindow {
                 "Biztos, hogy megcseréled a pontokat?", jFrame) == 1 ){
             return;
         }
+        else if( controller.transformation2D == null || controller.transformation2D.getCommonPointList().isEmpty()){
+            return;
+        }
         String point11Id = point11NumberField.getText();
         String point11Y = point11YField.getText();
         String point11X = point11XField.getText();
@@ -360,13 +362,16 @@ public class Transformation2DWindow {
         point22XField.setText(point12X);
         point22ZField.setText(point12Z);
         controller.transformation2D.exchangeCommonPoints();
+        if( MessagePane.getYesNoOptionMessage("Paraméterek számítása",
+                "Közös pontok megváltoztak, újraszámítod a paramétereket?", jFrame) == 0 ){
+            countBtn.doClick();
+        }
     }
 
     private void addSettingInputDataButton(){
         JPanel panel = new JPanel();
         panel.setBackground(GREEN);
-        JButton countBtn = new JButton("Paraméterek számítása");
-
+        countBtn = new JButton("Paraméterek számítása");
         countBtn.addActionListener(e -> controller.calcParamsForTransformation2D());
         countBtn.setFont(boldFont);
         countBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
