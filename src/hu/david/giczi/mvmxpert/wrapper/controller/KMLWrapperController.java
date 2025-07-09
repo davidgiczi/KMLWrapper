@@ -376,29 +376,48 @@ public class KMLWrapperController {
                 6 > Arrays.asList(InputDataFileWindow.KML_DATA_TYPE).indexOf(selectedItem)) {
 
             if (new File(FileProcess.FOLDER_PATH + "/" + fileName).exists()) {
-                if (MessagePane.getYesNoOptionMessage("Korábban mentett fájl", "Biztos, hogy felülírod?",
+
+                if (MessagePane.getYesNoOptionMessage("Korábban mentett fájl",
+                        "Hozzáadja a korábban mentett fájlhoz a menteni kívánt adatokat?",
                         INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
                     try {
-                        fileProcess.saveKMLDataFile(selectedItem, fileName);
+                        fileProcess.openInputFile(fileName);
+                        fileProcess.saveKMLDataFile(selectedItem, fileName, true);
                     } catch (IOException e) {
                         MessagePane.getInfoMessage("Fájl mentése sikertelen",
                                 FileProcess.FOLDER_PATH + "\\" + fileName,
                                 KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                         return;
                     }
-                } else {
+                } else if( MessagePane.getYesNoOptionMessage("Korábban mentett fájl",
+                        "Felülírja a korábban mentett adatokat?",
+                        INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
+
+                    try {
+                        fileProcess.saveKMLDataFile(selectedItem, fileName, false);
+                    } catch (IOException e) {
+                        MessagePane.getInfoMessage("Fájl mentése sikertelen",
+                                FileProcess.FOLDER_PATH + "\\" + fileName,
+                                KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                        return;
+                    }
+                }
+                else {
                     return;
                 }
             }
+        else {
+
             try {
-                fileProcess.saveKMLDataFile(selectedItem, fileName);
+                fileProcess.saveKMLDataFile(selectedItem, fileName, false);
             } catch (IOException e) {
                 MessagePane.getInfoMessage("Fájl mentése sikertelen",
                         FileProcess.FOLDER_PATH + "\\" + fileName,
                         KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                 return;
             }
-        }
+       }
+ }
         else if( selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[6]) ){
             if (new File(FileProcess.FOLDER_PATH + "/" + fileName).exists()) {
                 if (MessagePane.getYesNoOptionMessage("Korábban mentett fájl", "Biztos, hogy felülírod?",

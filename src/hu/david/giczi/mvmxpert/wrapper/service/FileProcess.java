@@ -61,7 +61,7 @@ public class FileProcess {
             File selectedFile = jfc.getSelectedFile();
             FILE_NAME = selectedFile.getName();
             FOLDER_PATH = selectedFile.getParent();
-            openInputFile();
+            openInputFile(null);
         } else {
             FILE_NAME = null;
         }
@@ -128,9 +128,9 @@ public class FileProcess {
         return pointsData;
     }
 
-    private void openInputFile() {
+    public void openInputFile(String fileName) {
         INPUT_DATA_LIST = new ArrayList<>();
-        File file = new File(FOLDER_PATH + "/" + FILE_NAME);
+        File file = new File(FOLDER_PATH + "/" + (fileName == null ? FILE_NAME : fileName) );
        try(FileInputStream fis = new FileInputStream(file);
         InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
         BufferedReader reader = new BufferedReader(isr)) {
@@ -258,9 +258,9 @@ public class FileProcess {
         fos.close();
     }
 
-public void saveKMLDataFile(String selectedItem, String fileName) throws IOException {
+public void saveKMLDataFile(String selectedItem, String fileName, boolean isAppendData) throws IOException {
     File file = new File(FOLDER_PATH + "/" + fileName);
-    ToKMLFormat toKML = new ToKMLFormat(selectedItem, fileName);
+    ToKMLFormat toKML = new ToKMLFormat(selectedItem, fileName, isAppendData);
     FileOutputStream fos = new FileOutputStream(file);
     OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
     BufferedWriter writer = new BufferedWriter(osw);
@@ -272,6 +272,7 @@ public void saveKMLDataFile(String selectedItem, String fileName) throws IOExcep
         osw.close();
         fos.close();
 }
+
 public void saveCalcData(String fileName) throws  IOException{
     File file = new File(FOLDER_PATH + "/" + fileName);
     FileOutputStream fos = new FileOutputStream(file);

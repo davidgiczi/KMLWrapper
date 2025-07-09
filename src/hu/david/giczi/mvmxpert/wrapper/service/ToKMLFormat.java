@@ -15,21 +15,26 @@ import java.util.Objects;
 public class ToKMLFormat {
 
     private final String dataType;
-    private final String fileName;
+    private  final String fileName;
     private List<String> kmlDataList;
 
 
-    public ToKMLFormat(String dataType, String fileName) {
+    public ToKMLFormat(String dataType, String fileName, boolean isAppendData) {
         this.dataType = dataType;
         this.fileName = fileName;
-        createDataListForKML();
+        createDataListForKML(isAppendData);
     }
 
     public List<String> getKmlDataList() {
         return kmlDataList;
     }
-    private void createDataListForKML(){
-        getTemplateDataForKML();
+    private void createDataListForKML(boolean isAppendData){
+        if( isAppendData ) {
+            appendDataListForKML();
+        }
+        else{
+            getTemplateDataForKML();
+        }
         if(dataType.equals(InputDataFileWindow.KML_DATA_TYPE[1])) {
             wrapPointsInKML();
             closeFile();
@@ -37,6 +42,7 @@ public class ToKMLFormat {
         else if(dataType.equals(InputDataFileWindow.KML_DATA_TYPE[2])){
            wrapPointsForLineInKML();
            closeFile();
+
         }
         else if(dataType.equals(InputDataFileWindow.KML_DATA_TYPE[3])) {
             wrapPointsForPerimeterInKML();
@@ -52,6 +58,13 @@ public class ToKMLFormat {
              wrapPointsForPerimeterInKML();
              closeFile();
         }
+    }
+
+    private void appendDataListForKML(){
+    FileProcess.INPUT_DATA_LIST.remove(FileProcess.INPUT_DATA_LIST.size() - 1);
+    FileProcess.INPUT_DATA_LIST.remove(FileProcess.INPUT_DATA_LIST.size() - 1);
+    kmlDataList = new ArrayList<>();
+    kmlDataList.addAll(FileProcess.INPUT_DATA_LIST);
     }
 
     private void getTemplateDataForKML()  {

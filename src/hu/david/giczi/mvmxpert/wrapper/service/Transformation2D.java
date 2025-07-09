@@ -186,7 +186,7 @@ public class Transformation2D {
                                 String point12Id, double point12Y, double point12X, double point12Z,
                                 String point21Id, double point21Y, double point21X, double point21Z,
                                 String point22Id, double point22Y, double point22X, double point22Z ){
-       Point point11 = new Point( point11Id.isEmpty() ? "11": point11Id, point11Y, point11X, point11Z);
+       Point point11 = new Point( point11Id.isEmpty() ? "11": point11Id, point11Y , point11X, point11Z);
        commonPointList.add(point11);
        Point point12 = new Point( point12Id.isEmpty() ? "12": point12Id, point12Y, point12X, point12Z);
        commonPointList.add(point12);
@@ -216,9 +216,9 @@ public class Transformation2D {
         deltaDistanceXParam = commonPointList.get(2).getY_EOV() - scaleParam *
                 (commonPointList.get(0).getY_EOV() * Math.cos(rotationParam) -
                         commonPointList.get(0).getX_EOV() * Math.sin(rotationParam));
-       deltaDistanceYParam = commonPointList.get(2).getX_EOV() - scaleParam *
+       deltaDistanceYParam =  commonPointList.get(2).getX_EOV() - scaleParam *
                (commonPointList.get(0).getY_EOV() * Math.sin(rotationParam) +
-                       commonPointList.get(0).getX_EOV() * Math.cos(rotationParam));
+                        commonPointList.get(0).getX_EOV() * Math.cos(rotationParam));
         deltaElevation = commonPointList.get(3).getM_EOV() - commonPointList.get(2).getM_EOV() -
                 commonPointList.get(1).getM_EOV() + commonPointList.get(0).getM_EOV();
     }
