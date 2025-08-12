@@ -119,8 +119,6 @@ public class Transformation2DWindow {
         longitudinalOptions.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem verticalOption = new JMenuItem("Vertikális hosszelvény adatok számítása");
         verticalOption.addActionListener(e -> {
-            longitudinalOptions.setText("Hosszelvény adatok számítása [vertikális]");
-            longitudinalOptions.setForeground(Color.RED);
             if( verticalWindow == null ){
                 verticalWindow = new LongitudinalOptionWindow(LongitudinalType.VERTICAL);
             }
@@ -135,8 +133,6 @@ public class Transformation2DWindow {
         verticalOption.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem horizontalOption = new JMenuItem("Horizontális hosszelvény adatok számítása");
         horizontalOption.addActionListener(e -> {
-            longitudinalOptions.setText("Hosszelvény adatok számítása [horizontális]");
-            longitudinalOptions.setForeground(Color.RED);
             if( horizontalWindow == null ){
                 horizontalWindow = new LongitudinalOptionWindow(LongitudinalType.HORIZONTAL);
             }
