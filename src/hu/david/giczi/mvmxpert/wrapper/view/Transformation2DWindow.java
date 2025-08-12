@@ -2,6 +2,8 @@ package hu.david.giczi.mvmxpert.wrapper.view;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
+import hu.david.giczi.mvmxpert.wrapper.utils.LongitudinalType;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -14,6 +16,7 @@ public class Transformation2DWindow {
     private JPanel inputDataOptionPanel;
     private JPanel transformationDataPanel;
     private JPanel transformDataPanel;
+    public JMenu longitudinalOptions;
     public JTextField point11NumberField;
     public JTextField point11YField;
     public JTextField point11XField;
@@ -46,6 +49,8 @@ public class Transformation2DWindow {
     public JRadioButton secondSystemRadioBtn;
     public JRadioButton deltaElevationRadioBtn;
     private final KMLWrapperController controller;
+    private LongitudinalOptionWindow verticalWindow;
+    private LongitudinalOptionWindow horizontalWindow;
     private final Font boldFont = new Font("Roboto",Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 18);
     private final Color GREEN = new Color(193, 225, 193);
@@ -109,10 +114,47 @@ public class Transformation2DWindow {
         });
         exitProgramMenuItem.setFont(plainFont);
         exitProgramMenuItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        optionMenu.add(inputDataFileMenuItem);
+        longitudinalOptions = new JMenu("Hosszelvény adatok számítása");
+        longitudinalOptions.setFont(boldFont);
+        longitudinalOptions.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JMenuItem verticalOption = new JMenuItem("Vertikális hosszelvény adatok számítása");
+        verticalOption.addActionListener(e -> {
+            longitudinalOptions.setText("Hosszelvény adatok számítása [vertikális]");
+            longitudinalOptions.setForeground(Color.RED);
+            if( verticalWindow == null ){
+                verticalWindow = new LongitudinalOptionWindow(LongitudinalType.VERTICAL);
+            }
+            else{
+                verticalWindow.jFrame.setVisible(true);
+            }
+            if( horizontalWindow != null ){
+                horizontalWindow.jFrame.setVisible(false);
+            }
+        });
+        verticalOption.setFont(plainFont);
+        verticalOption.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JMenuItem horizontalOption = new JMenuItem("Horizontális hosszelvény adatok számítása");
+        horizontalOption.addActionListener(e -> {
+            longitudinalOptions.setText("Hosszelvény adatok számítása [horizontális]");
+            longitudinalOptions.setForeground(Color.RED);
+            if( horizontalWindow == null ){
+                horizontalWindow = new LongitudinalOptionWindow(LongitudinalType.HORIZONTAL);
+            }
+            else {
+                horizontalWindow.jFrame.setVisible(true);
+            }
+            if( verticalWindow != null ){
+                verticalWindow.jFrame.setVisible(false);
+            }
+        });
+        horizontalOption.setFont(plainFont);
+        horizontalOption.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        longitudinalOptions.add(verticalOption);
+        longitudinalOptions.add(horizontalOption);
         optionMenu.addSeparator();
         optionMenu.add(exitProgramMenuItem);
         jMenuBar.add(optionMenu);
+        jMenuBar.add(longitudinalOptions);
         jFrame.setJMenuBar(jMenuBar);
     }
 
@@ -372,7 +414,11 @@ public class Transformation2DWindow {
         JPanel panel = new JPanel();
         panel.setBackground(GREEN);
         countBtn = new JButton("Paraméterek számítása");
-        countBtn.addActionListener(e -> controller.calcParamsForTransformation2D());
+        countBtn.addActionListener(e -> {
+            controller.calcParamsForTransformation2D();
+            longitudinalOptions.setText("Hosszelvény adatok számítása");
+            longitudinalOptions.setForeground(Color.BLACK);}
+        );
         countBtn.setFont(boldFont);
         countBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(countBtn);
