@@ -17,11 +17,19 @@ public class Transformation2D {
    private double scaleParam;
    private double deltaElevation;
    private DecimalFormat df;
-   private final List<Point> commonPointList;
+   private List<Point> commonPointList;
+    private int scaleStartValue;
+    private double distortionValue;
+    private double shiftOnScreenValue;
+    private String preIDValue;
+    private String postIDValue;
 
 
     public List<Point> getCommonPointList() {
         return commonPointList;
+    }
+
+    public Transformation2D() {
     }
 
     public Transformation2D(String point11Id, String point11Y, String point11X, String point11Z,
@@ -418,4 +426,23 @@ public class Transformation2D {
        return point;
     }
 
+    public void setScaleStartValue(int scaleStartValue) {
+        this.scaleStartValue = scaleStartValue;
+    }
+
+    public void setDistortionValue(double distortionValue) {
+        this.distortionValue = distortionValue;
+    }
+
+    public void setShiftOnScreenValue(double shiftOnScreenValue) {
+        this.shiftOnScreenValue = shiftOnScreenValue;
+    }
+
+    public void setPreIDValue(String preIDValue) {
+        this.preIDValue = preIDValue;
+    }
+
+    public void setPostIDValue(String postIDValue) {
+        this.postIDValue = postIDValue;
+    }
 }

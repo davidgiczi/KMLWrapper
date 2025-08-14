@@ -54,6 +54,7 @@ public class Transformation2DWindow {
     private final Font boldFont = new Font("Roboto",Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 18);
     private final Color GREEN = new Color(193, 225, 193);
+    public final String LONGITUDINAL_TEXT = "Hosszelvény adatok számítása";
     private final Image iconImage = Toolkit.getDefaultToolkit()
             .getImage(getClass().getResource("/icon/transfer.png"));
 
@@ -114,13 +115,14 @@ public class Transformation2DWindow {
         });
         exitProgramMenuItem.setFont(plainFont);
         exitProgramMenuItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        longitudinalOptions = new JMenu("Hosszelvény adatok számítása");
+        longitudinalOptions = new JMenu(LONGITUDINAL_TEXT);
         longitudinalOptions.setFont(boldFont);
         longitudinalOptions.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem verticalOption = new JMenuItem("Vertikális hosszelvény adatok számítása");
         verticalOption.addActionListener(e -> {
             if( verticalWindow == null ){
                 verticalWindow = new LongitudinalOptionWindow(LongitudinalType.VERTICAL);
+                verticalWindow.setController(controller);
             }
             else{
                 verticalWindow.jFrame.setVisible(true);
@@ -135,6 +137,7 @@ public class Transformation2DWindow {
         horizontalOption.addActionListener(e -> {
             if( horizontalWindow == null ){
                 horizontalWindow = new LongitudinalOptionWindow(LongitudinalType.HORIZONTAL);
+                horizontalWindow.setController(controller);
             }
             else {
                 horizontalWindow.jFrame.setVisible(true);
@@ -412,7 +415,7 @@ public class Transformation2DWindow {
         countBtn = new JButton("Paraméterek számítása");
         countBtn.addActionListener(e -> {
             controller.calcParamsForTransformation2D();
-            longitudinalOptions.setText("Hosszelvény adatok számítása");
+            longitudinalOptions.setText(LONGITUDINAL_TEXT);
             longitudinalOptions.setForeground(Color.BLACK);}
         );
         countBtn.setFont(boldFont);
