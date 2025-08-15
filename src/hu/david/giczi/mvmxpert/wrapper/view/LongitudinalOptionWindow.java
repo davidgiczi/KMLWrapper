@@ -1,6 +1,5 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
-import hu.david.giczi.mvmxpert.wrapper.service.Transformation2D;
 import hu.david.giczi.mvmxpert.wrapper.utils.LongitudinalType;
 
 import javax.swing.*;
@@ -13,7 +12,6 @@ import java.awt.event.WindowEvent;
 public class LongitudinalOptionWindow {
 
     public JFrame jFrame;
-    private KMLWrapperController controller;
     private LongitudinalType type;
     private JTextField scaleStartValueField;
     private JTextField distortionValueField;
@@ -179,92 +177,16 @@ public class LongitudinalOptionWindow {
         okButton.setFont(BOLD_FONT);
         okButton.setPreferredSize(new Dimension(80,40));
         okButton.addActionListener(e -> {
-            if( controller.transformation2D == null ){
-                controller.transformation2D = new Transformation2D();
-            }
-            int scaleStartValue = validateInputIntegerValueData(scaleStartValueField.getText().trim());
-            double distortionValue = validateInputPositiveDoubleValueData(
-                    distortionValueField.getText().trim().replace(",", "."));
-            Double shiftOnScreenValue = validateInputDoubleValueData(shiftOnScreenValueField.getText().trim());
-            if( scaleStartValue == -1){
-                return;
-            }
-            else if( distortionValue == 0d ){
-                return;
-            }
-            else if( shiftOnScreenValue == null ){
-                return;
-            }
-            controller.transformation2D.setScaleStartValue(scaleStartValue);
-            controller.transformation2D.setDistortionValue(distortionValue);
-            controller.transformation2D.setShiftOnScreenValue(shiftOnScreenValue);
-            controller.transformation2D.setPreIDValue(preIDValue.getText().trim());
-            controller.transformation2D.setPostIDValue(postIDValue.getText().trim());
-            if( type == LongitudinalType.HORIZONTAL ){
-                KMLWrapperController.TRANSFORMATION_2D_WINDOW
-                        .longitudinalOptions.
-                        setText(KMLWrapperController.TRANSFORMATION_2D_WINDOW.LONGITUDINAL_TEXT + " [horizontális]");
-            }
-            else if( type == LongitudinalType.VERTICAL ){
-                KMLWrapperController.TRANSFORMATION_2D_WINDOW
-                        .longitudinalOptions
-                        .setText(KMLWrapperController.TRANSFORMATION_2D_WINDOW.LONGITUDINAL_TEXT + " [vertikális]");
-            }
-            KMLWrapperController.TRANSFORMATION_2D_WINDOW.longitudinalOptions.setForeground(Color.RED);
-            jFrame.setVisible(false);
+            KMLWrapperController.
+                    TRANSFORMATION_2D_WINDOW.
+                    longitudinalProcessController.
+                    onClickLongitudinalOptionProcessButton();
         });
         panel.add(okButton);
         jFrame.add(panel);
     }
 
-    private int validateInputIntegerValueData(String inputData){
-        int integerValue = -1;
-        try{
-            integerValue = Integer.parseInt(inputData);
-            if( 0 > integerValue ){
-                throw new NumberFormatException();
-            }
-        }
-        catch (NumberFormatException e){
-          MessagePane.getInfoMessage("Hibás adatok megadása",
-                  (type == LongitudinalType.HORIZONTAL ? "A horizontális " : "A vertikális ") +
-                          "lépték induló magassága csak 0-nál nem kisebb pozitív egész szám lehet.", jFrame);
-        }
-        return integerValue;
-    }
-
-    private double validateInputPositiveDoubleValueData(String inputData){
-        double doubleValue = 0d;
-        try{
-            doubleValue = Double.parseDouble(inputData);
-            if( 0.0 >= doubleValue ){
-                throw new NumberFormatException();
-            }
-        }
-        catch (NumberFormatException e){
-            MessagePane.getInfoMessage("Hibás adatok megadása",
-                    (type == LongitudinalType.HORIZONTAL ? "A horizontális " : "A vertikális ") +
-                            "méretrány értéke csak 0-nál nagyobb pozitív szám lehet.", jFrame);
-        }
-        return doubleValue;
-    }
-
-    private Double validateInputDoubleValueData(String inputData){
-        Double doubleValue = null;
-        try{
-            doubleValue = Double.parseDouble(inputData);
-        }
-        catch (NumberFormatException e){
-            MessagePane.getInfoMessage("Hibás adatok megadása",
-                    "A monitoron való" +
-                            (type == LongitudinalType.HORIZONTAL ? " horizontális " : " vertikális ") +
-                            "eltolás értéke csak szám lehet.", jFrame);
-        }
-        return doubleValue;
-    }
-
     public void setController(KMLWrapperController controller) {
-        this.controller = controller;
     }
 
     public JTextField getScaleStartValueField() {

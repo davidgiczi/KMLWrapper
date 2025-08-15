@@ -2,6 +2,7 @@ package hu.david.giczi.mvmxpert.wrapper.service;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
+import hu.david.giczi.mvmxpert.wrapper.utils.LongitudinalType;
 import hu.david.giczi.mvmxpert.wrapper.view.MessagePane;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class Transformation2D {
    private double deltaElevation;
    private DecimalFormat df;
    private List<Point> commonPointList;
+   private LongitudinalType longitudinalType;
     private int scaleStartValue;
     private double distortionValue;
     private double shiftOnScreenValue;
@@ -29,7 +31,8 @@ public class Transformation2D {
         return commonPointList;
     }
 
-    public Transformation2D() {
+    public Transformation2D(LongitudinalType longitudinalType) {
+        this.longitudinalType = longitudinalType;
     }
 
     public Transformation2D(String point11Id, String point11Y, String point11X, String point11Z,

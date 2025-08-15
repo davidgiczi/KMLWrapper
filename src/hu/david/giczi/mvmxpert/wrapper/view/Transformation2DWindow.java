@@ -1,6 +1,7 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.controller.LongitudinalProcessController;
 import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
 import hu.david.giczi.mvmxpert.wrapper.utils.LongitudinalType;
 
@@ -49,8 +50,9 @@ public class Transformation2DWindow {
     public JRadioButton secondSystemRadioBtn;
     public JRadioButton deltaElevationRadioBtn;
     private final KMLWrapperController controller;
-    private LongitudinalOptionWindow verticalWindow;
-    private LongitudinalOptionWindow horizontalWindow;
+    public LongitudinalOptionWindow verticalWindow;
+    public LongitudinalOptionWindow horizontalWindow;
+    public LongitudinalProcessController longitudinalProcessController;
     private final Font boldFont = new Font("Roboto",Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 18);
     private final Color GREEN = new Color(193, 225, 193);
@@ -130,6 +132,10 @@ public class Transformation2DWindow {
             if( horizontalWindow != null ){
                 horizontalWindow.jFrame.setVisible(false);
             }
+
+            longitudinalProcessController = new LongitudinalProcessController(LongitudinalType.VERTICAL);
+            longitudinalProcessController.setController(controller);
+            longitudinalProcessController.setLongitudinalWindowFrame(verticalWindow.jFrame);
         });
         verticalOption.setFont(plainFont);
         verticalOption.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -145,6 +151,11 @@ public class Transformation2DWindow {
             if( verticalWindow != null ){
                 verticalWindow.jFrame.setVisible(false);
             }
+
+            longitudinalProcessController = new LongitudinalProcessController(LongitudinalType.HORIZONTAL);
+            longitudinalProcessController.setController(controller);
+            longitudinalProcessController.setLongitudinalWindowFrame(horizontalWindow.jFrame);
+
         });
         horizontalOption.setFont(plainFont);
         horizontalOption.setCursor(new Cursor(Cursor.HAND_CURSOR));
