@@ -427,12 +427,20 @@ public class Transformation2D {
             }
 
             if( longitudinalType == LongitudinalType.VERTICAL ){
-             convertedDataList.add(convertFirstSystemPointDataForVerticalLongitudinalTransformation(
-                     firstCoordinate, secondCoordinate, elevation));
+              if( rowData.length > 4 &&
+                      (rowData[4].trim().equalsIgnoreCase("bef") ||
+                              rowData[4].trim().equalsIgnoreCase("kar"))){
+                  convertedDataList.add(convertFirstSystemPointDataForVerticalLongitudinalTransformation(
+                          firstSystemPoint1Y, firstSystemPoint1X, elevation));
+              }
+              else {
+                  convertedDataList.add(convertFirstSystemPointDataForVerticalLongitudinalTransformation(
+                          firstCoordinate, secondCoordinate, elevation));
+              }
             }
             else if( longitudinalType == LongitudinalType.HORIZONTAL ){
              convertedDataList.add(convertFirstSystemPointDataForHorizontalLongitudinalTransformation(
-                     firstCoordinate, secondCoordinate, elevation));
+                     firstCoordinate, secondCoordinate));
             }
             else {
                 convertedDataList.add(convertFirstSystemPointDataFor2DTransformation(
@@ -504,13 +512,13 @@ public class Transformation2D {
         return point;
     }
     private Point convertFirstSystemPointDataForHorizontalLongitudinalTransformation(
-            double firstCoordinate, double secondCoordinate, double elevationData){
+            double firstCoordinate, double secondCoordinate){
         Point point = new Point();
         df = new DecimalFormat("0.00");
         AzimuthAndDistance distance = new AzimuthAndDistance(
                 new Point("FirstSystem", firstSystemPoint1Y, firstSystemPoint1X, 0d),
                 new Point("Measured", firstCoordinate, secondCoordinate, 0d));
-        String id =  df.format(distance.calcDistance()).replace(",", ".");
+        String id =  df.format(secondSystemPoint1Y + distance.calcDistance()).replace(",", ".");
         if( preIDValue.isEmpty() && postIDValue.isEmpty() ){
             point.setPointId(id + "m");
         }
