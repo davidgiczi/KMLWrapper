@@ -133,7 +133,7 @@ public class LongitudinalOptionWindow {
                     new TitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY),
                             "Monitoron való horizontális eltolás [m]",
                             TitledBorder.CENTER, TitledBorder.TOP, null, FONT_COLOR));
-            shiftOnScreenValueField.setText("0");
+            shiftOnScreenValueField.setText("10");
         }
         shiftOnScreenValueField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(shiftOnScreenValueField);
@@ -177,16 +177,11 @@ public class LongitudinalOptionWindow {
         okButton.setFont(BOLD_FONT);
         okButton.setPreferredSize(new Dimension(80,40));
         okButton.addActionListener(e -> {
-            KMLWrapperController.
-                    TRANSFORMATION_2D_WINDOW.
-                    longitudinalProcessController.
-                    onClickLongitudinalOptionProcessButton();
+            KMLWrapperController.TRANSFORMATION_2D_WINDOW.
+                    longitudinalProcessController.validateLongitudinalOptionsInputData();
         });
         panel.add(okButton);
         jFrame.add(panel);
-    }
-
-    public void setController(KMLWrapperController controller) {
     }
 
     public JTextField getScaleStartValueField() {

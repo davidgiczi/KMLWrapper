@@ -5,6 +5,7 @@ import hu.david.giczi.mvmxpert.wrapper.utils.LongitudinalType;
 import hu.david.giczi.mvmxpert.wrapper.view.MessagePane;
 import javax.swing.*;
 import java.awt.*;
+import java.util.prefs.InvalidPreferencesFormatException;
 
 public class LongitudinalProcessController {
 
@@ -25,11 +26,8 @@ public class LongitudinalProcessController {
         this.longitudinalWindowFrame = longitudinalWindowFrame;
     }
 
-    public void onClickLongitudinalOptionProcessButton(){
+    public void validateLongitudinalOptionsInputData(){
 
-        if( controller.transformation2D == null ){
-            controller.transformation2D = new Transformation2D(longitudinalType);
-        }
         int scaleStartValue = longitudinalType == LongitudinalType.HORIZONTAL ?
                 validateInputIntegerValueData(
                         KMLWrapperController.
@@ -74,8 +72,20 @@ public class LongitudinalProcessController {
         else if( shiftOnScreenValue == null ){
             return;
         }
+        try {
+            controller.transformation2D = new Transformation2D(longitudinalType,
+                    KMLWrapperController.TRANSFORMATION_2D_WINDOW.point11YField.getText(),
+                    KMLWrapperController.TRANSFORMATION_2D_WINDOW.point11XField.getText(),
+                    KMLWrapperController.TRANSFORMATION_2D_WINDOW.point21YField.getText(),
+                    KMLWrapperController.TRANSFORMATION_2D_WINDOW.point21XField.getText());
+        }
+        catch (InvalidPreferencesFormatException e){
+            MessagePane.getInfoMessage("Hibás bemeneti adat", e.getMessage(),
+                    KMLWrapperController.TRANSFORMATION_2D_WINDOW.jFrame);
+            return;
+        }
         controller.transformation2D.setScaleStartValue(scaleStartValue);
-        controller.transformation2D.setDistortionValue(distortionValue);
+        controller.transformation2D.setDistortionValue( 1 / distortionValue);
         controller.transformation2D.setShiftOnScreenValue(shiftOnScreenValue);
         controller.transformation2D.setPreIDValue(longitudinalType == LongitudinalType.HORIZONTAL ?
              KMLWrapperController.TRANSFORMATION_2D_WINDOW.horizontalWindow.getPreIDValue().getText() :
@@ -97,7 +107,6 @@ public class LongitudinalProcessController {
         longitudinalWindowFrame.setVisible(false);
     }
 
-
     private int validateInputIntegerValueData(String inputData){
         int integerValue = -1;
         try{
@@ -107,7 +116,7 @@ public class LongitudinalProcessController {
             }
         }
         catch (NumberFormatException e){
-            MessagePane.getInfoMessage("Hibás adatok megadása",
+            MessagePane.getInfoMessage("Hibás vagy hiányzó bementi adatok",
                     (longitudinalType == LongitudinalType.HORIZONTAL ? "A horizontális " : "A vertikális ") +
                             "lépték induló magassága csak 0-nál nem kisebb pozitív egész szám lehet.", longitudinalWindowFrame);
         }
@@ -123,7 +132,7 @@ public class LongitudinalProcessController {
             }
         }
         catch (NumberFormatException e){
-            MessagePane.getInfoMessage("Hibás adatok megadása",
+            MessagePane.getInfoMessage("Hibás vagy hiányzó bemeneti adatok",
                     (longitudinalType == LongitudinalType.HORIZONTAL ? "A horizontális " : "A vertikális ") +
                             "méretrány értéke csak 0-nál nagyobb pozitív szám lehet.", longitudinalWindowFrame);
         }
@@ -136,7 +145,7 @@ public class LongitudinalProcessController {
             doubleValue = Double.parseDouble(inputData);
         }
         catch (NumberFormatException e){
-            MessagePane.getInfoMessage("Hibás adatok megadása",
+            MessagePane.getInfoMessage("Hibás vagy hiányzó bementi adatok",
                     "A monitoron való" +
                             (longitudinalType == LongitudinalType.HORIZONTAL ? " horizontális " : " vertikális ") +
                             "eltolás értéke csak szám lehet.", longitudinalWindowFrame);

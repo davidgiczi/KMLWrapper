@@ -25,23 +25,30 @@ public class Transformation2D {
     private double shiftOnScreenValue;
     private String preIDValue;
     private String postIDValue;
+    private double firstSystemPoint1Y;
+    private double firstSystemPoint1X;
+    private double secondSystemPoint1Y;
+    private double secondSystemPoint1X;
+
 
 
     public List<Point> getCommonPointList() {
         return commonPointList;
     }
 
-    public Transformation2D(LongitudinalType longitudinalType) {
+    public Transformation2D(LongitudinalType longitudinalType,
+                            String point11Y, String point11X,
+                            String point12Y, String point12X) throws InvalidPreferencesFormatException {
         this.longitudinalType = longitudinalType;
+        isValidFirstAndSecondSystemsInputStartPointsData(point11Y, point11X,  point12Y, point12X);
     }
-
     public Transformation2D(String point11Id, String point11Y, String point11X, String point11Z,
                             String point12Id, String point12Y, String point12X, String point12Z,
                             String point21Id, String point21Y, String point21X, String point21Z,
                             String point22Id, String point22Y, String point22X, String point22Z){
        commonPointList = new ArrayList<>();
     try {
-        isValidInputData(point11Id, point11Y, point11X, point11Z,
+        isValidFirstAndSecondSystemsInputPointsData(point11Id, point11Y, point11X, point11Z,
                          point12Id, point12Y, point12X, point12Z,
                          point21Id, point21Y, point21X, point21Z,
                          point22Id, point22Y, point22X, point22Z);
@@ -66,10 +73,10 @@ public class Transformation2D {
         commonPointList.add(firstSystemPoint2);
     }
 
-   private void isValidInputData(String point11Id, String point11Y, String point11X, String point11Z,
-                                 String point12Id, String point12Y, String point12X, String point12Z,
-                                 String point21Id, String point21Y, String point21X, String point21Z,
-                                 String point22Id, String point22Y, String point22X, String point22Z)
+   private void isValidFirstAndSecondSystemsInputPointsData(String point11Id, String point11Y, String point11X, String point11Z,
+                                                            String point12Id, String point12Y, String point12X, String point12Z,
+                                                            String point21Id, String point21Y, String point21X, String point21Z,
+                                                            String point22Id, String point22Y, String point22X, String point22Z)
            throws InvalidPreferencesFormatException {
        double firstSystemPoint1Y;
        try{
@@ -191,6 +198,40 @@ public class Transformation2D {
                        point12Id, firstSystemPoint2Y, firstSystemPoint2X, firstSystemPoint2Z,
                        point21Id, secondSystemPoint1Y, secondSystemPoint1X, secondSystemPoint1Z,
                        point22Id, secondSystemPoint2Y, secondSystemPoint2X, secondSystemPoint2Z);
+   }
+
+   private void isValidFirstAndSecondSystemsInputStartPointsData(String point11Y, String point11X,
+                                                                    String point21Y, String point21X)
+   throws InvalidPreferencesFormatException{
+
+       try{
+           firstSystemPoint1Y =  Double.parseDouble(point11Y.trim().replace(",", "."));
+       }
+       catch (NumberFormatException e){
+           throw new InvalidPreferencesFormatException("Hibás vagy hiányzik az 1. " +
+                   "vonatkozási rendszer 1. pontjának 1. koordinátája.");
+       }
+       try{
+           firstSystemPoint1X =  Double.parseDouble(point11X.trim().replace(",", "."));
+       }
+       catch (NumberFormatException e){
+           throw new InvalidPreferencesFormatException("Hibás vagy hiányzik az 1. " +
+                   "vonatkozási rendszer 1. pontjának 2. koordinátája.");
+       }
+       try{
+           secondSystemPoint1Y =  Double.parseDouble(point21Y.trim().replace(",", "."));
+       }
+       catch (NumberFormatException e){
+           throw new InvalidPreferencesFormatException("Hibás vagy hiányzik az 2. " +
+                   "vonatkozási rendszer 1. pontjának 1. koordinátája.");
+       }
+       try{
+           secondSystemPoint1X =  Double.parseDouble(point21X.trim().replace(",", "."));
+       }
+       catch (NumberFormatException e){
+           throw new InvalidPreferencesFormatException("Hibás vagy hiányzik az 2. " +
+                   "vonatkozási rendszer 1. pontjának 2. koordinátája.");
+       }
    }
 
    private void addCommonPoints(String point11Id, double point11Y, double point11X, double point11Z,
@@ -349,8 +390,6 @@ public class Transformation2D {
         }
     }
 
-
-
     public List<Point> convertFirstSystemData(List<String> firstSystemData,
                                               boolean is2ndSystem,
                                               boolean isUsedCorrection)
@@ -386,18 +425,27 @@ public class Transformation2D {
             }catch (NumberFormatException n){
                 throw new InvalidPreferencesFormatException("Az 1. vonatkozási rendszer magassága csak szám lehet.");
             }
-            convertedDataList.add(convertFirstSystemPointData(rowData[0], firstCoordinate,
-                    secondCoordinate, elevation, is2ndSystem, isUsedCorrection));
-        }
 
+            if( longitudinalType == LongitudinalType.VERTICAL ){
+             convertedDataList.add(convertFirstSystemPointDataForVerticalLongitudinalTransformation(
+                     firstCoordinate, secondCoordinate, elevation));
+            }
+            else if( longitudinalType == LongitudinalType.HORIZONTAL ){
+             convertedDataList.add(convertFirstSystemPointDataForHorizontalLongitudinalTransformation(
+                     firstCoordinate, secondCoordinate, elevation));
+            }
+            else {
+                convertedDataList.add(convertFirstSystemPointDataFor2DTransformation(
+                        rowData[0], firstCoordinate, secondCoordinate, elevation, is2ndSystem, isUsedCorrection));
+            }
+        }
        return convertedDataList;
     }
 
-    private Point convertFirstSystemPointData(String pointId, double firstCoordinate,
-                                              double secondCoordinate, double elevationData,
-                                              boolean is2ndSystem,
-                                              boolean isUsedCorrection) {
-
+    private Point convertFirstSystemPointDataFor2DTransformation(String pointId, double firstCoordinate,
+                                                                 double secondCoordinate, double elevationData,
+                                                                 boolean is2ndSystem,
+                                                                 boolean isUsedCorrection) {
        Point point = new Point();
        point.setPointId(pointId);
        point.setY_EOV(deltaDistanceXParam + scaleParam * (firstCoordinate * Math.cos(rotationParam) -
@@ -427,6 +475,58 @@ public class Transformation2D {
         }
 
        return point;
+    }
+
+
+    private Point convertFirstSystemPointDataForVerticalLongitudinalTransformation(
+            double firstCoordinate, double secondCoordinate, double elevationData){
+        Point point = new Point();
+        df = new DecimalFormat("0.000");
+        String id =  df.format(elevationData).replace(",", ".");
+        if( preIDValue.isEmpty() && postIDValue.isEmpty() ){
+            point.setPointId("Bf." + id + "m");
+        }
+        else if( !preIDValue.isEmpty() && !postIDValue.isEmpty() ){
+            point.setPointId(preIDValue + "Bf." + id + "m" + postIDValue);
+        }
+        else if(preIDValue.isEmpty()){
+            point.setPointId("Bf." + id + "m" + postIDValue);
+        }
+        else{
+            point.setPointId(preIDValue + "Bf." + id + "m");
+        }
+        AzimuthAndDistance distance = new AzimuthAndDistance(
+                new Point("FirstSystem", firstSystemPoint1Y, firstSystemPoint1X, 0d),
+                new Point("Measured", firstCoordinate, secondCoordinate, 0d));
+        point.setY_EOV(secondSystemPoint1Y + distance.calcDistance());
+        point.setX_EOV(secondSystemPoint1X + distortionValue * (elevationData - scaleStartValue) + shiftOnScreenValue);
+        point.setM_EOV(0d);
+        return point;
+    }
+    private Point convertFirstSystemPointDataForHorizontalLongitudinalTransformation(
+            double firstCoordinate, double secondCoordinate, double elevationData){
+        Point point = new Point();
+        df = new DecimalFormat("0.00");
+        AzimuthAndDistance distance = new AzimuthAndDistance(
+                new Point("FirstSystem", firstSystemPoint1Y, firstSystemPoint1X, 0d),
+                new Point("Measured", firstCoordinate, secondCoordinate, 0d));
+        String id =  df.format(distance.calcDistance()).replace(",", ".");
+        if( preIDValue.isEmpty() && postIDValue.isEmpty() ){
+            point.setPointId(id + "m");
+        }
+        else if( !preIDValue.isEmpty() && !postIDValue.isEmpty() ){
+            point.setPointId(preIDValue + id + "m" + postIDValue);
+        }
+        else if(preIDValue.isEmpty()){
+            point.setPointId(id + "m" + postIDValue);
+        }
+        else{
+            point.setPointId(preIDValue + id + "m");
+        }
+        point.setY_EOV(secondSystemPoint1Y + distortionValue * (distance.calcDistance() - scaleStartValue));
+        point.setX_EOV(secondSystemPoint1X + shiftOnScreenValue);
+        point.setM_EOV(0d);
+        return point;
     }
 
     public void setScaleStartValue(int scaleStartValue) {

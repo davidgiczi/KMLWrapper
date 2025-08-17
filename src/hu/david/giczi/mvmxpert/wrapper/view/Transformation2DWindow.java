@@ -124,7 +124,6 @@ public class Transformation2DWindow {
         verticalOption.addActionListener(e -> {
             if( verticalWindow == null ){
                 verticalWindow = new LongitudinalOptionWindow(LongitudinalType.VERTICAL);
-                verticalWindow.setController(controller);
             }
             else{
                 verticalWindow.jFrame.setVisible(true);
@@ -143,7 +142,6 @@ public class Transformation2DWindow {
         horizontalOption.addActionListener(e -> {
             if( horizontalWindow == null ){
                 horizontalWindow = new LongitudinalOptionWindow(LongitudinalType.HORIZONTAL);
-                horizontalWindow.setController(controller);
             }
             else {
                 horizontalWindow.jFrame.setVisible(true);
@@ -427,7 +425,8 @@ public class Transformation2DWindow {
         countBtn.addActionListener(e -> {
             controller.calcParamsForTransformation2D();
             longitudinalOptions.setText(LONGITUDINAL_TEXT);
-            longitudinalOptions.setForeground(Color.BLACK);}
+            longitudinalOptions.setForeground(Color.BLACK);
+            longitudinalProcessController = null;}
         );
         countBtn.setFont(boldFont);
         countBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -575,7 +574,12 @@ public class Transformation2DWindow {
             public void mouseClicked(MouseEvent e) {
 
                 if( SwingUtilities.isRightMouseButton(e) ){
-                    controller.transformFirstSystemData();
+
+                    if( longitudinalProcessController != null ){
+                        controller.transformFirstSystemDataForLongitudinalOption();
+                        return;
+                    }
+                    controller.transformFirstSystemDataFor2DTransformation();
                 }
                 super.mouseClicked(e);
             }

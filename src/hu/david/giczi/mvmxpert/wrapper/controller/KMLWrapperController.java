@@ -525,7 +525,38 @@ public class KMLWrapperController {
    TRANSFORMATION_2D_WINDOW.deltaElevationField.setText(transformation2D.getDeltaElevation());
     }
 
-    public void transformFirstSystemData(){
+    public void transformFirstSystemDataForLongitudinalOption(){
+        if( DELIMITER == null ){
+            DELIMITER = MessagePane
+                    .getInputDataMessage(KMLWrapperController.TRANSFORMATION_2D_WINDOW.jFrame, null);
+            if( DELIMITER == null ){
+                return;
+            }
+        }
+        List<String> selectedValues = TRANSFORMATION_2D_WINDOW.firstSystemDataList.getSelectedValuesList();
+        List<Point> secondSystemData;
+        try{
+            secondSystemData = transformation2D.convertFirstSystemData(selectedValues,
+                    TRANSFORMATION_2D_WINDOW.secondSystemRadioBtn.isSelected(),
+                    TRANSFORMATION_2D_WINDOW.deltaElevationRadioBtn.isSelected());
+        }
+        catch (InvalidPreferencesFormatException e){
+            MessagePane.getInfoMessage("Hibás bemeneti pont adat", e.getMessage(), TRANSFORMATION_2D_WINDOW.jFrame);
+            return;
+        }
+
+        if( !secondSystemData.isEmpty() ){
+            for (Point secondSystemPoint : secondSystemData) {
+                TRANSFORMATION_2D_WINDOW.secondSystemDataListModel.
+                        addElement(secondSystemPoint.getPointId() + DELIMITER +
+                                secondSystemPoint.getFormattedYForEOV() + DELIMITER +
+                                secondSystemPoint.getFormattedXForEOV() + DELIMITER +
+                                secondSystemPoint.getFormattedMForEOV());
+            }
+        }
+    }
+
+    public void transformFirstSystemDataFor2DTransformation(){
         if( transformation2D == null ){
             return;
         }
