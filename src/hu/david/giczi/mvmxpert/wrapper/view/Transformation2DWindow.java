@@ -632,10 +632,18 @@ public class Transformation2DWindow {
             KMLWrapperController.setDelimiter(delimiter);
             for (String inputData : FileProcess.INPUT_DATA_LIST) {
                 if( !setCommonPointDataById(inputData) ){
-                    MessagePane.getInfoMessage("Hibás bemeneti adat: " + inputData,
-                            "A beolvasott pontok formátuma: Psz" +
-                                    delimiter + "Y" + delimiter + "X" + delimiter + "M", jFrame);
-                    continue;
+                    MessagePane.getInfoMessage("Hibás elválasztó: " + delimiter,
+                            "A beolvasott pontok formátuma: " + inputData, jFrame);
+                    delimiter = MessagePane.getInputDataMessage(jFrame, null);
+                    if( delimiter == null ){
+                        break;
+                    }
+                    else if( delimiter.isEmpty() ){
+                        continue;
+                    }
+                    else {
+                        KMLWrapperController.setDelimiter(delimiter);
+                    }
                 }
                 firstSystemDataListModel.addElement(inputData);
             }

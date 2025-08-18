@@ -427,16 +427,8 @@ public class Transformation2D {
             }
 
             if( longitudinalType == LongitudinalType.VERTICAL ){
-              if( rowData.length > 4 &&
-                      (rowData[4].trim().equalsIgnoreCase("bef") ||
-                              rowData[4].trim().equalsIgnoreCase("kar"))){
-                  convertedDataList.add(convertFirstSystemPointDataForVerticalLongitudinalTransformation(
-                          firstSystemPoint1Y, firstSystemPoint1X, elevation));
-              }
-              else {
-                  convertedDataList.add(convertFirstSystemPointDataForVerticalLongitudinalTransformation(
+                convertedDataList.add(convertFirstSystemPointDataForVerticalLongitudinalTransformation(
                           firstCoordinate, secondCoordinate, elevation));
-              }
             }
             else if( longitudinalType == LongitudinalType.HORIZONTAL ){
              convertedDataList.add(convertFirstSystemPointDataForHorizontalLongitudinalTransformation(
