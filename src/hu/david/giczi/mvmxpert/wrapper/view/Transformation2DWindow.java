@@ -629,6 +629,9 @@ public class Transformation2DWindow {
             }
             jFrame.setTitle(FileProcess.FILE_NAME);
             String delimiter = MessagePane.getInputDataMessage(jFrame, null);
+            if( delimiter == null ){
+                return;
+            }
             KMLWrapperController.setDelimiter(delimiter);
             for (String inputData : FileProcess.INPUT_DATA_LIST) {
                 if( !setCommonPointDataById(inputData) ){
