@@ -510,7 +510,7 @@ public class Transformation2D {
         AzimuthAndDistance distance = new AzimuthAndDistance(
                 new Point("FirstSystem", firstSystemPoint1Y, firstSystemPoint1X, 0d),
                 new Point("Measured", firstCoordinate, secondCoordinate, 0d));
-        String id =  df.format(secondSystemPoint1Y + distance.calcDistance()).replace(",", ".");
+        String id =  df.format( distance.calcDistance()).replace(",", ".");
         if( preIDValue.isEmpty() && postIDValue.isEmpty() ){
             point.setPointId(id + "m");
         }
