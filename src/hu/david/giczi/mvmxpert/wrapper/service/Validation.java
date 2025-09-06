@@ -16,7 +16,6 @@ public class Validation {
         runInputDataValidation();
     }
 
-
     private void runInputDataValidation() throws InvalidPreferencesFormatException {
         String[] rowData;
         for (String row : FileProcess.INPUT_DATA_LIST) {

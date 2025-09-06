@@ -250,6 +250,13 @@ public class Transformation2DWindow {
         point11ZField.setHorizontalAlignment(SwingConstants.CENTER);
         point11ZField.setPreferredSize(new Dimension(80, 35));
         point11ZField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        point11NumberField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+               setPointDataForPointInputFields(point11NumberField, point11YField, point11XField, point11ZField);
+                super.mouseClicked(e);
+            }
+        });
         JButton exchangeBtn =
                 new JButton(new ImageIcon(iconImage.getScaledInstance(35, 30, Image.SCALE_DEFAULT)));
         exchangeBtn.addActionListener(e -> onClickExchangeCommonPointsDataButton());
@@ -285,6 +292,13 @@ public class Transformation2DWindow {
         point21ZField.setHorizontalAlignment(SwingConstants.CENTER);
         point21ZField.setPreferredSize(new Dimension(80, 35));
         point21ZField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        point21NumberField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setPointDataForPointInputFields(point21NumberField, point21YField, point21XField, point21ZField);
+                super.mouseClicked(e);
+            }
+        });
         panel.add(point11Label);
         panel.add(point11NumberField);
         panel.add(point11YField);
@@ -334,6 +348,13 @@ public class Transformation2DWindow {
         point12ZField.setHorizontalAlignment(SwingConstants.CENTER);
         point12ZField.setPreferredSize(new Dimension(80, 35));
         point12ZField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        point12NumberField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setPointDataForPointInputFields(point12NumberField, point12YField, point12XField, point12ZField);
+                super.mouseClicked(e);
+            }
+        });
         JLabel point22Label = new JLabel("2. pont");
         point22Label.setFont(boldFont);
         point22NumberField = new JTextField();
@@ -364,6 +385,13 @@ public class Transformation2DWindow {
         point22ZField.setHorizontalAlignment(SwingConstants.CENTER);
         point22ZField.setPreferredSize(new Dimension(80, 35));
         point22ZField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        point22NumberField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setPointDataForPointInputFields(point22NumberField, point22YField, point22XField, point22ZField);
+                super.mouseClicked(e);
+            }
+        });
         panel.add(point21Label);
         panel.add(point12NumberField);
         panel.add(point12YField);
@@ -378,6 +406,62 @@ public class Transformation2DWindow {
         inputDataOptionPanel.add(panel);
     }
 
+    private void setPointDataForPointInputFields(JTextField pointIdField,
+                                                 JTextField firstDataField,
+                                                 JTextField secondDataField,
+                                                 JTextField thirdDataField){
+        List<String> selectedValues = firstSystemDataList.getSelectedValuesList();
+        if( selectedValues.isEmpty() ){
+            return;
+        }
+        double firstData = 0d;
+        double secondData = 0d;
+        double thirdData = 0d;
+        for (String selectedValue : selectedValues) {
+            firstData +=  Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[1]);
+            secondData += Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[2]);
+            thirdData += Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[3]);
+        }
+
+        String pointID = selectedValues.get(0).split(KMLWrapperController.DELIMITER)[0].split("_")[0];
+        String firstValue = String.
+                format("%.3f", firstData / selectedValues.size()).replace(",", ".");
+        String secondValue = String.
+                format("%.3f", secondData / selectedValues.size()).replace(",", ".");
+        String thirdValue = String.
+                format("%.3f", thirdData / selectedValues.size()).replace(",", ".");
+        if( firstDataField.getText().isEmpty() && secondDataField.getText().isEmpty() ){
+            pointIdField.setText(pointID);
+            firstDataField.setText(firstValue);
+            secondDataField.setText(secondValue);
+            thirdDataField.setText(thirdValue);
+        }
+        else {
+
+            int option =  MessagePane.getYesNoOptionMessage("Pont adatok cseréje",
+                    "Cserélni akarod a pont adatokat?", jFrame);
+
+            if( option == -1 ){
+                return;
+            }
+            if( option == 0 ){
+                pointIdField.setText(pointID);
+                firstDataField.setText(firstValue);
+                secondDataField.setText(secondValue);
+                thirdDataField.setText(thirdValue);
+            }
+            else {
+
+                if( MessagePane.getYesNoOptionMessage("Pont adatok törlése",
+                        "Törölni akarod a pont adatokat?", jFrame) == 0 ){
+                    pointIdField.setText("");
+                    firstDataField.setText("");
+                    secondDataField.setText("");
+                    thirdDataField.setText("");
+                }
+            }
+        }
+    }
     private void onClickExchangeCommonPointsDataButton(){
 
         if( MessagePane.getYesNoOptionMessage("Közös pontok cseréje",
