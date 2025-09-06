@@ -418,9 +418,16 @@ public class Transformation2DWindow {
         double secondData = 0d;
         double thirdData = 0d;
         for (String selectedValue : selectedValues) {
-            firstData +=  Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[1]);
-            secondData += Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[2]);
-            thirdData += Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[3]);
+            try{
+                firstData +=  Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[1]);
+                secondData += Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[2]);
+                thirdData += Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[3]);
+            }
+            catch (Exception e){
+                MessagePane.getInfoMessage("Hibás elválasztó: " + KMLWrapperController.DELIMITER,
+                        selectedValue,  jFrame);
+                return;
+            }
         }
 
         String pointID = selectedValues.get(0).split(KMLWrapperController.DELIMITER)[0].split("_")[0];
