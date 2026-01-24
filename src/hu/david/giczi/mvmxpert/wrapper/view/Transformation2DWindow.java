@@ -462,16 +462,16 @@ public class Transformation2DWindow {
                 format("%.3f", secondData / selectedValues.size()).replace(",", ".");
         String thirdValue = String.
                 format("%.3f", thirdData / selectedValues.size()).replace(",", ".");
-        firstSystemDataListModel.add(0,
-                pointID + KMLWrapperController.DELIMITER + firstValue +
-                                    KMLWrapperController.DELIMITER + secondValue +
-                                     KMLWrapperController.DELIMITER + thirdValue);
+
         if (firstDataField.getText().isEmpty() && secondDataField.getText().isEmpty()) {
             pointIdField.setText(pointID);
             firstDataField.setText(firstValue);
             secondDataField.setText(secondValue);
             thirdDataField.setText(thirdValue);
-
+            firstSystemDataListModel.add(0,
+                    pointID + KMLWrapperController.DELIMITER + firstValue +
+                            KMLWrapperController.DELIMITER + secondValue +
+                            KMLWrapperController.DELIMITER + thirdValue);
         } else {
 
             int option = MessagePane.getYesNoOptionMessage("Pont adatok cseréje",
@@ -481,6 +481,10 @@ public class Transformation2DWindow {
                 firstDataField.setText(firstValue);
                 secondDataField.setText(secondValue);
                 thirdDataField.setText(thirdValue);
+                firstSystemDataListModel.add(0,
+                        pointID + KMLWrapperController.DELIMITER + firstValue +
+                                KMLWrapperController.DELIMITER + secondValue +
+                                KMLWrapperController.DELIMITER + thirdValue);
             }
             else {
                 if (MessagePane.getYesNoOptionMessage("Pont adatok törlése",
