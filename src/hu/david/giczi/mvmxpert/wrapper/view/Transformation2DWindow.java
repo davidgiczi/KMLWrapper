@@ -8,7 +8,10 @@ import hu.david.giczi.mvmxpert.wrapper.utils.LongitudinalType;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 public class Transformation2DWindow {
@@ -53,7 +56,7 @@ public class Transformation2DWindow {
     public LongitudinalOptionWindow verticalWindow;
     public LongitudinalOptionWindow horizontalWindow;
     public LongitudinalProcessController longitudinalProcessController;
-    private final Font boldFont = new Font("Roboto",Font.BOLD, 17);
+    private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 18);
     private final Color GREEN = new Color(193, 225, 193);
     public final String LONGITUDINAL_TEXT = "Hosszelvény adatok számítása";
@@ -66,7 +69,7 @@ public class Transformation2DWindow {
         createWindow();
     }
 
-    private void createWindow(){
+    private void createWindow() {
         jFrame = new JFrame("2D transzformáció");
         jFrame.addWindowListener(new WindowAdapter() {
             @Override
@@ -90,12 +93,12 @@ public class Transformation2DWindow {
         jFrame.setVisible(true);
     }
 
-    private void addLogo(){
+    private void addLogo() {
         jFrame.setIconImage(Toolkit.getDefaultToolkit()
                 .getImage(getClass().getResource("/logo/MVM.jpg")));
     }
 
-    private void addMenu(){
+    private void addMenu() {
         JMenuBar jMenuBar = new JMenuBar();
         JMenu optionMenu = new JMenu("Opciók");
         optionMenu.setFont(boldFont);
@@ -110,8 +113,8 @@ public class Transformation2DWindow {
         inputDataFileMenuItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem exitProgramMenuItem = new JMenuItem("Kilépés a programból");
         exitProgramMenuItem.addActionListener(e -> {
-            if( MessagePane.getYesNoOptionMessage("A program bezárása",
-                    "Kilép a programból?", jFrame) == 0 ){
+            if (MessagePane.getYesNoOptionMessage("A program bezárása",
+                    "Kilép a programból?", jFrame) == 0) {
                 System.exit(0);
             }
         });
@@ -122,13 +125,12 @@ public class Transformation2DWindow {
         longitudinalOptions.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem verticalOption = new JMenuItem("Vertikális hosszelvény adatok számítása");
         verticalOption.addActionListener(e -> {
-            if( verticalWindow == null ){
+            if (verticalWindow == null) {
                 verticalWindow = new LongitudinalOptionWindow(LongitudinalType.VERTICAL);
-            }
-            else{
+            } else {
                 verticalWindow.jFrame.setVisible(true);
             }
-            if( horizontalWindow != null ){
+            if (horizontalWindow != null) {
                 horizontalWindow.jFrame.setVisible(false);
             }
 
@@ -140,13 +142,12 @@ public class Transformation2DWindow {
         verticalOption.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem horizontalOption = new JMenuItem("Horizontális hosszelvény adatok számítása");
         horizontalOption.addActionListener(e -> {
-            if( horizontalWindow == null ){
+            if (horizontalWindow == null) {
                 horizontalWindow = new LongitudinalOptionWindow(LongitudinalType.HORIZONTAL);
-            }
-            else {
+            } else {
                 horizontalWindow.jFrame.setVisible(true);
             }
-            if( verticalWindow != null ){
+            if (verticalWindow != null) {
                 verticalWindow.jFrame.setVisible(false);
             }
 
@@ -166,14 +167,14 @@ public class Transformation2DWindow {
         jFrame.setJMenuBar(jMenuBar);
     }
 
-    private void addInputDataOptionPanel(){
+    private void addInputDataOptionPanel() {
         inputDataOptionPanel = new JPanel();
         inputDataOptionPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if( SwingUtilities.isRightMouseButton(e) ){
-                    if( MessagePane.getYesNoOptionMessage("Pont adatok törlése",
-                            "Biztos, hogy törlöd a vonatkozási rendszerek pontjainak adatait?", jFrame) == 1 ){
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    if (MessagePane.getYesNoOptionMessage("Pont adatok törlése",
+                            "Biztos, hogy törlöd a vonatkozási rendszerek pontjainak adatait?", jFrame) == 1) {
                         return;
                     }
                     point11NumberField.setText(null);
@@ -203,21 +204,22 @@ public class Transformation2DWindow {
         addSettingInputDataButton();
         jFrame.add(inputDataOptionPanel);
     }
-    private void addTitleForInputDataOptionPanel(){
+
+    private void addTitleForInputDataOptionPanel() {
         JPanel panel = new JPanel();
         panel.setBackground(GREEN);
         JLabel system1Label = new JLabel("1. vonatkozási rendszer");
         system1Label.setFont(boldFont);
-        system1Label.setBorder(new EmptyBorder(10,0,0,400));
+        system1Label.setBorder(new EmptyBorder(10, 0, 0, 400));
         JLabel system2Label = new JLabel("2. vonatkozási rendszer");
         system2Label.setFont(boldFont);
-        system2Label.setBorder(new EmptyBorder(10,0,0,0));
+        system2Label.setBorder(new EmptyBorder(10, 0, 0, 0));
         panel.add(system1Label);
         panel.add(system2Label);
         inputDataOptionPanel.add(panel);
     }
 
-    private void addFirstCommonPointsData(){
+    private void addFirstCommonPointsData() {
         JPanel panel = new JPanel();
         panel.setBackground(GREEN);
         JLabel point11Label = new JLabel("1. pont");
@@ -253,7 +255,9 @@ public class Transformation2DWindow {
         point11NumberField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-               setPointDataForPointInputFields(point11NumberField, point11YField, point11XField, point11ZField);
+                if (e.getClickCount() == 2) {
+                    onClickProcessForPointInputField(point11NumberField, point11YField, point11XField, point11ZField);
+                }
                 super.mouseClicked(e);
             }
         });
@@ -295,7 +299,9 @@ public class Transformation2DWindow {
         point21NumberField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                setPointDataForPointInputFields(point21NumberField, point21YField, point21XField, point21ZField);
+                if (e.getClickCount() == 2) {
+                    onClickProcessForPointInputField(point21NumberField, point21YField, point21XField, point21ZField);
+                }
                 super.mouseClicked(e);
             }
         });
@@ -315,7 +321,7 @@ public class Transformation2DWindow {
         inputDataOptionPanel.add(panel);
     }
 
-    private void addSecondCommonPointsData(){
+    private void addSecondCommonPointsData() {
         JPanel panel = new JPanel();
         panel.setBackground(GREEN);
         JLabel point21Label = new JLabel("2. pont");
@@ -351,7 +357,9 @@ public class Transformation2DWindow {
         point12NumberField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                setPointDataForPointInputFields(point12NumberField, point12YField, point12XField, point12ZField);
+                if (e.getClickCount() == 2) {
+                    onClickProcessForPointInputField(point12NumberField, point12YField, point12XField, point12ZField);
+                }
                 super.mouseClicked(e);
             }
         });
@@ -371,6 +379,15 @@ public class Transformation2DWindow {
         point22YField.setHorizontalAlignment(SwingConstants.CENTER);
         point22YField.setPreferredSize(new Dimension(100, 35));
         point22YField.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        point22YField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    setCoordinateValue(point21YField, point11YField, point11XField, point12YField, point12XField);
+                }
+                super.mouseClicked(e);
+            }
+        });
         point22XField = new JTextField();
         point22XField.setToolTipText("2. koordináta");
         point22XField.setFont(boldFont);
@@ -388,7 +405,9 @@ public class Transformation2DWindow {
         point22NumberField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                setPointDataForPointInputFields(point22NumberField, point22YField, point22XField, point22ZField);
+                if (e.getClickCount() == 2) {
+                    onClickProcessForPointInputField(point22NumberField, point22YField, point22XField, point22ZField);
+                }
                 super.mouseClicked(e);
             }
         });
@@ -406,30 +425,36 @@ public class Transformation2DWindow {
         inputDataOptionPanel.add(panel);
     }
 
-    private void setPointDataForPointInputFields(JTextField pointIdField,
-                                                 JTextField firstDataField,
-                                                 JTextField secondDataField,
-                                                 JTextField thirdDataField){
+    private void onClickProcessForPointInputField(JTextField pointIdField,
+                                                  JTextField firstDataField,
+                                                  JTextField secondDataField,
+                                                  JTextField thirdDataField) {
         List<String> selectedValues = firstSystemDataList.getSelectedValuesList();
-        if( selectedValues.isEmpty() ){
+        if (selectedValues.isEmpty()) {
+
+            if (MessagePane.getYesNoOptionMessage("Pont adatok törlése",
+                    "Törölni akarod a pont adatokat?", jFrame) == 0) {
+                pointIdField.setText("");
+                firstDataField.setText("");
+                secondDataField.setText("");
+                thirdDataField.setText("");
+            }
             return;
         }
         double firstData = 0d;
         double secondData = 0d;
         double thirdData = 0d;
         for (String selectedValue : selectedValues) {
-            try{
-                firstData +=  Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[1]);
+            try {
+                firstData += Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[1]);
                 secondData += Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[2]);
                 thirdData += Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[3]);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 MessagePane.getInfoMessage("Hibás elválasztó: " + KMLWrapperController.DELIMITER,
-                        selectedValue,  jFrame);
+                        selectedValue, jFrame);
                 return;
             }
         }
-
         String pointID = selectedValues.get(0).split(KMLWrapperController.DELIMITER)[0].split("_")[0];
         String firstValue = String.
                 format("%.3f", firstData / selectedValues.size()).replace(",", ".");
@@ -437,30 +462,29 @@ public class Transformation2DWindow {
                 format("%.3f", secondData / selectedValues.size()).replace(",", ".");
         String thirdValue = String.
                 format("%.3f", thirdData / selectedValues.size()).replace(",", ".");
-        if( firstDataField.getText().isEmpty() && secondDataField.getText().isEmpty() ){
+        firstSystemDataListModel.add(0,
+                pointID + KMLWrapperController.DELIMITER + firstValue +
+                                    KMLWrapperController.DELIMITER + secondValue +
+                                     KMLWrapperController.DELIMITER + thirdValue);
+        if (firstDataField.getText().isEmpty() && secondDataField.getText().isEmpty()) {
             pointIdField.setText(pointID);
             firstDataField.setText(firstValue);
             secondDataField.setText(secondValue);
             thirdDataField.setText(thirdValue);
-        }
-        else {
 
-            int option =  MessagePane.getYesNoOptionMessage("Pont adatok cseréje",
+        } else {
+
+            int option = MessagePane.getYesNoOptionMessage("Pont adatok cseréje",
                     "Cserélni akarod a pont adatokat?", jFrame);
-
-            if( option == -1 ){
-                return;
-            }
-            if( option == 0 ){
+            if (option == 0) {
                 pointIdField.setText(pointID);
                 firstDataField.setText(firstValue);
                 secondDataField.setText(secondValue);
                 thirdDataField.setText(thirdValue);
             }
             else {
-
-                if( MessagePane.getYesNoOptionMessage("Pont adatok törlése",
-                        "Törölni akarod a pont adatokat?", jFrame) == 0 ){
+                if (MessagePane.getYesNoOptionMessage("Pont adatok törlése",
+                        "Törölni akarod a pont adatokat?", jFrame) == 0) {
                     pointIdField.setText("");
                     firstDataField.setText("");
                     secondDataField.setText("");
@@ -469,6 +493,33 @@ public class Transformation2DWindow {
             }
         }
     }
+
+    private void setCoordinateValue(JTextField point21YField,
+                                    JTextField point11YField, JTextField point11XField,
+                                    JTextField point12YField, JTextField point12XField){
+        double point11Y;
+        double point11X;
+        double point12Y;
+        double point12X;
+        try{
+            point11Y = Double.parseDouble(point11YField.getText());
+            point11X = Double.parseDouble(point11XField.getText());
+            point12Y = Double.parseDouble(point12YField.getText());
+            point12X = Double.parseDouble(point12XField.getText());
+
+        }catch (NumberFormatException e){
+            return;
+        }
+        double point21Y = 0;
+        try{
+            point21Y = Double.parseDouble(point21YField.getText());
+        }catch (NumberFormatException ignored){
+        }
+        double distance = Math.sqrt(Math.pow(point11Y- point12Y, 2) + Math.pow(point11X - point12X, 2));
+        this.point22YField.setText(String.
+                format("%.3f", point21Y + distance).replace(",", "."));
+    }
+
     private void onClickExchangeCommonPointsDataButton(){
 
         if( MessagePane.getYesNoOptionMessage("Közös pontok cseréje",
