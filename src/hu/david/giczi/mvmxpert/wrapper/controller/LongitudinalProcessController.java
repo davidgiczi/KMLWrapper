@@ -117,8 +117,9 @@ public class LongitudinalProcessController {
         }
         catch (NumberFormatException e){
             MessagePane.getInfoMessage("Hibás vagy hiányzó bementi adatok",
-                    (longitudinalType == LongitudinalType.HORIZONTAL ? "A horizontális " : "A vertikális ") +
-                            "lépték induló magassága csak 0-nál nem kisebb pozitív egész szám lehet.", longitudinalWindowFrame);
+                    (longitudinalType == LongitudinalType.HORIZONTAL ? "A horizontális lépték induló távolsága " :
+                            "A vertikális lépték induló magassága ") +
+                            "csak 0-nál nem kisebb pozitív egész szám lehet.", longitudinalWindowFrame);
         }
         return integerValue;
     }
