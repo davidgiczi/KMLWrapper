@@ -470,10 +470,13 @@ public void saveCalcData(String fileName) throws  IOException{
         osw.close();
         fos.close();
     }
-
     public void saveTransformation2Data(List<String> secondSystemDataList) throws IOException{
         File file = new File(FOLDER_PATH + "/" +
                 FILE_NAME.replaceAll(INVALID_CHARACTERS, "_") + "_tr2D.txt");
+        if( file.exists() && MessagePane.getYesNoOptionMessage("Korábban mentett fájl",
+                "Biztos, hogy felülírod?", null) == 1 ){
+            return;
+        }
         FileOutputStream fos = new FileOutputStream(file);
         OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
         BufferedWriter writer = new BufferedWriter(osw);

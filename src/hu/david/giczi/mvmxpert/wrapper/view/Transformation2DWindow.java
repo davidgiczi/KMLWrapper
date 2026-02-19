@@ -435,6 +435,7 @@ public class Transformation2DWindow {
             if (MessagePane.getYesNoOptionMessage("Pont adatok törlése",
                     "Törölni akarod a pont adatokat?", jFrame) == 0) {
                 pointIdField.setText("");
+                pointIdField.setToolTipText("Pontszám");
                 firstDataField.setText("");
                 secondDataField.setText("");
                 thirdDataField.setText("");
@@ -462,34 +463,34 @@ public class Transformation2DWindow {
                 format("%.3f", secondData / selectedValues.size()).replace(",", ".");
         String thirdValue = String.
                 format("%.3f", thirdData / selectedValues.size()).replace(",", ".");
-
+        String addedRow = pointID + KMLWrapperController.DELIMITER + firstValue +
+                KMLWrapperController.DELIMITER + secondValue +
+                KMLWrapperController.DELIMITER + thirdValue;
+        if( !firstSystemDataListModel.contains(addedRow) ){
+            firstSystemDataListModel.add(0, addedRow);
+        }
         if (firstDataField.getText().isEmpty() && secondDataField.getText().isEmpty()) {
             pointIdField.setText(pointID);
+            pointIdField.setToolTipText(pointID);
             firstDataField.setText(firstValue);
             secondDataField.setText(secondValue);
             thirdDataField.setText(thirdValue);
-            firstSystemDataListModel.add(0,
-                    pointID + KMLWrapperController.DELIMITER + firstValue +
-                            KMLWrapperController.DELIMITER + secondValue +
-                            KMLWrapperController.DELIMITER + thirdValue);
         } else {
-
             int option = MessagePane.getYesNoOptionMessage("Pont adatok cseréje",
                     "Cserélni akarod a pont adatokat?", jFrame);
+
             if (option == 0) {
                 pointIdField.setText(pointID);
+                pointIdField.setToolTipText(pointID);
                 firstDataField.setText(firstValue);
                 secondDataField.setText(secondValue);
                 thirdDataField.setText(thirdValue);
-                firstSystemDataListModel.add(0,
-                        pointID + KMLWrapperController.DELIMITER + firstValue +
-                                KMLWrapperController.DELIMITER + secondValue +
-                                KMLWrapperController.DELIMITER + thirdValue);
             }
             else {
                 if (MessagePane.getYesNoOptionMessage("Pont adatok törlése",
                         "Törölni akarod a pont adatokat?", jFrame) == 0) {
                     pointIdField.setText("");
+                    pointIdField.setToolTipText("Pontszám");
                     firstDataField.setText("");
                     secondDataField.setText("");
                     thirdDataField.setText("");
