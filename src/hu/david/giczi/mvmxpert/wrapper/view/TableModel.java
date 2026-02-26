@@ -359,7 +359,8 @@ public class TableModel extends DefaultTableModel {
                         inputPoint.getFormattedHForWGS84(), true};
                 addRow(row);
             }
-        } else if ( dataType.startsWith("AutoCad")) {
+        } else if ( dataType.equals(InputDataFileWindow.SCR_DATA_TYPE[1]) ||
+                dataType.equals(InputDataFileWindow.SCR_DATA_TYPE[2]) ) {
             for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
                 displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
@@ -505,7 +506,8 @@ public class TableModel extends DefaultTableModel {
             columNames = new String[]{"Pontszám", "Szélesség", "Hosszúság",
                     "[fok perc mperc]" , "[fok perc mperc]", "h", "Ment"};
         }
-        else if( dataType.startsWith("AutoCad") ){
+        else if( dataType.equals(InputDataFileWindow.SCR_DATA_TYPE[1]) ||
+                    dataType.equals(InputDataFileWindow.SCR_DATA_TYPE[2])){
             columNames = new String[]{"Pontszám", "Y", "X", "M", "Ment"};
         }
         else if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6]) ){
@@ -609,7 +611,8 @@ public class TableModel extends DefaultTableModel {
                 6 > Arrays.asList(InputDataFileWindow.KML_DATA_TYPE).indexOf(dataType) ){
             pcs = KMLWrapperController.INPUT_POINTS.size();
         }
-        else if( dataType.startsWith("AutoCad") ){
+        else if( dataType.equals(InputDataFileWindow.SCR_DATA_TYPE[1]) ||
+                    dataType.equals(InputDataFileWindow.SCR_DATA_TYPE[2]) ){
             pcs = KMLWrapperController.INPUT_POINTS.size();
         }
         else if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6]) ){
@@ -669,7 +672,8 @@ public class TableModel extends DefaultTableModel {
                 6 > Arrays.asList(InputDataFileWindow.KML_DATA_TYPE).indexOf(dataType) ){
             lastIndex = 6;
         }
-        else if( dataType.startsWith("AutoCad") ){
+        else if( dataType.equals(InputDataFileWindow.SCR_DATA_TYPE[1]) ||
+                    dataType.equals(InputDataFileWindow.SCR_DATA_TYPE[2]) ){
             lastIndex = 4;
         }
         else if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6]) ){

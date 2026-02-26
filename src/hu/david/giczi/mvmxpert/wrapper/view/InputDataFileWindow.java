@@ -87,6 +87,12 @@ public class InputDataFileWindow {
             "Maradék ellentmondások: EOV-WGS84 (dX, dY, dZ)",
             "Maradék ellentmondások: WGS84-EOV (dY, dX, dM)"};
 
+    public static final String[] SCR_DATA_TYPE = {
+            "Adattípus választása",
+            "_MULTIPLE _POINT",
+            "_TEXT fájl by _SCRIPT"
+    };
+
     private static final String[] FILE_NAME_OPTION = {
             "_pont.kml",
             "_vonal.kml",
@@ -378,26 +384,11 @@ public class InputDataFileWindow {
         txtRadioBtn.setFont(plainFont);
         txtRadioBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         txtRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
-        JRadioButton scrRadioBtn = new JRadioButton("scr fájl");
+        JRadioButton scrRadioBtn = new JRadioButton("AutoCad scr fájl");
         scrRadioBtn.addActionListener(e ->{
-            String[] cadList = {"AutoCad scr fájl (EOV Y, X, M)"};
-            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cadList);
+            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(SCR_DATA_TYPE);
             outputDataTypeComboBox.setModel(model);
-            createFileNameForSaveOutputFile();
-            outputDataTypeComboBox.setForeground(Color.BLACK);
-            saveBtn.setEnabled(false);
-            createFileNameForSaveOutputFile();
-            if( isOkDisplayData("AutoCad") && controller.setIdForInputDataPoints("AutoCad") ){
-                try{
-                    controller.transformationInputPointData();
-                    displayer = new DataDisplayerWindow("AutoCad scr fájl", controller);
-                }
-                catch (IllegalArgumentException a){
-                    MessagePane.getInfoMessage(a.getMessage(),
-                            "Nem beolvasott adat vagy érvénytelen adattípus választás." ,
-                            KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
-                }
-            }
+            saveFileNameField.setText(null);
         });
         scrRadioBtn.setBorder(new EmptyBorder(10,50,10,50));
         scrRadioBtn.setFont(plainFont);
@@ -418,7 +409,7 @@ public class InputDataFileWindow {
         outputDataTypeComboBox.addActionListener( e -> {
            saveBtn.setEnabled(false);
            String selectedItem = Objects.requireNonNull(outputDataTypeComboBox.getSelectedItem()).toString();
-            if( selectedItem.equals(TXT_DATA_TYPE[0]) ){
+            if( selectedItem.equals(TXT_DATA_TYPE[0]) || selectedItem.equals(SCR_DATA_TYPE[0]) ){
                 outputDataTypeComboBox.setForeground(Color.LIGHT_GRAY);
                 saveFileNameField.setText(null);
             }
@@ -490,7 +481,7 @@ public class InputDataFileWindow {
 
     private boolean isOkDisplayData(String selectedItem){
 
-        if (selectedItem.equals(TXT_DATA_TYPE[0])) {
+        if ( selectedItem.equals(TXT_DATA_TYPE[0]) || selectedItem.equals(SCR_DATA_TYPE[0]) ) {
             MessagePane.getInfoMessage("Érvénytelen adattípus",
                     "Adattípus választása szükséges.", jFrame);
             return false;
@@ -545,6 +536,9 @@ public class InputDataFileWindow {
        else if( KML_DATA_TYPE[5].equals(selectedOption) ){
             saveFileNameField.setText(FILE_NAME_OPTION[4]);
         }
+       else if( KML_DATA_TYPE[6].equals(selectedOption) ){
+           saveFileNameField.setText(FILE_NAME_OPTION[20]);
+       }
        else if( TXT_DATA_TYPE[1].equals(selectedOption)){
            saveFileNameField.setText(FILE_NAME_OPTION[5]);
        }
@@ -590,11 +584,11 @@ public class InputDataFileWindow {
        else if( TXT_DATA_TYPE[15].equals(selectedOption)){
            saveFileNameField.setText(FILE_NAME_OPTION[19]);
        }
-       else if( selectedOption.startsWith("AutoCad") ){
+       else if( SCR_DATA_TYPE[1].equals(selectedOption) ){
           saveFileNameField.setText("_pontok.scr");
        }
-       else if( KML_DATA_TYPE[6].equals(selectedOption) ){
-           saveFileNameField.setText(FILE_NAME_OPTION[20]);
+       else if( SCR_DATA_TYPE[2].equals(selectedOption) ){
+           saveFileNameField.setText("_feliratok.scr");
        }
     }
 
@@ -641,6 +635,15 @@ public class InputDataFileWindow {
                 fileName = addedFileNameByUser;
             } else {
                 fileName = addedFileNameByUser + FILE_NAME_OPTION[4];
+            }
+        }
+        else if( selectedOption.equals(KML_DATA_TYPE[6]) ) {
+            if (addedFileNameByUser.isEmpty()) {
+                fileName = FILE_NAME_OPTION[20];
+            } else if (addedFileNameByUser.endsWith(".txt")) {
+                fileName = addedFileNameByUser;
+            } else {
+                fileName = addedFileNameByUser + FILE_NAME_OPTION[20];
             }
         }
         else if (selectedOption.equals(TXT_DATA_TYPE[1])) {
@@ -774,7 +777,7 @@ public class InputDataFileWindow {
                 fileName = addedFileNameByUser + FILE_NAME_OPTION[19];
             }
         }
-        else if( selectedOption.startsWith("AutoCad") ){
+        else if( selectedOption.equals(SCR_DATA_TYPE[1]) ){
 
             if( addedFileNameByUser.isEmpty() ){
                 fileName = "_pontok.scr";
@@ -786,13 +789,16 @@ public class InputDataFileWindow {
                 fileName = addedFileNameByUser + "_pontok.scr";
             }
         }
-        else if( selectedOption.equals(KML_DATA_TYPE[6]) ) {
-            if (addedFileNameByUser.isEmpty()) {
-                fileName = FILE_NAME_OPTION[20];
-            } else if (addedFileNameByUser.endsWith(".txt")) {
+        else if( selectedOption.equals(SCR_DATA_TYPE[2]) ){
+
+            if( addedFileNameByUser.isEmpty() ){
+                fileName = "_feliratok.scr";
+            }
+            else if( addedFileNameByUser.endsWith(".scr") ){
                 fileName = addedFileNameByUser;
-            } else {
-                fileName = addedFileNameByUser + FILE_NAME_OPTION[20];
+            }
+            else {
+                fileName = addedFileNameByUser + "_feliratok.scr";
             }
         }
 

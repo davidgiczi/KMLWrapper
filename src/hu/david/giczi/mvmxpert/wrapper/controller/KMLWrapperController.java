@@ -469,13 +469,13 @@ public class KMLWrapperController {
                         KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                 return;
             }
-        } else if ( selectedItem.startsWith("AutoCad") ) {
+        } else if ( selectedItem.equals(InputDataFileWindow.SCR_DATA_TYPE[1]) ) {
 
             if (new File(FileProcess.FOLDER_PATH + "/" + fileName).exists()) {
                 if (MessagePane.getYesNoOptionMessage("Korábban mentett fájl", "Biztos, hogy felülírod?",
                         INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
                     try {
-                        fileProcess.saveAutoCadDataFile(fileName);
+                        fileProcess.saveAutoCadDataAsPoint(fileName);
                     } catch (IOException e) {
                         MessagePane.getInfoMessage("Fájl mentése sikertelen",
                                 FileProcess.FOLDER_PATH + "\\" + fileName,
@@ -487,13 +487,45 @@ public class KMLWrapperController {
                 }
             }
                 try {
-                    fileProcess.saveAutoCadDataFile(fileName);
+                    fileProcess.saveAutoCadDataAsPoint(fileName);
                 } catch (IOException e) {
                     MessagePane.getInfoMessage("Fájl mentése sikertelen",
                             FileProcess.FOLDER_PATH + "\\" + fileName,
                             KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                     return;
                 }
+        }
+        else if ( selectedItem.equals(InputDataFileWindow.SCR_DATA_TYPE[2]) ) {
+
+            if (new File(FileProcess.FOLDER_PATH + "/" + fileName).exists()) {
+                if (MessagePane.getYesNoOptionMessage("Korábban mentett fájl", "Biztos, hogy felülírod?",
+                        INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
+                    try {
+                        fileProcess.saveAutoCadDataAsPoint(fileName);
+                    } catch (IOException e) {
+                        MessagePane.getInfoMessage("Fájl mentése sikertelen",
+                                FileProcess.FOLDER_PATH + "\\" + fileName,
+                                KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                        return;
+                    }
+                } else {
+                    return;
+                }
+            }
+            try {
+                if( MessagePane.getYesNoOptionMessage("Igen: azonosító, Nem: magasság",
+                        "A pont azonosítóját kivánod menteni?", KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0){
+                    fileProcess.saveAutoCadDataAsText(fileName, true);
+                }
+                else{
+                    fileProcess.saveAutoCadDataAsText(fileName, false);
+                }
+            } catch (IOException e) {
+                MessagePane.getInfoMessage("Fájl mentése sikertelen",
+                        FileProcess.FOLDER_PATH + "\\" + fileName,
+                        KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                return;
+            }
         }
         MessagePane.getInfoMessage("Sikeres mentés",
                 "Fájl mentve az alábbi mappába:<br>" + FileProcess.FOLDER_PATH + "\\" + fileName,

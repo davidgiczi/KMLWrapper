@@ -239,7 +239,7 @@ public class FileProcess {
         return endIndexes;
     }
 
-    public void saveAutoCadDataFile(String fileName) throws IOException {
+    public void saveAutoCadDataAsPoint(String fileName) throws IOException {
         File file = new File(FOLDER_PATH + "/" + fileName);
         FileOutputStream fos = new FileOutputStream(file);
         OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
@@ -250,8 +250,26 @@ public class FileProcess {
             if( inputPoint.isLeftOut() ){
                 writer.write(inputPoint.getFormattedYForEOV() + "," +
                         inputPoint.getFormattedXForEOV() + "," + inputPoint.getFormattedMForEOV());
+                writer.newLine();
             }
-            writer.newLine();
+        }
+        writer.close();
+        osw.close();
+        fos.close();
+    }
+
+    public void saveAutoCadDataAsText(String fileName, boolean isSaveId) throws IOException {
+        File file = new File(FOLDER_PATH + "/" + fileName);
+        FileOutputStream fos = new FileOutputStream(file);
+        OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+        BufferedWriter writer = new BufferedWriter(osw);
+        for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+            if( inputPoint.isLeftOut() ){
+                writer.write("_TEXT " + inputPoint.getFormattedYForEOV() + "," +
+                        inputPoint.getFormattedXForEOV() + " 2 " +
+                        (isSaveId ? inputPoint.getPointId() : inputPoint.getM_EOV()));
+                writer.newLine();
+            }
         }
         writer.close();
         osw.close();
