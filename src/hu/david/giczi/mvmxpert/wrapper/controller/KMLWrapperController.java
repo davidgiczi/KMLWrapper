@@ -324,6 +324,7 @@ public class KMLWrapperController {
             return false;
         }
       else if ( option == 0) {
+
                 for (Point point : INPUT_POINTS) {
                     String pointId = prefix + (pointIdValue++) + postfix;
                     point.setPointId(pointId);
@@ -513,13 +514,8 @@ public class KMLWrapperController {
                 }
             }
             try {
-                if( MessagePane.getYesNoOptionMessage("Igen: azonosító, Nem: magasság",
-                        "A pont azonosítóját kivánod menteni?", KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0){
-                    fileProcess.saveAutoCadDataAsText(fileName, true);
-                }
-                else{
-                    fileProcess.saveAutoCadDataAsText(fileName, false);
-                }
+                fileProcess.saveAutoCadDataAsText(fileName, MessagePane.getYesNoOptionMessage("Igen: azonosító, Nem: magasság",
+                        "A pont azonosítóját kivánod menteni?", KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0);
             } catch (IOException e) {
                 MessagePane.getInfoMessage("Fájl mentése sikertelen",
                         FileProcess.FOLDER_PATH + "\\" + fileName,

@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController.INPUT_DATA_FILE_WINDOW;
+
 public class DataDisplayerWindow {
 
     public JFrame jFrame;
@@ -48,7 +50,7 @@ public class DataDisplayerWindow {
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
                 tableModel.setSaveInputPoint();
-                KMLWrapperController.INPUT_DATA_FILE_WINDOW.saveBtn.setEnabled(true);
+                INPUT_DATA_FILE_WINDOW.saveBtn.setEnabled(true);
             }
         });
         JTable table = new JTable(tableModel);
@@ -71,6 +73,16 @@ public class DataDisplayerWindow {
                         tableModel.setValueAt( !saveValue, row, tableModel.getTableColsNumber() );
                     }
                 }
+                else if( e.getClickCount() == 2 && "M".equals(headerName) ){
+                 if( 0 == MessagePane.getYesNoOptionMessage("Magasság módosítása",
+                            "Nullázza a pontok magasságát?", INPUT_DATA_FILE_WINDOW.jFrame) ){
+                     for (Point point : KMLWrapperController.INPUT_POINTS) {
+                         point.setM_EOV(0d);
+                     }
+                     jFrame.setVisible(false);
+                     displayData(dataType);
+                 }
+                }
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -88,6 +100,7 @@ public class DataDisplayerWindow {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+
                 if( e.getClickCount() == 2 &&
                       0 < Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(dataType) &&
                       9 > Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(dataType) ){
@@ -171,7 +184,7 @@ public class DataDisplayerWindow {
                         "Terület: " + calc.calcArea() + " m2<br>" +
                         "Kerület: " + calc.calcPerimeter() + " m<br>" +
                         "Magasságkülönbség: " + calc.calcElevation() + " m",
-                KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                INPUT_DATA_FILE_WINDOW.jFrame);
     }
     private void removePointFromCalcPointList(String pointId){
         usedForCalcPointList.removeIf(point -> point.getPointId().equals(pointId));

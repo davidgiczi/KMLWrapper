@@ -266,7 +266,7 @@ public class FileProcess {
         for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
             if( inputPoint.isLeftOut() ){
                 writer.write("_TEXT " + inputPoint.getFormattedYForEOV() + "," +
-                        inputPoint.getFormattedXForEOV() + " 2 " +
+                        inputPoint.getFormattedXForEOV() + " 2 0 "  +
                         (isSaveId ? inputPoint.getPointId() : inputPoint.getM_EOV()));
                 writer.newLine();
             }
