@@ -129,16 +129,23 @@ public class KMLWrapperController {
             return;
         }
         for (String kmlData : dataFromKML) {
-            String[] kmlInputData = kmlData.split(",");
-            try{
+            String[] lineData = kmlData.split("\\s+");
+            String[] pointData;
+            for (String point : lineData) {
+
+             if( point.isEmpty() ){
+                 continue;
+             }
+
+                pointData = point.split(",");
+                try {
                     Validation.isValidManuallyInputDataForWGS84DecimalFormat
-                            (null, kmlInputData[1], kmlInputData[0], kmlInputData[2]);
-            }
-            catch (IllegalArgumentException i){
-                break;
-            }
-            catch (InvalidPreferencesFormatException e){
-                MessagePane.getInfoMessage("Hibás WGS84 földrajzi koordináta", e.getMessage(), INPUT_DATA_FILE_WINDOW.jFrame);
+                            (null, pointData[1], pointData[0], pointData[2]);
+                } catch (IllegalArgumentException i) {
+                    break;
+                } catch (InvalidPreferencesFormatException e) {
+                    MessagePane.getInfoMessage("Hibás WGS84 földrajzi koordináta", e.getMessage(), INPUT_DATA_FILE_WINDOW.jFrame);
+                }
             }
         }
     }
