@@ -90,7 +90,8 @@ public class InputDataFileWindow {
     public static final String[] SCR_DATA_TYPE = {
             "Adattípus választása",
             "_MULTIPLE _POINT",
-            "_TEXT fájl by _SCRIPT"
+            "_TEXT fájl by _SCRIPT",
+            "LINE vagy POLYLINE"
     };
 
     private static final String[] FILE_NAME_OPTION = {
@@ -502,7 +503,8 @@ public class InputDataFileWindow {
             return false;
         }
        else if( (selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[2]) ||
-                 selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[4])) &&
+                 selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[4]) ||
+                 selectedItem.equals(SCR_DATA_TYPE[3])) &&
                 displayer != null && displayer.getTableModel().getHowManyInputPointSaved() < 2 ){
                 MessagePane.getInfoMessage("Mentés nem hajtható végre",
                     "Vonal mentéséhez legalább két menteni kívánt pont szükséges.", jFrame);
@@ -590,6 +592,10 @@ public class InputDataFileWindow {
        else if( SCR_DATA_TYPE[2].equals(selectedOption) ){
            saveFileNameField.setText("_feliratok.scr");
        }
+       else if( SCR_DATA_TYPE[3].equals(selectedOption) ){
+           saveFileNameField.setText("_vonalak.scr");
+       }
+
     }
 
     public String getOutputFileName() {
@@ -789,17 +795,28 @@ public class InputDataFileWindow {
                 fileName = addedFileNameByUser + "_pontok.scr";
             }
         }
-        else if( selectedOption.equals(SCR_DATA_TYPE[2]) ){
+        else if( selectedOption.equals(SCR_DATA_TYPE[2]) ) {
 
-            if( addedFileNameByUser.isEmpty() ){
+            if (addedFileNameByUser.isEmpty()) {
                 fileName = "_feliratok.scr";
-            }
-            else if( addedFileNameByUser.endsWith(".scr") ){
+            } else if (addedFileNameByUser.endsWith(".scr")) {
                 fileName = addedFileNameByUser;
-            }
-            else {
+            } else {
                 fileName = addedFileNameByUser + "_feliratok.scr";
             }
+        }
+            else if( selectedOption.equals(SCR_DATA_TYPE[3]) ){
+
+                if( addedFileNameByUser.isEmpty() ){
+                    fileName = "_vonalak.scr";
+                }
+                else if( addedFileNameByUser.endsWith(".scr") ){
+                    fileName = addedFileNameByUser;
+                }
+                else  {
+                    fileName = addedFileNameByUser + "_vonalak.scr";
+                }
+
         }
 
         return fileName;

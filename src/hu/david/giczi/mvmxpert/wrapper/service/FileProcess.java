@@ -275,6 +275,24 @@ public class FileProcess {
         osw.close();
         fos.close();
     }
+    public void saveAutoCadDataAsLine(String fileName, boolean isLine, boolean isAppend) throws IOException {
+        File file = new File(FOLDER_PATH + "/" + fileName);
+        FileOutputStream fos = new FileOutputStream(file, isAppend);
+        OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+        BufferedWriter writer = new BufferedWriter(osw);
+        writer.write((isLine ? "LINE" : "PLINE"));
+        writer.newLine();
+        for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+            if( inputPoint.isLeftOut() ){
+                writer.write(inputPoint.getFormattedYForEOV() + "," + inputPoint.getFormattedXForEOV());
+                writer.newLine();
+            }
+        }
+        writer.newLine();
+        writer.close();
+        osw.close();
+        fos.close();
+    }
 
 public void saveKMLDataFile(String selectedItem, String fileName, boolean isAppendData) throws IOException {
     File file = new File(FOLDER_PATH + "/" + fileName);
