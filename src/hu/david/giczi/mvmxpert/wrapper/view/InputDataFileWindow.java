@@ -91,7 +91,7 @@ public class InputDataFileWindow {
             "Adattípus választása",
             "_MULTIPLE _POINT",
             "_TEXT fájl by _SCRIPT",
-            "LINE vagy POLYLINE"
+            "_LINE vagy _POLYLINE"
     };
 
     private static final String[] FILE_NAME_OPTION = {

@@ -2,6 +2,7 @@ package hu.david.giczi.mvmxpert.wrapper.service;
 
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
+
 import java.util.prefs.InvalidPreferencesFormatException;
 
 public class Validation {
@@ -26,7 +27,12 @@ public class Validation {
                                 + (FileProcess.INPUT_DATA_LIST.indexOf(row) + 1) + ". sorában.");
             }
         Point validPoint = parseInputData(rowData, FileProcess.INPUT_DATA_LIST.indexOf(row) + 1);
-        KMLWrapperController.addValidInputPoint(validPoint);
+            try{
+                KMLWrapperController.addValidInputPoint(validPoint);
+            }
+            catch (RuntimeException r){
+                break;
+            }
         }
     }
 

@@ -280,7 +280,7 @@ public class FileProcess {
         FileOutputStream fos = new FileOutputStream(file, isAppend);
         OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
         BufferedWriter writer = new BufferedWriter(osw);
-        writer.write((isLine ? "LINE" : "PLINE"));
+        writer.write((isLine ? "_LINE" : "_PLINE"));
         writer.newLine();
         for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
             if( inputPoint.isLeftOut() ){

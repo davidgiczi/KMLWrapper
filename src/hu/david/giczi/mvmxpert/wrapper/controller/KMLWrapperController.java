@@ -6,6 +6,7 @@ import hu.david.giczi.mvmxpert.wrapper.service.Transformation;
 import hu.david.giczi.mvmxpert.wrapper.service.Transformation2D;
 import hu.david.giczi.mvmxpert.wrapper.service.Validation;
 import hu.david.giczi.mvmxpert.wrapper.view.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -239,7 +240,7 @@ public class KMLWrapperController {
         }
     }
 
-    public static void addValidInputPoint(Point validPoint) throws IllegalArgumentException {
+    public static void addValidInputPoint(Point validPoint) throws RuntimeException {
         if (KMLWrapperController.INPUT_POINTS.isEmpty()) {
             KMLWrapperController.INPUT_POINTS.add(validPoint);
             return;
@@ -259,7 +260,7 @@ public class KMLWrapperController {
                     KMLWrapperController.INPUT_POINTS.add(validPoint);
                 }
                 else if( option == -1 ){
-                    throw new IllegalArgumentException();
+                   throw new RuntimeException();
                 }
         }
         setWindowTitle();
