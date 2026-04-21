@@ -27,12 +27,14 @@ public class KMLWrapperController {
     public static List<Point> INPUT_POINTS;
     public Transformation2D transformation2D;
     public static String DELIMITER;
+    public List<Integer> linesIndexList;
 
 
     public KMLWrapperController() {
         this.fileProcess = new FileProcess();
         INPUT_DATA_FILE_WINDOW = new InputDataFileWindow(this);
         INPUT_POINTS = new ArrayList<>();
+        linesIndexList = new ArrayList<>();
         FileProcess.getReferencePoints();
     }
 
@@ -129,19 +131,22 @@ public class KMLWrapperController {
                     "KML fájl adatok nem olvashatók.", INPUT_DATA_FILE_WINDOW.jFrame);
             return;
         }
+        linesIndexList.clear();
         for (String kmlData : dataFromKML) {
             String[] lineData = kmlData.split("\\s+");
             String[] pointData;
+            linesIndexList.add(lineData.length);
             for (String point : lineData) {
 
              if( point.isEmpty() ){
                  continue;
              }
-
                 pointData = point.split(",");
+
                 try {
                     Validation.isValidManuallyInputDataForWGS84DecimalFormat
                             (null, pointData[1], pointData[0], pointData[2]);
+
                 } catch (IllegalArgumentException i) {
                     break;
                 } catch (InvalidPreferencesFormatException e) {
@@ -373,7 +378,8 @@ public class KMLWrapperController {
     }
 
     public void saveDataFile(String selectedItem) {
-        if (INPUT_DATA_FILE_WINDOW.displayer.getTableModel().getHowManyInputPointSaved() == 0) {
+        if (INPUT_DATA_FILE_WINDOW.displayer != null &&
+                INPUT_DATA_FILE_WINDOW.displayer.getTableModel().getHowManyInputPointSaved() == 0) {
             return;
         }
         fileProcess.openDirectory();
@@ -545,7 +551,7 @@ public class KMLWrapperController {
                                 MessagePane.getYesNoOptionMessage("Igen: LINE, Nem: PLINE",
                                 "Mi legyen a vonal típusa?",
                                         KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0,
-                                false);
+                                false, INPUT_POINTS);
                     } catch (IOException e) {
                         MessagePane.getInfoMessage("Fájl mentése sikertelen",
                                 FileProcess.FOLDER_PATH + "\\" + fileName,
@@ -564,7 +570,7 @@ public class KMLWrapperController {
                                 MessagePane.getYesNoOptionMessage("Igen: LINE, Nem: PLINE",
                                         "Mi legyen a vonal típusa?",
                                         KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0,
-                                true);
+                                true, INPUT_POINTS);
                     } catch (IOException e) {
                         MessagePane.getInfoMessage("Fájl mentése sikertelen",
                                 FileProcess.FOLDER_PATH + "\\" + fileName,
@@ -582,12 +588,55 @@ public class KMLWrapperController {
                         MessagePane.getYesNoOptionMessage("Igen: LINE, Nem: PLINE",
                         "Mi legyen a vonal típusa?",
                         KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0,
-                        false);
+                        false, INPUT_POINTS);
             } catch (IOException e) {
                 MessagePane.getInfoMessage("Fájl mentése sikertelen",
                         FileProcess.FOLDER_PATH + "\\" + fileName,
                         KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                 return;
+            }
+        }
+    else if( selectedItem.equals(InputDataFileWindow.SCR_DATA_TYPE[4] ) ){
+            List<Point> linePoints = new ArrayList<>();
+        int option = MessagePane.getYesNoOptionMessage("Igen: LINE, Nem: PLINE",
+                "Mi legyen a vonalak típusa?", KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+            if (new File(FileProcess.FOLDER_PATH + "/" + fileName).exists()) {
+                MessagePane.getInfoMessage("Korábban mentett fájl", "A fájl nem felülírható.",
+                        KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                 return;
+            }
+            switch (option) {
+                case 0:
+                    for (Integer index : linesIndexList) {
+                        for (int i = 0; i < index; i++) {
+                            KMLWrapperController.INPUT_POINTS.get(i).setLeftOut(true);
+                            linePoints.add(KMLWrapperController.INPUT_POINTS.get(i));
+                        }
+                        try {
+                            fileProcess.saveAutoCadDataAsLine(fileName, true, true, linePoints);
+                        } catch (IOException e) {
+                            MessagePane.getInfoMessage("Fájl mentése sikertelen",
+                                    FileProcess.FOLDER_PATH + "\\" + fileName,
+                                    KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                        }
+                        linePoints.clear();
+                    }
+                    break;
+                case 1:
+                    for (Integer index : linesIndexList) {
+                        for (int i = 0; i < index; i++) {
+                            KMLWrapperController.INPUT_POINTS.get(i).setLeftOut(true);
+                            linePoints.add(KMLWrapperController.INPUT_POINTS.get(i));
+                        }
+                        try {
+                            fileProcess.saveAutoCadDataAsLine(fileName, false, true, linePoints);
+                        } catch (IOException e) {
+                            MessagePane.getInfoMessage("Fájl mentése sikertelen",
+                                    FileProcess.FOLDER_PATH + "\\" + fileName,
+                                    KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                        }
+                        linePoints.clear();
+                    }
             }
         }
         MessagePane.getInfoMessage("Sikeres mentés",
@@ -753,5 +802,15 @@ public class KMLWrapperController {
         }
     }
 
+    public boolean isLineData(){
+        boolean isLine = false;
+        for (Integer lineIndex : linesIndexList) {
+            if (1 < lineIndex) {
+                isLine = true;
+                break;
+            }
+        }
+        return isLine;
+    }
 
 }

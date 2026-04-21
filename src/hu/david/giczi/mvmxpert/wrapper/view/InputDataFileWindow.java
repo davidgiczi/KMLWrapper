@@ -1,10 +1,13 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
+
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Objects;
 
 public class InputDataFileWindow {
@@ -91,7 +94,8 @@ public class InputDataFileWindow {
             "Adattípus választása",
             "_MULTIPLE _POINT",
             "_TEXT fájl by _SCRIPT",
-            "_LINE vagy _POLYLINE"
+            "_LINE vagy _POLYLINE",
+            "Beolvasott vonalak mentése"
     };
 
     private static final String[] FILE_NAME_OPTION = {
@@ -404,6 +408,23 @@ public class InputDataFileWindow {
         outputFileOptionPanel.add(panel);
     }
 
+    private void saveInputLineData() {
+        if (!controller.isLineData()) {
+            MessagePane.getInfoMessage("Vonalak mentése sikertelen", "Nincsenek beolvasott vonalak.",
+                    KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+        }
+        else{
+            int lines = 0;
+            for (Integer lengthOfLine : controller.linesIndexList) {
+                if( 1 < lengthOfLine ){
+                    lines++;
+                }
+            }
+            MessagePane.getInfoMessage("Beolvasott vonalak",
+                    lines + " db vonal mentésre kész.", jFrame);
+            saveBtn.setEnabled(true);
+        }
+    }
     private void addComboBoxForOutputFileOptionPanel(){
         JPanel panel = new JPanel();
         outputDataTypeComboBox = new JComboBox<>(KML_DATA_TYPE);
@@ -420,7 +441,12 @@ public class InputDataFileWindow {
                 if( isOkDisplayData(selectedItem) && controller.setIdForInputDataPoints(selectedItem) ){
                     try{
                         controller.transformationInputPointData();
-                        displayer = new DataDisplayerWindow(selectedItem,  controller);
+                        if( selectedItem.equals(SCR_DATA_TYPE[4]) ){
+                            saveInputLineData();
+                        }
+                        else {
+                            displayer = new DataDisplayerWindow(selectedItem,  controller);
+                        }
                     }
                     catch (IllegalArgumentException a){
                         MessagePane.getInfoMessage(a.getMessage(),
@@ -592,7 +618,8 @@ public class InputDataFileWindow {
        else if( SCR_DATA_TYPE[2].equals(selectedOption) ){
            saveFileNameField.setText("_feliratok.scr");
        }
-       else if( SCR_DATA_TYPE[3].equals(selectedOption) ){
+       else if( SCR_DATA_TYPE[3].equals(selectedOption) ||
+               SCR_DATA_TYPE[4].equals(selectedOption) ){
            saveFileNameField.setText("_vonalak.scr");
        }
 
@@ -805,7 +832,8 @@ public class InputDataFileWindow {
                 fileName = addedFileNameByUser + "_feliratok.scr";
             }
         }
-            else if( selectedOption.equals(SCR_DATA_TYPE[3]) ){
+            else if( selectedOption.equals(SCR_DATA_TYPE[3]) ||
+                            selectedOption.equals(SCR_DATA_TYPE[4])){
 
                 if( addedFileNameByUser.isEmpty() ){
                     fileName = "_vonalak.scr";
@@ -816,7 +844,6 @@ public class InputDataFileWindow {
                 else  {
                     fileName = addedFileNameByUser + "_vonalak.scr";
                 }
-
         }
 
         return fileName;

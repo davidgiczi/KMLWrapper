@@ -4,8 +4,10 @@ package hu.david.giczi.mvmxpert.wrapper.view;
 import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.service.CalcData;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -25,6 +27,7 @@ public class DataDisplayerWindow {
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
     private final KMLWrapperController controller;
     public List<Point> usedForCalcPointList;
+
     public DataDisplayerWindow(String dataType, KMLWrapperController controller) {
         this.controller = controller;
         displayData(dataType);
@@ -53,7 +56,21 @@ public class DataDisplayerWindow {
                 INPUT_DATA_FILE_WINDOW.saveBtn.setEnabled(true);
             }
         });
-        JTable table = new JTable(tableModel);
+        JTable table = new JTable(tableModel){
+
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component dataRow = super.prepareRenderer(renderer, row, column);
+
+                    if(  row % 2 == 1 ){
+                        dataRow.setBackground(new Color(240, 240, 240));
+                    }
+                    else {
+                        dataRow.setBackground(new Color(255, 255, 255));
+                    }
+                return  dataRow;
+            }
+        };
 
         table.getTableHeader().addMouseListener(new MouseAdapter() {
             @Override

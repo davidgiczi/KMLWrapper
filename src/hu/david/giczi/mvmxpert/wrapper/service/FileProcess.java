@@ -275,14 +275,14 @@ public class FileProcess {
         osw.close();
         fos.close();
     }
-    public void saveAutoCadDataAsLine(String fileName, boolean isLine, boolean isAppend) throws IOException {
+    public void saveAutoCadDataAsLine(String fileName, boolean isLine, boolean isAppend, List<Point> inputPoints) throws IOException {
         File file = new File(FOLDER_PATH + "/" + fileName);
         FileOutputStream fos = new FileOutputStream(file, isAppend);
         OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
         BufferedWriter writer = new BufferedWriter(osw);
         writer.write((isLine ? "_LINE" : "_PLINE"));
         writer.newLine();
-        for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+        for (Point inputPoint : inputPoints){
             if( inputPoint.isLeftOut() ){
                 writer.write(inputPoint.getFormattedYForEOV() + "," + inputPoint.getFormattedXForEOV());
                 writer.newLine();

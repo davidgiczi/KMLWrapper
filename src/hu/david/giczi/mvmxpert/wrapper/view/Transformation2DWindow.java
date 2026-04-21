@@ -164,6 +164,26 @@ public class Transformation2DWindow {
         optionMenu.add(exitProgramMenuItem);
         jMenuBar.add(optionMenu);
         jMenuBar.add(longitudinalOptions);
+        JMenu autoCadMacroOptions = new JMenu("AutoCad makró fájl létrehozása");
+        autoCadMacroOptions.setFont(boldFont);
+        autoCadMacroOptions.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JMenuItem textItem = new JMenuItem("_TEXT scr fájl");
+        textItem.setFont(plainFont);
+        textItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JMenuItem pointItem = new JMenuItem("_MULTIPLE _POINT scr fájl");
+        pointItem.setFont(plainFont);
+        pointItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JMenuItem lineItem = new JMenuItem("_LINE scr fájl");
+        lineItem.setFont(plainFont);
+        lineItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JMenuItem pLineItem = new JMenuItem("_PLINE scr fájl");
+        pLineItem.setFont(plainFont);
+        pLineItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        autoCadMacroOptions.add(textItem);
+        autoCadMacroOptions.add(pointItem);
+        autoCadMacroOptions.add(lineItem);
+        autoCadMacroOptions.add(pLineItem);
+        jMenuBar.add(autoCadMacroOptions);
         jFrame.setJMenuBar(jMenuBar);
     }
 
