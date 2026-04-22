@@ -188,15 +188,41 @@ public class Transformation2DWindow {
         textItem.setFont(plainFont);
         textItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem pointItem = new JMenuItem(AUTOCAD_MACRO_TYPE[1]);
-        pointItem.addActionListener(e -> autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[1]));
+        pointItem.addActionListener(e -> {
+            autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[1]);
+            if( secondSystemDataListModel.isEmpty() ){
+                secondSystemDataListModel.addElement("_MULTIPLE _POINT");
+            }
+            else{
+                secondSystemDataListModel.addElement("\n");
+                secondSystemDataListModel.addElement("_MULTIPLE _POINT");
+            }
+        });
         pointItem.setFont(plainFont);
         pointItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem lineItem = new JMenuItem(AUTOCAD_MACRO_TYPE[2]);
-        lineItem.addActionListener(e -> autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[2]));
+        lineItem.addActionListener(e -> {
+            autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[2]);
+            if( secondSystemDataListModel.isEmpty() ) {
+                secondSystemDataListModel.addElement("_LINE");
+            }else{
+                secondSystemDataListModel.addElement("\n");
+                secondSystemDataListModel.addElement("_LINE");
+            }
+        });
         lineItem.setFont(plainFont);
         lineItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem pLineItem = new JMenuItem(AUTOCAD_MACRO_TYPE[3]);
-        pLineItem.addActionListener(e -> autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[3]));
+        pLineItem.addActionListener(e -> {
+            autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[3]);
+            if( secondSystemDataListModel.isEmpty() ) {
+                secondSystemDataListModel.addElement("_PLINE");
+            }
+            else{
+                secondSystemDataListModel.addElement("\n");
+                secondSystemDataListModel.addElement("_PLINE");
+            }
+        });
         pLineItem.setFont(plainFont);
         pLineItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         autoCadMacroOptions.add(textItem);
