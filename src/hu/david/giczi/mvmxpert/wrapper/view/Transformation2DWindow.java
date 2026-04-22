@@ -21,6 +21,7 @@ public class Transformation2DWindow {
     private JPanel transformationDataPanel;
     private JPanel transformDataPanel;
     public JMenu longitudinalOptions;
+    public JMenu autoCadMacroOptions;
     public JTextField point11NumberField;
     public JTextField point11YField;
     public JTextField point11XField;
@@ -170,19 +171,32 @@ public class Transformation2DWindow {
         optionMenu.add(exitProgramMenuItem);
         jMenuBar.add(optionMenu);
         jMenuBar.add(longitudinalOptions);
-        JMenu autoCadMacroOptions = new JMenu("AutoCad makró fájl létrehozása");
+        autoCadMacroOptions = new JMenu("AutoCad makró fájl létrehozása");
+        autoCadMacroOptions.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(SwingUtilities.isRightMouseButton(e)){
+                    autoCadMacroOptions.setText("AutoCad makró fájl létrehozása");
+                }
+            }
+        });
         autoCadMacroOptions.setFont(boldFont);
         autoCadMacroOptions.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem textItem = new JMenuItem(AUTOCAD_MACRO_TYPE[0]);
+        textItem.addActionListener(e -> autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[0]));
         textItem.setFont(plainFont);
         textItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem pointItem = new JMenuItem(AUTOCAD_MACRO_TYPE[1]);
+        pointItem.addActionListener(e -> autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[1]));
         pointItem.setFont(plainFont);
         pointItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem lineItem = new JMenuItem(AUTOCAD_MACRO_TYPE[2]);
+        lineItem.addActionListener(e -> autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[2]));
         lineItem.setFont(plainFont);
         lineItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem pLineItem = new JMenuItem(AUTOCAD_MACRO_TYPE[3]);
+        pLineItem.addActionListener(e -> autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[3]));
         pLineItem.setFont(plainFont);
         pLineItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         autoCadMacroOptions.add(textItem);
