@@ -62,6 +62,12 @@ public class Transformation2DWindow {
     public final String LONGITUDINAL_TEXT = "Hosszelvény adatok számítása";
     private final Image iconImage = Toolkit.getDefaultToolkit()
             .getImage(getClass().getResource("/icon/transfer.png"));
+    public static final String[] AUTOCAD_MACRO_TYPE = {
+            "_TEXT scr fájl",
+            "_MULTIPLE _POINT scr fájl",
+            "_LINE scr fájl",
+            "_POLYLINE scr fájl"
+    };
 
 
     public Transformation2DWindow(KMLWrapperController controller) {
@@ -167,16 +173,16 @@ public class Transformation2DWindow {
         JMenu autoCadMacroOptions = new JMenu("AutoCad makró fájl létrehozása");
         autoCadMacroOptions.setFont(boldFont);
         autoCadMacroOptions.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        JMenuItem textItem = new JMenuItem("_TEXT scr fájl");
+        JMenuItem textItem = new JMenuItem(AUTOCAD_MACRO_TYPE[0]);
         textItem.setFont(plainFont);
         textItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        JMenuItem pointItem = new JMenuItem("_MULTIPLE _POINT scr fájl");
+        JMenuItem pointItem = new JMenuItem(AUTOCAD_MACRO_TYPE[1]);
         pointItem.setFont(plainFont);
         pointItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        JMenuItem lineItem = new JMenuItem("_LINE scr fájl");
+        JMenuItem lineItem = new JMenuItem(AUTOCAD_MACRO_TYPE[2]);
         lineItem.setFont(plainFont);
         lineItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        JMenuItem pLineItem = new JMenuItem("_PLINE scr fájl");
+        JMenuItem pLineItem = new JMenuItem(AUTOCAD_MACRO_TYPE[3]);
         pLineItem.setFont(plainFont);
         pLineItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         autoCadMacroOptions.add(textItem);

@@ -62,12 +62,25 @@ public class DataDisplayerWindow {
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
                 Component dataRow = super.prepareRenderer(renderer, row, column);
 
-                    if(  row % 2 == 1 ){
-                        dataRow.setBackground(new Color(240, 240, 240));
+                if ( !isRowSelected(row) ) {
+
+                    int sumIndex = 0;
+
+                    for (int i = 0; i < controller.linesIndexList.size(); i++) {
+                        int blockSize = controller.linesIndexList.get(i);
+
+                        if (row >= sumIndex && row < sumIndex + blockSize) {
+                            if (i % 2 == 0) {
+                                dataRow.setBackground(new Color(254, 249, 204));
+                            } else {
+                                dataRow.setBackground(Color.WHITE);
+                            }
+                            break;
+                        }
+                        sumIndex += blockSize;
                     }
-                    else {
-                        dataRow.setBackground(new Color(255, 255, 255));
-                    }
+                }
+
                 return  dataRow;
             }
         };

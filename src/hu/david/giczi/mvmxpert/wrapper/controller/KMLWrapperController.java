@@ -9,6 +9,7 @@ import hu.david.giczi.mvmxpert.wrapper.view.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -600,10 +601,20 @@ public class KMLWrapperController {
             List<Point> linePoints = new ArrayList<>();
         int option = MessagePane.getYesNoOptionMessage("Igen: LINE, Nem: PLINE",
                 "Mi legyen a vonalak típusa?", KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
-            if (new File(FileProcess.FOLDER_PATH + "/" + fileName).exists()) {
-                MessagePane.getInfoMessage("Korábban mentett fájl", "A fájl nem felülírható.",
-                        KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
-                 return;
+        File file = new File(FileProcess.FOLDER_PATH + "/" + fileName);
+            if ( file.exists()) {
+              if(  MessagePane.getYesNoOptionMessage("Korábban mentett fájl", "Biztos, hogy felülírod?.",
+                        KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0 ){
+                  try{
+                      Files.delete(file.toPath());
+                  }
+                  catch (IOException e){
+                      return;
+                  }
+              }
+              else {
+                  return;
+              }
             }
             switch (option) {
                 case 0:

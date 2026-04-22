@@ -1,8 +1,8 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="Transformer:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/Transformer_jar</output-path>
-    <root id="archive" name="KMLWrapper.jar">
-      <element id="module-output" name="KMLWrapper" />
+    <root id="archive" name="Transformer.jar">
+      <element id="module-output" name="Transformer" />
     </root>
   </artifact>
 </component>

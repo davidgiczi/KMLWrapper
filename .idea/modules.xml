@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/KMLWrapper.iml" filepath="$PROJECT_DIR$/KMLWrapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Transformer.iml" filepath="$PROJECT_DIR$/Transformer.iml" />
     </modules>
   </component>
 </project>
