@@ -405,7 +405,7 @@ public class KMLWrapperController {
                                 KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                         return;
                     }
-                } else if( MessagePane.getYesNoOptionMessage("Korábban mentett fájl",
+                } else if (MessagePane.getYesNoOptionMessage("Korábban mentett fájl",
                         "Felülírja a korábban mentett adatokat?",
                         INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
 
@@ -417,24 +417,21 @@ public class KMLWrapperController {
                                 KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                         return;
                     }
+                } else {
+                    return;
                 }
-                else {
+            } else {
+
+                try {
+                    fileProcess.saveKMLDataFile(selectedItem, fileName, false);
+                } catch (IOException e) {
+                    MessagePane.getInfoMessage("Fájl mentése sikertelen",
+                            FileProcess.FOLDER_PATH + "\\" + fileName,
+                            KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                     return;
                 }
             }
-        else {
-
-            try {
-                fileProcess.saveKMLDataFile(selectedItem, fileName, false);
-            } catch (IOException e) {
-                MessagePane.getInfoMessage("Fájl mentése sikertelen",
-                        FileProcess.FOLDER_PATH + "\\" + fileName,
-                        KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
-                return;
-            }
-       }
- }
-        else if( selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[6]) ){
+        } else if (selectedItem.equals(InputDataFileWindow.KML_DATA_TYPE[6])) {
             if (new File(FileProcess.FOLDER_PATH + "/" + fileName).exists()) {
                 if (MessagePane.getYesNoOptionMessage("Korábban mentett fájl", "Biztos, hogy felülírod?",
                         INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
@@ -458,8 +455,7 @@ public class KMLWrapperController {
                         KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                 return;
             }
-        }
-        else if (Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(selectedItem) > 0 &&
+        } else if (Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(selectedItem) > 0 &&
                 16 > Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(selectedItem)) {
 
             if (new File(FileProcess.FOLDER_PATH + "/" + fileName).exists()) {
@@ -485,7 +481,7 @@ public class KMLWrapperController {
                         KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                 return;
             }
-        } else if ( selectedItem.equals(InputDataFileWindow.SCR_DATA_TYPE[1]) ) {
+        } else if (selectedItem.equals(InputDataFileWindow.SCR_DATA_TYPE[1])) {
 
             if (new File(FileProcess.FOLDER_PATH + "/" + fileName).exists()) {
                 if (MessagePane.getYesNoOptionMessage("Korábban mentett fájl", "Biztos, hogy felülírod?",
@@ -502,24 +498,23 @@ public class KMLWrapperController {
                     return;
                 }
             }
-                try {
-                    fileProcess.saveAutoCadDataAsPoint(fileName);
-                } catch (IOException e) {
-                    MessagePane.getInfoMessage("Fájl mentése sikertelen",
-                            FileProcess.FOLDER_PATH + "\\" + fileName,
-                            KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
-                    return;
-                }
-        }
-        else if ( selectedItem.equals(InputDataFileWindow.SCR_DATA_TYPE[2]) ) {
+            try {
+                fileProcess.saveAutoCadDataAsPoint(fileName);
+            } catch (IOException e) {
+                MessagePane.getInfoMessage("Fájl mentése sikertelen",
+                        FileProcess.FOLDER_PATH + "\\" + fileName,
+                        KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                return;
+            }
+        } else if (selectedItem.equals(InputDataFileWindow.SCR_DATA_TYPE[2])) {
 
             if (new File(FileProcess.FOLDER_PATH + "/" + fileName).exists()) {
                 if (MessagePane.getYesNoOptionMessage("Korábban mentett fájl", "Biztos, hogy felülírod?",
                         INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
                     try {
                         fileProcess.saveAutoCadDataAsText(fileName,
-                     MessagePane.getYesNoOptionMessage("Igen: azonosító, Nem: magasság",
-                     "A pont azonosítóját kivánod menteni?", KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0);
+                                MessagePane.getYesNoOptionMessage("Igen: azonosító, Nem: magasság",
+                                        "A pont azonosítóját kivánod menteni?", KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0);
                     } catch (IOException e) {
                         MessagePane.getInfoMessage("Fájl mentése sikertelen",
                                 FileProcess.FOLDER_PATH + "\\" + fileName,
@@ -532,16 +527,15 @@ public class KMLWrapperController {
             }
             try {
                 fileProcess.saveAutoCadDataAsText(fileName,
-                MessagePane.getYesNoOptionMessage("Igen: azonosító, Nem: magasság",
-                 "A pont azonosítóját kivánod menteni?", KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0);
+                        MessagePane.getYesNoOptionMessage("Igen: azonosító, Nem: magasság",
+                                "A pont azonosítóját kivánod menteni?", KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0);
             } catch (IOException e) {
                 MessagePane.getInfoMessage("Fájl mentése sikertelen",
                         FileProcess.FOLDER_PATH + "\\" + fileName,
                         KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                 return;
             }
-        }
-        else if ( selectedItem.equals(InputDataFileWindow.SCR_DATA_TYPE[3]) ) {
+        } else if (selectedItem.equals(InputDataFileWindow.SCR_DATA_TYPE[3])) {
 
             if (new File(FileProcess.FOLDER_PATH + "/" + fileName).exists()) {
 
@@ -550,7 +544,7 @@ public class KMLWrapperController {
                     try {
                         fileProcess.saveAutoCadDataAsLine(fileName,
                                 MessagePane.getYesNoOptionMessage("Igen: LINE, Nem: PLINE",
-                                "Mi legyen a vonal típusa?",
+                                        "Mi legyen a vonal típusa?",
                                         KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0,
                                 false, INPUT_POINTS);
                     } catch (IOException e) {
@@ -587,8 +581,8 @@ public class KMLWrapperController {
             try {
                 fileProcess.saveAutoCadDataAsLine(fileName,
                         MessagePane.getYesNoOptionMessage("Igen: LINE, Nem: PLINE",
-                        "Mi legyen a vonal típusa?",
-                        KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0,
+                                "Mi legyen a vonal típusa?",
+                                KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0,
                         false, INPUT_POINTS);
             } catch (IOException e) {
                 MessagePane.getInfoMessage("Fájl mentése sikertelen",
@@ -596,32 +590,30 @@ public class KMLWrapperController {
                         KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                 return;
             }
-        }
-    else if( selectedItem.equals(InputDataFileWindow.SCR_DATA_TYPE[4] ) ){
+        } else if (selectedItem.equals(InputDataFileWindow.SCR_DATA_TYPE[4])) {
             List<Point> linePoints = new ArrayList<>();
-        int option = MessagePane.getYesNoOptionMessage("Igen: LINE, Nem: PLINE",
-                "Mi legyen a vonalak típusa?", KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
-        File file = new File(FileProcess.FOLDER_PATH + "/" + fileName);
-            if ( file.exists()) {
-              if(  MessagePane.getYesNoOptionMessage("Korábban mentett fájl", "Biztos, hogy felülírod?.",
-                        KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0 ){
-                  try{
-                      Files.delete(file.toPath());
-                  }
-                  catch (IOException e){
-                      return;
-                  }
-              }
-              else {
-                  return;
-              }
+            int option = MessagePane.getYesNoOptionMessage("Igen: LINE, Nem: PLINE",
+                    "Mi legyen a vonalak típusa?", KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+            File file = new File(FileProcess.FOLDER_PATH + "/" + fileName);
+            if (file.exists()) {
+                if (MessagePane.getYesNoOptionMessage("Korábban mentett fájl", "Biztos, hogy felülírod?.",
+                        KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame) == 0) {
+                    try {
+                        Files.delete(file.toPath());
+                    } catch (IOException e) {
+                        return;
+                    }
+                } else {
+                    return;
+                }
             }
+            int sumIndex = 0;
             switch (option) {
                 case 0:
-                    for (Integer index : linesIndexList) {
-                        for (int i = 0; i < index; i++) {
-                            KMLWrapperController.INPUT_POINTS.get(i).setLeftOut(true);
-                            linePoints.add(KMLWrapperController.INPUT_POINTS.get(i));
+                    for (Integer range : linesIndexList) {
+                        for (int j = 0; j < range; j++) {
+                            KMLWrapperController.INPUT_POINTS.get(sumIndex + j).setLeftOut(true);
+                            linePoints.add(KMLWrapperController.INPUT_POINTS.get(sumIndex + j));
                         }
                         try {
                             fileProcess.saveAutoCadDataAsLine(fileName, true, true, linePoints);
@@ -631,13 +623,14 @@ public class KMLWrapperController {
                                     KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                         }
                         linePoints.clear();
+                        sumIndex += range;
                     }
                     break;
                 case 1:
-                    for (Integer index : linesIndexList) {
-                        for (int i = 0; i < index; i++) {
-                            KMLWrapperController.INPUT_POINTS.get(i).setLeftOut(true);
-                            linePoints.add(KMLWrapperController.INPUT_POINTS.get(i));
+                    for (Integer range : linesIndexList) {
+                        for (int j = 0; j < range; j++) {
+                            KMLWrapperController.INPUT_POINTS.get(sumIndex + j).setLeftOut(true);
+                            linePoints.add(KMLWrapperController.INPUT_POINTS.get(sumIndex + j));
                         }
                         try {
                             fileProcess.saveAutoCadDataAsLine(fileName, false, true, linePoints);
@@ -647,6 +640,7 @@ public class KMLWrapperController {
                                     KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
                         }
                         linePoints.clear();
+                        sumIndex += range;
                     }
             }
         }
