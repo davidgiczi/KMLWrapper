@@ -1,7 +1,7 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 
 
-import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.controller.TransformerController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.service.CalcData;
 
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController.INPUT_DATA_FILE_WINDOW;
+import static hu.david.giczi.mvmxpert.wrapper.controller.TransformerController.INPUT_DATA_FILE_WINDOW;
 
 public class DataDisplayerWindow {
 
@@ -25,10 +25,10 @@ public class DataDisplayerWindow {
     private TableModel tableModel;
     private final Font plainFont = new Font("Roboto", Font.PLAIN, 16);
     private final Font boldFont = new Font("Roboto", Font.BOLD, 17);
-    private final KMLWrapperController controller;
+    private final TransformerController controller;
     public List<Point> usedForCalcPointList;
 
-    public DataDisplayerWindow(String dataType, KMLWrapperController controller) {
+    public DataDisplayerWindow(String dataType, TransformerController controller) {
         this.controller = controller;
         displayData(dataType);
     }
@@ -106,7 +106,7 @@ public class DataDisplayerWindow {
                 else if( e.getClickCount() == 2 && "M".equals(headerName) ){
                  if( 0 == MessagePane.getYesNoOptionMessage("Magasság módosítása",
                             "Nullázza a pontok magasságát?", INPUT_DATA_FILE_WINDOW.jFrame) ){
-                     for (Point point : KMLWrapperController.INPUT_POINTS) {
+                     for (Point point : TransformerController.INPUT_POINTS) {
                          point.setM_EOV(0d);
                      }
                      jFrame.setVisible(false);
@@ -172,7 +172,6 @@ public class DataDisplayerWindow {
                     }
                 }
             }
-
             @Override
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
@@ -205,7 +204,7 @@ public class DataDisplayerWindow {
 
     public void getCalcDataMessagePane(){
         if( usedForCalcPointList == null ){
-            usedForCalcPointList = new ArrayList<>(KMLWrapperController.INPUT_POINTS);
+            usedForCalcPointList = new ArrayList<>(TransformerController.INPUT_POINTS);
         }
         CalcData calc = new CalcData(usedForCalcPointList);
         MessagePane.getInfoMessage("Terület és távolság adatok",
@@ -220,7 +219,7 @@ public class DataDisplayerWindow {
         usedForCalcPointList.removeIf(point -> point.getPointId().equals(pointId));
     }
     private void addPointIntoCalcPointList(String pointId){
-        for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+        for (Point inputPoint : TransformerController.INPUT_POINTS) {
             if( inputPoint.getPointId().equals(pointId) ){
                 usedForCalcPointList.add(inputPoint);
             }

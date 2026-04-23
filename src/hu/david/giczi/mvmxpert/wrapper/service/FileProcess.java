@@ -1,6 +1,6 @@
 package hu.david.giczi.mvmxpert.wrapper.service;
 
-import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.controller.TransformerController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Deviation;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.domain.TransformationParam;
@@ -98,7 +98,7 @@ public class FileProcess {
 
     public static void getReferencePoints() {
         List<String> pointsData = getPointsData();
-        KMLWrapperController.REFERENCE_POINTS = new ArrayList<>();
+        TransformerController.REFERENCE_POINTS = new ArrayList<>();
         for (String rowData : pointsData) {
             String[] pointData = rowData.split(",");
             Point point = new Point();
@@ -111,7 +111,7 @@ public class FileProcess {
             point.setM_EOV(Double.parseDouble(pointData[6]));
             point.convertEOVCoordinatesForIUGG67();
             point.convertWGS84XYZCoordinatesForWGS84Geographical();
-            KMLWrapperController.REFERENCE_POINTS.add(point);
+            TransformerController.REFERENCE_POINTS.add(point);
         }
     }
 
@@ -141,7 +141,7 @@ public class FileProcess {
        }catch (IOException e){
            e.printStackTrace();
            MessagePane.getInfoMessage("Fájl nem nyitható meg", FOLDER_PATH + "\\" + FILE_NAME,
-                   KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                   TransformerController.INPUT_DATA_FILE_WINDOW.jFrame);
        }
     }
 
@@ -246,7 +246,7 @@ public class FileProcess {
         BufferedWriter writer = new BufferedWriter(osw);
         writer.write("_MULTIPLE _POINT");
         writer.newLine();
-        for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+        for (Point inputPoint : TransformerController.INPUT_POINTS) {
             if( inputPoint.isLeftOut() ){
                 writer.write(inputPoint.getFormattedYForEOV() + "," +
                         inputPoint.getFormattedXForEOV() + "," + inputPoint.getFormattedMForEOV());
@@ -263,7 +263,7 @@ public class FileProcess {
         FileOutputStream fos = new FileOutputStream(file);
         OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
         BufferedWriter writer = new BufferedWriter(osw);
-        for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+        for (Point inputPoint : TransformerController.INPUT_POINTS) {
             if( inputPoint.isLeftOut() ){
                 writer.write("_TEXT " + inputPoint.getFormattedYForEOV() + "," +
                         inputPoint.getFormattedXForEOV() + " 2 0 "  +
@@ -316,14 +316,14 @@ public void saveCalcData(String fileName) throws  IOException{
     BufferedWriter writer = new BufferedWriter(osw);
     writer.write("Felhasznált pontok:");
     writer.newLine();
-    for (Point usedPointForCalc : KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.usedForCalcPointList) {
+    for (Point usedPointForCalc : TransformerController.INPUT_DATA_FILE_WINDOW.displayer.usedForCalcPointList) {
         writer.write(usedPointForCalc.getPointId() + "," +
                 usedPointForCalc.getFormattedYForEOV() + "," +
                 usedPointForCalc.getFormattedXForEOV() + "," +
                 usedPointForCalc.getFormattedMForEOV());
         writer.newLine();
     }
-    CalcData calc = new CalcData(KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.usedForCalcPointList);
+    CalcData calc = new CalcData(TransformerController.INPUT_DATA_FILE_WINDOW.displayer.usedForCalcPointList);
     writer.write("Távolság: " + calc.calcDistance() + "m");
     writer.newLine();
     writer.write("Terület: " + calc.calcArea() + "m2");
@@ -343,7 +343,7 @@ public void saveCalcData(String fileName) throws  IOException{
         BufferedWriter writer = new BufferedWriter(osw);
 
         if( Arrays.asList(InputDataFileWindow.TXT_DATA_TYPE).indexOf(selectedItem) < 9 ) {
-            List<Point> displayedPointList = KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer
+            List<Point> displayedPointList = TransformerController.INPUT_DATA_FILE_WINDOW.displayer
                     .getTableModel().displayedPointList;
             for (Point displayedPoint : displayedPointList) {
 
@@ -411,7 +411,7 @@ public void saveCalcData(String fileName) throws  IOException{
             }
         }
         else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[9])) {
-            for (Point wgsToEovReferencePoint : KMLWrapperController.
+            for (Point wgsToEovReferencePoint : TransformerController.
                     INPUT_DATA_FILE_WINDOW.displayer.getTableModel().displayedPointList) {
                 if( wgsToEovReferencePoint.isLeftOut() ){
                 writer.write(wgsToEovReferencePoint.getPointId() + "," +
@@ -422,7 +422,7 @@ public void saveCalcData(String fileName) throws  IOException{
                 }
             }
         } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[10])) {
-            for (Point eovToWgsReferencePoint : KMLWrapperController.
+            for (Point eovToWgsReferencePoint : TransformerController.
                     INPUT_DATA_FILE_WINDOW.displayer.getTableModel().displayedPointList) {
                 if( eovToWgsReferencePoint.isLeftOut() ) {
                     writer.write(eovToWgsReferencePoint.getPointId() + "," +
@@ -433,7 +433,7 @@ public void saveCalcData(String fileName) throws  IOException{
                 }
             }
         } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[11])) {
-            for (Point eovToWgsReferencePoint : KMLWrapperController.
+            for (Point eovToWgsReferencePoint : TransformerController.
                     INPUT_DATA_FILE_WINDOW.displayer.getTableModel().displayedPointList) {
                 if( eovToWgsReferencePoint.isLeftOut() ) {
                         writer.write(eovToWgsReferencePoint.getPointId() + "," +
@@ -449,7 +449,7 @@ public void saveCalcData(String fileName) throws  IOException{
         }
         else if( selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[12])){
             TransformationParam trParam =
-                    KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().toWGSParams;
+                    TransformerController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().toWGSParams;
             writer.write(trParam.getDeltaXParam() + "," +
                     trParam.getDeltaYParam() + "," +
                     trParam.getDeltaZParam() + "," +
@@ -460,7 +460,7 @@ public void saveCalcData(String fileName) throws  IOException{
         }
         else if( selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[13])){
             TransformationParam trParam =
-                    KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().toEOVParams;
+                    TransformerController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().toEOVParams;
             writer.write(trParam.getDeltaXParam() + "," +
                     trParam.getDeltaYParam() + "," +
                     trParam.getDeltaZParam() + "," +
@@ -471,7 +471,7 @@ public void saveCalcData(String fileName) throws  IOException{
         }
         else if( selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[14])){
             List<Deviation> deviationDataForWGS =
-                    KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().deviationListForWGS;
+                    TransformerController.INPUT_DATA_FILE_WINDOW.displayer.getTableModel().deviationListForWGS;
             for (Deviation deviation : deviationDataForWGS) {
                 if( deviation.isSave() ) {
                     writer.write(deviation.getPointId() + "," +
@@ -486,7 +486,7 @@ public void saveCalcData(String fileName) throws  IOException{
             }
         }
         else if( selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[15])){
-            List<Deviation> deviationDataForEOV = KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer
+            List<Deviation> deviationDataForEOV = TransformerController.INPUT_DATA_FILE_WINDOW.displayer
                     .getTableModel().deviationListForEOV;
             for (Deviation deviation : deviationDataForEOV) {
                 if( deviation.isSave() ) {
@@ -518,6 +518,9 @@ public void saveCalcData(String fileName) throws  IOException{
         BufferedWriter writer = new BufferedWriter(osw);
         for (String secondSystemData : secondSystemDataList) {
             writer.write(secondSystemData);
+            if( secondSystemData.equals("\n") ){
+                continue;
+            }
             writer.newLine();
         }
         writer.close();
@@ -525,7 +528,7 @@ public void saveCalcData(String fileName) throws  IOException{
         fos.close();
         MessagePane.getInfoMessage("Adatok mentése",
                 "A transzformált pontok mentve az alábbi mappába:<br>" + file.getAbsolutePath()
-                        , KMLWrapperController.TRANSFORMATION_2D_WINDOW.jFrame);
+                        , TransformerController.TRANSFORMATION_2D_WINDOW.jFrame);
     }
 
 }

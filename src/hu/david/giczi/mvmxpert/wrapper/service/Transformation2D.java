@@ -1,6 +1,6 @@
 package hu.david.giczi.mvmxpert.wrapper.service;
 
-import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.controller.TransformerController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.utils.LongitudinalType;
 import hu.david.giczi.mvmxpert.wrapper.view.MessagePane;
@@ -55,7 +55,7 @@ public class Transformation2D {
     }
      catch (InvalidPreferencesFormatException e){
          MessagePane.getInfoMessage("Hibás bemeneti adat", e.getMessage(),
-                 KMLWrapperController.TRANSFORMATION_2D_WINDOW.jFrame);
+                 TransformerController.TRANSFORMATION_2D_WINDOW.jFrame);
         return;
      }
     calcTransformation2DParams();
@@ -397,14 +397,14 @@ public class Transformation2D {
        List<Point> convertedDataList = new ArrayList<>();
         for (String inputRowData : firstSystemData) {
             String[] rowData = inputRowData.split(Objects.
-                    requireNonNull(KMLWrapperController.DELIMITER).equals(" ") ? "\\s+" :
-                    KMLWrapperController.DELIMITER);
+                    requireNonNull(TransformerController.DELIMITER).equals(" ") ? "\\s+" :
+                    TransformerController.DELIMITER);
             if( 4 > rowData.length ){
                 String delimiter = MessagePane
-                        .getInputDataMessage(KMLWrapperController.TRANSFORMATION_2D_WINDOW.jFrame, null);
-                KMLWrapperController.setDelimiter(delimiter);
+                        .getInputDataMessage(TransformerController.TRANSFORMATION_2D_WINDOW.jFrame, null);
+                TransformerController.setDelimiter(delimiter);
             }
-            if( KMLWrapperController.DELIMITER == null || KMLWrapperController.DELIMITER.isEmpty() ){
+            if( TransformerController.DELIMITER == null || TransformerController.DELIMITER.isEmpty() ){
                 continue;
             }
             double firstCoordinate;
@@ -453,7 +453,7 @@ public class Transformation2D {
        point.setX_EOV(deltaDistanceYParam + scaleParam * (firstCoordinate  * Math.sin(rotationParam) +
                        secondCoordinate  * Math.cos(rotationParam)));
 
-        if( KMLWrapperController.TRANSFORMATION_2D_WINDOW.
+        if( TransformerController.TRANSFORMATION_2D_WINDOW.
                 deltaElevationField.getText().equalsIgnoreCase("x") ){
             point.setM_EOV(0d);
         }

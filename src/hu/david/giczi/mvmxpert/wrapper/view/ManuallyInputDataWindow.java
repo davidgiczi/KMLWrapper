@@ -1,6 +1,6 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 
-import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.controller.TransformerController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class ManuallyInputDataWindow {
     public JFrame jFrame;
-    private final KMLWrapperController controller;
+    private final TransformerController controller;
     private JPanel inputDataPanel;
     private JComboBox<String> inputDataTypeComboBox;
     public JTextField pointIdFieldForEOV;
@@ -47,7 +47,7 @@ public class ManuallyInputDataWindow {
             "WGS84 (fok,perc,mperc)",
             "WGS84 (X,Y,Z)"};
 
-    public ManuallyInputDataWindow(KMLWrapperController controller) {
+    public ManuallyInputDataWindow(TransformerController controller) {
         this.controller = controller;
         createWindow(INPUT_DATA_TYPE[0]);
     }
@@ -59,7 +59,7 @@ public class ManuallyInputDataWindow {
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
                 jFrame.setVisible(false);
-               KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame.setVisible(true);
+               TransformerController.INPUT_DATA_FILE_WINDOW.jFrame.setVisible(true);
             }
         });
         Arrays.fill(IS_INPUT_DATA_TYPE, false);
@@ -75,7 +75,7 @@ public class ManuallyInputDataWindow {
         jFrame.setLocationRelativeTo(null);
         jFrame.setResizable(false);
         jFrame.setVisible(true);
-        KMLWrapperController.setWindowTitle();
+        TransformerController.setWindowTitle();
     }
 
     private void addInputFileOptionPanel(String selectedItem){
@@ -375,11 +375,11 @@ public class ManuallyInputDataWindow {
     }
 
     private void onClickProcessForAddingInputDataByManually(){
-        if( !KMLWrapperController.INPUT_POINTS.isEmpty() ) {
+        if( !TransformerController.INPUT_POINTS.isEmpty() ) {
             if (MessagePane.getYesNoOptionMessage("Beolvasott pontok lista nem üres",
                     "Törli a korábban beolvasott pontokat?",
-                    KMLWrapperController.MANUALLY_INPUT_DATA_WINDOW.jFrame) == 0) {
-                KMLWrapperController.INPUT_POINTS.clear();
+                    TransformerController.MANUALLY_INPUT_DATA_WINDOW.jFrame) == 0) {
+                TransformerController.INPUT_POINTS.clear();
             }
         }
         int inpuDataTypeIndex = 0;
@@ -407,7 +407,7 @@ public class ManuallyInputDataWindow {
                 break;
             default:
         }
-        KMLWrapperController.setWindowTitle();
+        TransformerController.setWindowTitle();
     }
 
     private void addLogo(){
@@ -422,8 +422,8 @@ public class ManuallyInputDataWindow {
         JMenuItem inputDataFileMenuItem = new JMenuItem("Adatok fájlból beolvasása");
         inputDataFileMenuItem.addActionListener(e -> {
             jFrame.setVisible(false);
-            KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame.setVisible(true);
-            KMLWrapperController.setWindowTitle();
+            TransformerController.INPUT_DATA_FILE_WINDOW.jFrame.setVisible(true);
+            TransformerController.setWindowTitle();
         });
         inputDataFileMenuItem.setFont(plainFont);
         inputDataFileMenuItem.setCursor(new Cursor(Cursor.HAND_CURSOR));

@@ -1,6 +1,6 @@
 package hu.david.giczi.mvmxpert.wrapper.service;
 
-import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.controller.TransformerController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 
 import java.util.prefs.InvalidPreferencesFormatException;
@@ -28,7 +28,7 @@ public class Validation {
             }
         Point validPoint = parseInputData(rowData, FileProcess.INPUT_DATA_LIST.indexOf(row) + 1);
             try{
-                KMLWrapperController.addValidInputPoint(validPoint);
+                TransformerController.addValidInputPoint(validPoint);
             }
             catch (RuntimeException r){
                 break;
@@ -315,7 +315,7 @@ public class Validation {
         pointEOV.setX_EOV(X);
         pointEOV.setM_EOV(M);
         pointEOV.convertEOVCoordinatesForIUGG67();
-        KMLWrapperController.addValidInputPoint(pointEOV);
+        TransformerController.addValidInputPoint(pointEOV);
     }
     public static void isValidManuallyInputDataForWGS84DecimalFormat(String pointId, String Fi, String Lambda, String H)
             throws InvalidPreferencesFormatException {
@@ -356,7 +356,7 @@ public class Validation {
         pointWGS84.setLambda_WGS84(lambda);
         pointWGS84.setH_WGS84(h);
         pointWGS84.convertWGS84GeographicalCoordinatesForWGS84XYZ();
-        KMLWrapperController.addValidInputPoint(pointWGS84);
+        TransformerController.addValidInputPoint(pointWGS84);
     }
     public static void isValidManuallyInputDataForWGS84AngleMinSecFormat(String pointId, String Fi_angle, String Fi_min, String Fi_sec,
          String Lambda_angle, String Lambda_min, String Lambda_sec, String H)
@@ -458,7 +458,7 @@ public class Validation {
         pointWGS84.setLambda_WGS84(LambdaValue);
         pointWGS84.setH_WGS84(h);
         pointWGS84.convertWGS84GeographicalCoordinatesForWGS84XYZ();
-        KMLWrapperController.addValidInputPoint(pointWGS84);
+        TransformerController.addValidInputPoint(pointWGS84);
     }
     public static void isValidManuallyInputDataForWGS84XYZFormat(String pointId, String X, String Y, String Z)
             throws InvalidPreferencesFormatException {
@@ -503,7 +503,7 @@ public class Validation {
         pointWGS84.setZ_WGS84(z);
         pointWGS84.setXYZ(true);
         pointWGS84.convertWGS84XYZCoordinatesForWGS84Geographical();
-        KMLWrapperController.addValidInputPoint(pointWGS84);
+        TransformerController.addValidInputPoint(pointWGS84);
     }
 
 

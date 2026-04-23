@@ -1,6 +1,6 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 
-import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.controller.TransformerController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Deviation;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.domain.TransformationParam;
@@ -79,7 +79,7 @@ public class TableModel extends DefaultTableModel {
             }
         }
         else if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6])){
-            pcs = KMLWrapperController.INPUT_DATA_FILE_WINDOW.displayer.usedForCalcPointList.size();
+            pcs = TransformerController.INPUT_DATA_FILE_WINDOW.displayer.usedForCalcPointList.size();
         }
        else if( !displayedPointList.isEmpty() ) {
             for (Point displayedPoint : displayedPointList) {
@@ -111,7 +111,7 @@ public class TableModel extends DefaultTableModel {
     private void addInputData(){
         displayedPointList = new ArrayList<>();
         if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[1]) ){
-            for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+            for ( Point inputPoint : TransformerController.INPUT_POINTS ) {
                 displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedYForEOV(),
@@ -121,7 +121,7 @@ public class TableModel extends DefaultTableModel {
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[2]) ){
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+            for (Point inputPoint : TransformerController.INPUT_POINTS ) {
                 displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedDecimalFiForWGS84(),
@@ -133,7 +133,7 @@ public class TableModel extends DefaultTableModel {
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[3]) ){
-            for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+            for ( Point inputPoint : TransformerController.INPUT_POINTS ) {
                 displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedXForWGS84(),
@@ -143,7 +143,7 @@ public class TableModel extends DefaultTableModel {
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[4]) ){
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+            for (Point inputPoint : TransformerController.INPUT_POINTS ) {
                 displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedXForIUGG67(),
@@ -153,7 +153,7 @@ public class TableModel extends DefaultTableModel {
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
-            for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+            for ( Point inputPoint : TransformerController.INPUT_POINTS ) {
                 displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedDecimalFiForIUGG67(),
@@ -165,7 +165,7 @@ public class TableModel extends DefaultTableModel {
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[6]) ) {
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+            for (Point inputPoint : TransformerController.INPUT_POINTS) {
                 if (!inputPoint.isWGS()) {
                     continue;
                 }
@@ -178,7 +178,7 @@ public class TableModel extends DefaultTableModel {
             }
         }
             else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[7]) ){
-                for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+                for (Point inputPoint : TransformerController.INPUT_POINTS ) {
                     if( inputPoint.isWGS() ){
                         continue;
                     }
@@ -193,7 +193,7 @@ public class TableModel extends DefaultTableModel {
                 }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[8]) ){
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+            for (Point inputPoint : TransformerController.INPUT_POINTS ) {
                 if( inputPoint.isWGS() ){
                     continue;
                 }
@@ -252,11 +252,11 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[12]) ){
 
-            if( KMLWrapperController.TRANSFORMATION.toWGS == null ){
+            if( TransformerController.TRANSFORMATION.toWGS == null ){
                 throw new IllegalArgumentException("Hozzáadott EOV pont nem található");
             }
                     toWGSParams =
-                            new TransformationParam(KMLWrapperController.TRANSFORMATION.toWGS.PARAM_FOR_WGS);
+                            new TransformationParam(TransformerController.TRANSFORMATION.toWGS.PARAM_FOR_WGS);
                     Object[] row = new Object[]{
                             toWGSParams.getDeltaXParam(),
                             toWGSParams.getDeltaYParam(),
@@ -269,12 +269,12 @@ public class TableModel extends DefaultTableModel {
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[13]) ){
 
-            if( KMLWrapperController.TRANSFORMATION.toEOV == null ){
+            if( TransformerController.TRANSFORMATION.toEOV == null ){
                 throw new IllegalArgumentException("Hozzáadott WGS84 pont nem található");
             }
 
                 toEOVParams =
-                        new TransformationParam(KMLWrapperController.TRANSFORMATION.toEOV.PARAM_FOR_EOV);
+                        new TransformationParam(TransformerController.TRANSFORMATION.toEOV.PARAM_FOR_EOV);
                 Object[] row = new Object[]{
                         toEOVParams.getDeltaXParam(),
                         toEOVParams.getDeltaYParam(),
@@ -287,7 +287,7 @@ public class TableModel extends DefaultTableModel {
 
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
-            if( KMLWrapperController.TRANSFORMATION.toWGS == null ){
+            if( TransformerController.TRANSFORMATION.toWGS == null ){
                 throw new IllegalArgumentException("Hozzáadott EOV pont nem található");
             }
             setCommonPointsDisplayedData();
@@ -296,7 +296,7 @@ public class TableModel extends DefaultTableModel {
                new ToWGS(commonPoint.getX_IUGG67(),
                         commonPoint.getY_IUGG67(),
                         commonPoint.getZ_IUGG67(),
-                        KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS);
+                        TransformerController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS);
                         Deviation deviationForWGS = new Deviation(
                         commonPoint.getPointId(),
                         commonPoint.getX_WGS84(),
@@ -316,7 +316,7 @@ public class TableModel extends DefaultTableModel {
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
-            if( KMLWrapperController.TRANSFORMATION.toEOV == null ){
+            if( TransformerController.TRANSFORMATION.toEOV == null ){
                 throw new IllegalArgumentException("Hozzáadott WGS84 pont nem található");
             }
             setCommonPointsDisplayedData();
@@ -326,7 +326,7 @@ public class TableModel extends DefaultTableModel {
                new ToEOV(commonPoint.getX_WGS84(),
                          commonPoint.getY_WGS84(),
                          commonPoint.getZ_WGS84(),
-                         KMLWrapperController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS);
+                         TransformerController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS);
                         Deviation  deviationForEOV = new Deviation(
                         commonPoint.getPointId(),
                         commonPoint.getY_EOV(),
@@ -349,7 +349,7 @@ public class TableModel extends DefaultTableModel {
                 6 > Arrays.asList(InputDataFileWindow.KML_DATA_TYPE).indexOf(dataType) ){
 
 
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+            for (Point inputPoint : TransformerController.INPUT_POINTS ) {
                 displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedDecimalFiForWGS84(),
@@ -363,7 +363,7 @@ public class TableModel extends DefaultTableModel {
                         dataType.equals(InputDataFileWindow.SCR_DATA_TYPE[2]) ||
                             dataType.equals(InputDataFileWindow.SCR_DATA_TYPE[3] )
         ) {
-            for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+            for ( Point inputPoint : TransformerController.INPUT_POINTS ) {
                 displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedYForEOV(),
@@ -373,7 +373,7 @@ public class TableModel extends DefaultTableModel {
             }
         }
         else if ( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6]) ) {
-            for ( Point inputPoint : KMLWrapperController.INPUT_POINTS ) {
+            for ( Point inputPoint : TransformerController.INPUT_POINTS ) {
                 displayedPointList.add(inputPoint);
                 Object[] row = new Object[]{inputPoint.getPointId(),
                         inputPoint.getFormattedYForEOV(),
@@ -387,7 +387,7 @@ public class TableModel extends DefaultTableModel {
 
     public void displayPointData(){
               if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
-            if( KMLWrapperController.TRANSFORMATION.toWGS == null ){
+            if( TransformerController.TRANSFORMATION.toWGS == null ){
                 throw new IllegalArgumentException("Hozzáadott EOV pont nem található");
             }
             setCommonPointsDisplayedData();
@@ -396,7 +396,7 @@ public class TableModel extends DefaultTableModel {
                 new ToWGS(commonPoint.getX_IUGG67(),
                         commonPoint.getY_IUGG67(),
                         commonPoint.getZ_IUGG67(),
-                        KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS);
+                        TransformerController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS);
                 Deviation deviationForWGS = new Deviation(
                         commonPoint.getPointId(),
                         commonPoint.getX_WGS84(),
@@ -418,7 +418,7 @@ public class TableModel extends DefaultTableModel {
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ) {
-            if (KMLWrapperController.TRANSFORMATION.toEOV == null) {
+            if (TransformerController.TRANSFORMATION.toEOV == null) {
                 throw new IllegalArgumentException("Hozzáadott WGS84 pont nem található");
             }
             setCommonPointsDisplayedData();
@@ -427,7 +427,7 @@ public class TableModel extends DefaultTableModel {
                 new ToEOV(commonPoint.getX_WGS84(),
                         commonPoint.getY_WGS84(),
                         commonPoint.getZ_WGS84(),
-                        KMLWrapperController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS);
+                        TransformerController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS);
                 Deviation deviationForEOV = new Deviation(
                         commonPoint.getPointId(),
                         commonPoint.getY_EOV(),
@@ -528,7 +528,7 @@ public class TableModel extends DefaultTableModel {
         if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[9]) ||
                 dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[15]) ){
 
-            for (Point wgsToEovReferencePoint : KMLWrapperController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS) {
+            for (Point wgsToEovReferencePoint : TransformerController.TRANSFORMATION.WGS_TO_EOV_REFERENCE_POINTS) {
                 if( wgsToEovReferencePoint == null ){
                     continue;
                 }
@@ -538,7 +538,7 @@ public class TableModel extends DefaultTableModel {
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[10]) ||
                 dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[11]) ||
                 dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[14]) ){
-            for (Point eovToWgsReferencePoint : KMLWrapperController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS) {
+            for (Point eovToWgsReferencePoint : TransformerController.TRANSFORMATION.EOV_TO_WGS_REFERENCE_POINTS) {
                 if( eovToWgsReferencePoint == null ){
                     continue;
                 }
@@ -551,35 +551,35 @@ public class TableModel extends DefaultTableModel {
     public int getTableRowsNumber(){
         int pcs = 0;
         if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[1]) ){
-            pcs = KMLWrapperController.INPUT_POINTS.size();
+            pcs = TransformerController.INPUT_POINTS.size();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[2]) ){
-            pcs = KMLWrapperController.INPUT_POINTS.size();
+            pcs = TransformerController.INPUT_POINTS.size();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[3]) ){
-            pcs = KMLWrapperController.INPUT_POINTS.size();
+            pcs = TransformerController.INPUT_POINTS.size();
         }
 
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[4]) ){
-            pcs = KMLWrapperController.INPUT_POINTS.size();
+            pcs = TransformerController.INPUT_POINTS.size();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[5]) ){
-           pcs = KMLWrapperController.INPUT_POINTS.size();
+           pcs = TransformerController.INPUT_POINTS.size();
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[6]) ){
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+            for (Point inputPoint : TransformerController.INPUT_POINTS) {
                 if( inputPoint.isWGS() )
                     pcs++;
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[7]) ){
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+            for (Point inputPoint : TransformerController.INPUT_POINTS) {
                 if( !inputPoint.isWGS() )
                     pcs++;
             }
         }
         else if( dataType.equals(InputDataFileWindow.TXT_DATA_TYPE[8]) ){
-            for (Point inputPoint : KMLWrapperController.INPUT_POINTS) {
+            for (Point inputPoint : TransformerController.INPUT_POINTS) {
                 if( !inputPoint.isWGS() )
                     pcs++;
             }
@@ -612,15 +612,15 @@ public class TableModel extends DefaultTableModel {
         }
         else if( Arrays.asList(InputDataFileWindow.KML_DATA_TYPE).indexOf(dataType) > 0  &&
                 6 > Arrays.asList(InputDataFileWindow.KML_DATA_TYPE).indexOf(dataType) ){
-            pcs = KMLWrapperController.INPUT_POINTS.size();
+            pcs = TransformerController.INPUT_POINTS.size();
         }
         else if( dataType.equals(InputDataFileWindow.SCR_DATA_TYPE[1]) ||
                     dataType.equals(InputDataFileWindow.SCR_DATA_TYPE[2]) ||
                         dataType.equals(InputDataFileWindow.SCR_DATA_TYPE[3]) ){
-            pcs = KMLWrapperController.INPUT_POINTS.size();
+            pcs = TransformerController.INPUT_POINTS.size();
         }
         else if( dataType.equals(InputDataFileWindow.KML_DATA_TYPE[6]) ){
-            pcs = KMLWrapperController.INPUT_POINTS.size();
+            pcs = TransformerController.INPUT_POINTS.size();
         }
         return pcs;
     }

@@ -1,5 +1,5 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
-import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.controller.TransformerController;
 import hu.david.giczi.mvmxpert.wrapper.utils.LongitudinalType;
 
 import javax.swing.*;
@@ -176,7 +176,7 @@ public class LongitudinalOptionWindow {
         okButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         okButton.setFont(BOLD_FONT);
         okButton.setPreferredSize(new Dimension(80,40));
-        okButton.addActionListener(e -> KMLWrapperController.TRANSFORMATION_2D_WINDOW.
+        okButton.addActionListener(e -> TransformerController.TRANSFORMATION_2D_WINDOW.
                 longitudinalProcessController.validateLongitudinalOptionsInputData());
         panel.add(okButton);
         jFrame.add(panel);

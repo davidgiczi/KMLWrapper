@@ -1,6 +1,6 @@
 package hu.david.giczi.mvmxpert.wrapper.service;
 
-import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.controller.TransformerController;
 import hu.david.giczi.mvmxpert.wrapper.domain.Point;
 import hu.david.giczi.mvmxpert.wrapper.view.InputDataFileWindow;
 
@@ -87,7 +87,7 @@ public class ToKMLFormat {
     private void wrapPointsInKML(){
         kmlDataList.add("<Folder>");
         kmlDataList.add("<name>Points</name>");
-        for (Point point : KMLWrapperController.INPUT_POINTS) {
+        for (Point point : TransformerController.INPUT_POINTS) {
             if( point.isLeftOut() ){
                 wrapPoint(point);
             }
@@ -112,14 +112,14 @@ public class ToKMLFormat {
         kmlDataList.add("<name>Line</name>");
         kmlDataList.add("<Placemark>");
         kmlDataList.add( "<name>" +
-                KMLWrapperController.INPUT_POINTS.get(0).getPointId()+ "-" +
-                KMLWrapperController.INPUT_POINTS.get(KMLWrapperController.INPUT_POINTS
+                TransformerController.INPUT_POINTS.get(0).getPointId()+ "-" +
+                TransformerController.INPUT_POINTS.get(TransformerController.INPUT_POINTS
                         .size() - 1).getPointId() +  "_track</name>");
         kmlDataList.add("<styleUrl>#linestyle</styleUrl>");
         kmlDataList.add("<LineString>");
         kmlDataList.add("<tessellate>1</tessellate>");
         kmlDataList.add("<coordinates>");
-        for (Point point : KMLWrapperController.INPUT_POINTS) {
+        for (Point point : TransformerController.INPUT_POINTS) {
             if( point.isLeftOut() ){
                 kmlDataList.add(point.getFormattedDecimalLambdaForWGS84() + ","
                         + point.getFormattedDecimalFiForWGS84() + "," + point.getFormattedHForWGS84());
@@ -136,20 +136,20 @@ public class ToKMLFormat {
         kmlDataList.add("<name>Perimeter</name>");
         kmlDataList.add("<Placemark>");
         kmlDataList.add( "<name>" +
-                KMLWrapperController.INPUT_POINTS.get(0).getPointId() + "-" +
-                KMLWrapperController.INPUT_POINTS.get(KMLWrapperController.INPUT_POINTS.size() - 1)
+                TransformerController.INPUT_POINTS.get(0).getPointId() + "-" +
+                TransformerController.INPUT_POINTS.get(TransformerController.INPUT_POINTS.size() - 1)
                         .getPointId() +  "_perimeter</name>");
         kmlDataList.add("<styleUrl>#linestyle</styleUrl>");
         kmlDataList.add("<LineString>");
         kmlDataList.add("<tessellate>1</tessellate>");
         kmlDataList.add("<coordinates>");
-        for (Point point : KMLWrapperController.INPUT_POINTS) {
+        for (Point point : TransformerController.INPUT_POINTS) {
             if( point.isLeftOut() ){
                 kmlDataList.add(point.getFormattedDecimalLambdaForWGS84() + ","
                         + point.getFormattedDecimalFiForWGS84() + "," + point.getFormattedHForWGS84());
             }
         }
-        for (Point point : KMLWrapperController.INPUT_POINTS) {
+        for (Point point : TransformerController.INPUT_POINTS) {
             if ( point.isLeftOut()) {
                 kmlDataList.add(point.getFormattedDecimalLambdaForWGS84() + ","
                         + point.getFormattedDecimalFiForWGS84() + "," + point.getFormattedHForWGS84());

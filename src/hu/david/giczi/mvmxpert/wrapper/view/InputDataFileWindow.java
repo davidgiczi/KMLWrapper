@@ -1,6 +1,6 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 
-import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.controller.TransformerController;
 import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
 
 import javax.swing.*;
@@ -16,7 +16,7 @@ public class InputDataFileWindow {
     public JTextField pointPreIdField;
     public JTextField pointIdField;
     public JTextField pointPostIdField;
-    private final KMLWrapperController controller;
+    private final TransformerController controller;
     private JPanel inputFileOptionPanel;
     private JPanel outputFileOptionPanel;
     private JPanel saveOutputFileOptionPanel;
@@ -121,7 +121,7 @@ public class InputDataFileWindow {
             "_kozephibak_EOV.txt",
             "_terület_távolság.txt"};
 
-    public InputDataFileWindow(KMLWrapperController controller) {
+    public InputDataFileWindow(TransformerController controller) {
         this.controller = controller;
         createWindow();
     }
@@ -190,11 +190,11 @@ public class InputDataFileWindow {
         JMenuItem transformationMenuItem = new JMenuItem("2D transzformáció");
         transformationMenuItem.addActionListener( e -> {
             jFrame.setVisible(false);
-            if( KMLWrapperController.TRANSFORMATION_2D_WINDOW == null ){
-                KMLWrapperController.TRANSFORMATION_2D_WINDOW = new Transformation2DWindow(controller);
+            if( TransformerController.TRANSFORMATION_2D_WINDOW == null ){
+                TransformerController.TRANSFORMATION_2D_WINDOW = new Transformation2DWindow(controller);
             }
             else {
-                KMLWrapperController.TRANSFORMATION_2D_WINDOW.jFrame.setVisible(true);
+                TransformerController.TRANSFORMATION_2D_WINDOW.jFrame.setVisible(true);
             }
 
         });
@@ -203,13 +203,13 @@ public class InputDataFileWindow {
         JMenuItem manuallyInputMenuItem = new JMenuItem("Kézi adatbevitel");
         manuallyInputMenuItem.addActionListener(e -> {
             jFrame.setVisible(false);
-            if( KMLWrapperController.MANUALLY_INPUT_DATA_WINDOW == null ){
-                KMLWrapperController.MANUALLY_INPUT_DATA_WINDOW = new ManuallyInputDataWindow(controller);
+            if( TransformerController.MANUALLY_INPUT_DATA_WINDOW == null ){
+                TransformerController.MANUALLY_INPUT_DATA_WINDOW = new ManuallyInputDataWindow(controller);
             }
             else {
-                KMLWrapperController.MANUALLY_INPUT_DATA_WINDOW.jFrame.setVisible(true);
+                TransformerController.MANUALLY_INPUT_DATA_WINDOW.jFrame.setVisible(true);
             }
-            KMLWrapperController.setWindowTitle();
+            TransformerController.setWindowTitle();
             if( displayer != null && displayer.jFrame.isVisible() ){
                 displayer.getTableModel().setSaveInputPoint();
             }
@@ -411,7 +411,7 @@ public class InputDataFileWindow {
     private void saveInputLineData() {
         if (!controller.isLineData()) {
             MessagePane.getInfoMessage("Vonalak mentése sikertelen", "Nincsenek beolvasott vonalak.",
-                    KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                    TransformerController.INPUT_DATA_FILE_WINDOW.jFrame);
         }
         else{
             int lines = 0;
@@ -451,7 +451,7 @@ public class InputDataFileWindow {
                     catch (IllegalArgumentException a){
                         MessagePane.getInfoMessage(a.getMessage(),
                                 "Nem beolvasott adat vagy érvénytelen adattípus választás." ,
-                                KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame);
+                                TransformerController.INPUT_DATA_FILE_WINDOW.jFrame);
                     }
                 }
             }
@@ -512,7 +512,7 @@ public class InputDataFileWindow {
             MessagePane.getInfoMessage("Érvénytelen adattípus",
                     "Adattípus választása szükséges.", jFrame);
             return false;
-        } else if( KMLWrapperController.INPUT_POINTS.isEmpty() ) {
+        } else if( TransformerController.INPUT_POINTS.isEmpty() ) {
             MessagePane.getInfoMessage("Nem található adat",
                     "Hozzáadott pont nem található.", jFrame);
             return false;

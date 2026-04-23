@@ -1,6 +1,7 @@
 package hu.david.giczi.mvmxpert.wrapper.controller;
 
 import hu.david.giczi.mvmxpert.wrapper.service.Transformation2D;
+import hu.david.giczi.mvmxpert.wrapper.utils.AutoCadType;
 import hu.david.giczi.mvmxpert.wrapper.utils.LongitudinalType;
 import hu.david.giczi.mvmxpert.wrapper.view.MessagePane;
 import javax.swing.*;
@@ -9,7 +10,7 @@ import java.util.prefs.InvalidPreferencesFormatException;
 
 public class LongitudinalProcessController {
 
-    private KMLWrapperController controller;
+    private TransformerController controller;
     private final LongitudinalType longitudinalType;
     private JFrame longitudinalWindowFrame;
 
@@ -18,7 +19,7 @@ public class LongitudinalProcessController {
        this.longitudinalType = longitudinalType;
     }
 
-    public void setController(KMLWrapperController controller) {
+    public void setController(TransformerController controller) {
         this.controller = controller;
     }
 
@@ -30,23 +31,23 @@ public class LongitudinalProcessController {
 
         int scaleStartValue = longitudinalType == LongitudinalType.HORIZONTAL ?
                 validateInputIntegerValueData(
-                        KMLWrapperController.
+                        TransformerController.
                                 TRANSFORMATION_2D_WINDOW.
                                 horizontalWindow.getScaleStartValueField().getText().trim()) :
                 validateInputIntegerValueData(
-                        KMLWrapperController.
+                        TransformerController.
                                 TRANSFORMATION_2D_WINDOW.
                                 verticalWindow.getScaleStartValueField().getText().trim()) ;
         double distortionValue = longitudinalType == LongitudinalType.HORIZONTAL ?
                 validateInputPositiveDoubleValueData(
-                KMLWrapperController.
+                TransformerController.
                         TRANSFORMATION_2D_WINDOW.
                         horizontalWindow.
                         getDistortionValueField().
                         getText().trim().
                         replace(",", ".")) :
                 validateInputPositiveDoubleValueData(
-                        KMLWrapperController.
+                        TransformerController.
                                 TRANSFORMATION_2D_WINDOW.
                                 verticalWindow.
                                 getDistortionValueField().
@@ -54,12 +55,12 @@ public class LongitudinalProcessController {
                                 replace(",", "."));
         Double shiftOnScreenValue = longitudinalType == LongitudinalType.HORIZONTAL ?
                 validateInputDoubleValueData(
-                       KMLWrapperController.
+                       TransformerController.
                                TRANSFORMATION_2D_WINDOW.
                                horizontalWindow.
                                getShiftOnScreenValueField().getText().trim()) :
                 validateInputDoubleValueData(
-                        KMLWrapperController.
+                        TransformerController.
                                 TRANSFORMATION_2D_WINDOW.
                                 verticalWindow.
                                 getShiftOnScreenValueField().getText().trim()) ;
@@ -74,36 +75,36 @@ public class LongitudinalProcessController {
         }
         try {
             controller.transformation2D = new Transformation2D(longitudinalType,
-                    KMLWrapperController.TRANSFORMATION_2D_WINDOW.point11YField.getText(),
-                    KMLWrapperController.TRANSFORMATION_2D_WINDOW.point11XField.getText(),
-                    KMLWrapperController.TRANSFORMATION_2D_WINDOW.point21YField.getText(),
-                    KMLWrapperController.TRANSFORMATION_2D_WINDOW.point21XField.getText());
+                    TransformerController.TRANSFORMATION_2D_WINDOW.point11YField.getText(),
+                    TransformerController.TRANSFORMATION_2D_WINDOW.point11XField.getText(),
+                    TransformerController.TRANSFORMATION_2D_WINDOW.point21YField.getText(),
+                    TransformerController.TRANSFORMATION_2D_WINDOW.point21XField.getText());
         }
         catch (InvalidPreferencesFormatException e){
             MessagePane.getInfoMessage("Hibás bemeneti adat", e.getMessage(),
-                    KMLWrapperController.TRANSFORMATION_2D_WINDOW.jFrame);
+                    TransformerController.TRANSFORMATION_2D_WINDOW.jFrame);
             return;
         }
         controller.transformation2D.setScaleStartValue(scaleStartValue);
         controller.transformation2D.setDistortionValue( 1 / distortionValue);
         controller.transformation2D.setShiftOnScreenValue(shiftOnScreenValue);
         controller.transformation2D.setPreIDValue(longitudinalType == LongitudinalType.HORIZONTAL ?
-             KMLWrapperController.TRANSFORMATION_2D_WINDOW.horizontalWindow.getPreIDValue().getText() :
-             KMLWrapperController.TRANSFORMATION_2D_WINDOW.verticalWindow.getPreIDValue().getText());
+             TransformerController.TRANSFORMATION_2D_WINDOW.horizontalWindow.getPreIDValue().getText() :
+             TransformerController.TRANSFORMATION_2D_WINDOW.verticalWindow.getPreIDValue().getText());
         controller.transformation2D.setPostIDValue(longitudinalType == LongitudinalType.HORIZONTAL ?
-                KMLWrapperController.TRANSFORMATION_2D_WINDOW.horizontalWindow.getPostIDValue().getText() :
-                KMLWrapperController.TRANSFORMATION_2D_WINDOW.verticalWindow.getPostIDValue().getText());
+                TransformerController.TRANSFORMATION_2D_WINDOW.horizontalWindow.getPostIDValue().getText() :
+                TransformerController.TRANSFORMATION_2D_WINDOW.verticalWindow.getPostIDValue().getText());
         if( longitudinalType == LongitudinalType.HORIZONTAL ){
-            KMLWrapperController.TRANSFORMATION_2D_WINDOW
+            TransformerController.TRANSFORMATION_2D_WINDOW
                     .longitudinalOptions.
-                    setText(KMLWrapperController.TRANSFORMATION_2D_WINDOW.LONGITUDINAL_TEXT + " [horizontális]");
+                    setText(TransformerController.TRANSFORMATION_2D_WINDOW.LONGITUDINAL_TEXT + " [horizontális]");
         }
         else if( longitudinalType == LongitudinalType.VERTICAL ){
-            KMLWrapperController.TRANSFORMATION_2D_WINDOW
+            TransformerController.TRANSFORMATION_2D_WINDOW
                     .longitudinalOptions
-                    .setText(KMLWrapperController.TRANSFORMATION_2D_WINDOW.LONGITUDINAL_TEXT + " [vertikális]");
+                    .setText(TransformerController.TRANSFORMATION_2D_WINDOW.LONGITUDINAL_TEXT + " [vertikális]");
         }
-        KMLWrapperController.TRANSFORMATION_2D_WINDOW.longitudinalOptions.setForeground(Color.RED);
+        TransformerController.TRANSFORMATION_2D_WINDOW.longitudinalOptions.setForeground(Color.RED);
         longitudinalWindowFrame.setVisible(false);
     }
 

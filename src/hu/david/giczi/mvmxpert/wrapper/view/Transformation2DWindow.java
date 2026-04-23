@@ -1,8 +1,9 @@
 package hu.david.giczi.mvmxpert.wrapper.view;
 
-import hu.david.giczi.mvmxpert.wrapper.controller.KMLWrapperController;
+import hu.david.giczi.mvmxpert.wrapper.controller.TransformerController;
 import hu.david.giczi.mvmxpert.wrapper.controller.LongitudinalProcessController;
 import hu.david.giczi.mvmxpert.wrapper.service.FileProcess;
+import hu.david.giczi.mvmxpert.wrapper.utils.AutoCadType;
 import hu.david.giczi.mvmxpert.wrapper.utils.LongitudinalType;
 
 import javax.swing.*;
@@ -53,7 +54,7 @@ public class Transformation2DWindow {
     public JRadioButton firstSystemRadioBtn;
     public JRadioButton secondSystemRadioBtn;
     public JRadioButton deltaElevationRadioBtn;
-    private final KMLWrapperController controller;
+    private final TransformerController controller;
     public LongitudinalOptionWindow verticalWindow;
     public LongitudinalOptionWindow horizontalWindow;
     public LongitudinalProcessController longitudinalProcessController;
@@ -71,7 +72,7 @@ public class Transformation2DWindow {
     };
 
 
-    public Transformation2DWindow(KMLWrapperController controller) {
+    public Transformation2DWindow(TransformerController controller) {
         this.controller = controller;
         createWindow();
     }
@@ -83,7 +84,7 @@ public class Transformation2DWindow {
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
                 jFrame.setVisible(false);
-                KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame.setVisible(true);
+                TransformerController.INPUT_DATA_FILE_WINDOW.jFrame.setVisible(true);
             }
         });
 
@@ -113,8 +114,8 @@ public class Transformation2DWindow {
         JMenuItem inputDataFileMenuItem = new JMenuItem("Adatok fájlból beolvasása");
         inputDataFileMenuItem.addActionListener(e -> {
             jFrame.setVisible(false);
-            KMLWrapperController.INPUT_DATA_FILE_WINDOW.jFrame.setVisible(true);
-            KMLWrapperController.setWindowTitle();
+            TransformerController.INPUT_DATA_FILE_WINDOW.jFrame.setVisible(true);
+            TransformerController.setWindowTitle();
         });
         inputDataFileMenuItem.setFont(plainFont);
         inputDataFileMenuItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -178,18 +179,22 @@ public class Transformation2DWindow {
                 super.mouseClicked(e);
                 if(SwingUtilities.isRightMouseButton(e)){
                     autoCadMacroOptions.setText("AutoCad makró fájl létrehozása");
+                    controller.setAutoCadType(null);
                 }
             }
         });
         autoCadMacroOptions.setFont(boldFont);
         autoCadMacroOptions.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem textItem = new JMenuItem(AUTOCAD_MACRO_TYPE[0]);
-        textItem.addActionListener(e -> autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[0]));
+        textItem.addActionListener(e -> {
+            autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[0]);
+            controller.setAutoCadType(AutoCadType._TEXT);});
         textItem.setFont(plainFont);
         textItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem pointItem = new JMenuItem(AUTOCAD_MACRO_TYPE[1]);
         pointItem.addActionListener(e -> {
             autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[1]);
+            controller.setAutoCadType(AutoCadType._MULTIPLE_POINT);
             if( secondSystemDataListModel.isEmpty() ){
                 secondSystemDataListModel.addElement("_MULTIPLE _POINT");
             }
@@ -203,6 +208,7 @@ public class Transformation2DWindow {
         JMenuItem lineItem = new JMenuItem(AUTOCAD_MACRO_TYPE[2]);
         lineItem.addActionListener(e -> {
             autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[2]);
+            controller.setAutoCadType(AutoCadType._LINE);
             if( secondSystemDataListModel.isEmpty() ) {
                 secondSystemDataListModel.addElement("_LINE");
             }else{
@@ -213,6 +219,7 @@ public class Transformation2DWindow {
         lineItem.setFont(plainFont);
         lineItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem pLineItem = new JMenuItem(AUTOCAD_MACRO_TYPE[3]);
+        controller.setAutoCadType(AutoCadType._POLYLINE);
         pLineItem.addActionListener(e -> {
             autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[3]);
             if( secondSystemDataListModel.isEmpty() ) {
@@ -513,25 +520,25 @@ public class Transformation2DWindow {
         double thirdData = 0d;
         for (String selectedValue : selectedValues) {
             try {
-                firstData += Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[1]);
-                secondData += Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[2]);
-                thirdData += Double.parseDouble(selectedValue.split(KMLWrapperController.DELIMITER)[3]);
+                firstData += Double.parseDouble(selectedValue.split(TransformerController.DELIMITER)[1]);
+                secondData += Double.parseDouble(selectedValue.split(TransformerController.DELIMITER)[2]);
+                thirdData += Double.parseDouble(selectedValue.split(TransformerController.DELIMITER)[3]);
             } catch (Exception e) {
-                MessagePane.getInfoMessage("Hibás elválasztó: " + KMLWrapperController.DELIMITER,
+                MessagePane.getInfoMessage("Hibás elválasztó: " + TransformerController.DELIMITER,
                         selectedValue, jFrame);
                 return;
             }
         }
-        String pointID = selectedValues.get(0).split(KMLWrapperController.DELIMITER)[0].split("_")[0];
+        String pointID = selectedValues.get(0).split(TransformerController.DELIMITER)[0].split("_")[0];
         String firstValue = String.
                 format("%.3f", firstData / selectedValues.size()).replace(",", ".");
         String secondValue = String.
                 format("%.3f", secondData / selectedValues.size()).replace(",", ".");
         String thirdValue = String.
                 format("%.3f", thirdData / selectedValues.size()).replace(",", ".");
-        String addedRow = pointID + KMLWrapperController.DELIMITER + firstValue +
-                KMLWrapperController.DELIMITER + secondValue +
-                KMLWrapperController.DELIMITER + thirdValue;
+        String addedRow = pointID + TransformerController.DELIMITER + firstValue +
+                TransformerController.DELIMITER + secondValue +
+                TransformerController.DELIMITER + thirdValue;
         if( !firstSystemDataListModel.contains(addedRow) ){
             firstSystemDataListModel.add(0, addedRow);
         }
@@ -845,7 +852,7 @@ public class Transformation2DWindow {
             if( delimiter == null ){
                 return;
             }
-            KMLWrapperController.setDelimiter(delimiter);
+            TransformerController.setDelimiter(delimiter);
             for (String inputData : FileProcess.INPUT_DATA_LIST) {
                 if( !setCommonPointDataById(inputData) ){
                     MessagePane.getInfoMessage("Hibás elválasztó: " + delimiter,
@@ -858,7 +865,7 @@ public class Transformation2DWindow {
                         continue;
                     }
                     else {
-                        KMLWrapperController.setDelimiter(delimiter);
+                        TransformerController.setDelimiter(delimiter);
                     }
                 }
                 firstSystemDataListModel.addElement(inputData);
@@ -930,10 +937,10 @@ public class Transformation2DWindow {
     }
 
     private boolean setCommonPointDataById(String inputData){
-        if( KMLWrapperController.DELIMITER == null ){
+        if( TransformerController.DELIMITER == null ){
             return false;
         }
-        String[] pointData = inputData.split(KMLWrapperController.DELIMITER);
+        String[] pointData = inputData.split(TransformerController.DELIMITER);
         if( 4 > pointData.length ){
             return false;
         }
