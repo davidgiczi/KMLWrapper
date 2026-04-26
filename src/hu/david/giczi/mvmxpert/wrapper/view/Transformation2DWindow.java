@@ -920,12 +920,15 @@ public class Transformation2DWindow {
             List<String> selectedItems = secondSystemDataList.getSelectedValuesList();
             if( selectedItems.isEmpty() ){
                 secondSystemDataListModel.removeAllElements();
+                autoCadMacroOptions.setText("AutoCad makró fájl létrehozása");
+                controller.setAutoCadType(null);
             }
             else{
                 for (String selectedItem : selectedItems) {
                     secondSystemDataListModel.removeElement(selectedItem);
                 }
             }
+
         });
         deleteSecondSystemDataBtn.setToolTipText("2. vonatkozási rendszer kijelölt vagy összes adatainak törlése");
         deleteSecondSystemDataBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
