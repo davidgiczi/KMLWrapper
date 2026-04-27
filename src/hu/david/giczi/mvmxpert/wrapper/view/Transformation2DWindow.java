@@ -188,7 +188,11 @@ public class Transformation2DWindow {
         JMenuItem textItem = new JMenuItem(AUTOCAD_MACRO_TYPE[0]);
         textItem.addActionListener(e -> {
             autoCadMacroOptions.setText(AUTOCAD_MACRO_TYPE[0]);
-            controller.setAutoCadType(AutoCadType._TEXT);});
+            controller.setAutoCadType(AutoCadType._TEXT);
+            if( !secondSystemDataListModel.isEmpty() ){
+                secondSystemDataListModel.addElement("\n");
+            }
+        });
         textItem.setFont(plainFont);
         textItem.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem pointItem = new JMenuItem(AUTOCAD_MACRO_TYPE[1]);
