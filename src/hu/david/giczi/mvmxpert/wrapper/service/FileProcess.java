@@ -359,11 +359,9 @@ public void saveCalcData(String fileName) throws  IOException{
                 } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[2])) {
                     writer.write(displayedPoint.getPointId() + "," +
                             displayedPoint.getFormattedDecimalFiForWGS84() + "," +
-                            displayedPoint.getFormattedDecimalLambdaForWGS84() + "," +
-                            displayedPoint.getFormattedHForWGS84() + "\n" +
-                            displayedPoint.convertAngleMinSecFormat(displayedPoint.getFi_WGS84()) + "," +
-                            displayedPoint.convertAngleMinSecFormat(displayedPoint.getLambda_WGS84()) + "," +
-                            displayedPoint.getFormattedHForWGS84());
+                            displayedPoint.getFormattedDecimalLambdaForWGS84() +
+                            (displayedPoint.getFormattedHForWGS84().equals("0.000") ? "" :
+                                    "," + displayedPoint.getFormattedHForWGS84()));
                 } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[3])) {
                     writer.write(displayedPoint.getPointId() + "," +
                             displayedPoint.getFormattedXForWGS84() + "," +
@@ -378,9 +376,6 @@ public void saveCalcData(String fileName) throws  IOException{
                     writer.write(displayedPoint.getPointId() + "," +
                             displayedPoint.getFormattedDecimalFiForIUGG67() + "," +
                             displayedPoint.getFormattedDecimalLambdaForIUGG67() + "," +
-                            displayedPoint.getFormattedHForIUGG67() + "\n" +
-                            displayedPoint.convertAngleMinSecFormat(displayedPoint.getFi_IUGG67()) + "," +
-                            displayedPoint.convertAngleMinSecFormat(displayedPoint.getLambda_IUGG67()) + "," +
                             displayedPoint.getFormattedHForIUGG67());
                 } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[6])) {
                     if (displayedPoint.isWGS()) {
@@ -394,9 +389,6 @@ public void saveCalcData(String fileName) throws  IOException{
                         writer.write(displayedPoint.getPointId() + "," +
                                 displayedPoint.getFormattedDecimalFiForWGS84() + "," +
                                 displayedPoint.getFormattedDecimalLambdaForWGS84() + "," +
-                                displayedPoint.getFormattedHForWGS84() + "\n" +
-                                displayedPoint.convertAngleMinSecFormat(displayedPoint.getFi_WGS84()) + "," +
-                                displayedPoint.convertAngleMinSecFormat(displayedPoint.getLambda_WGS84()) + "," +
                                 displayedPoint.getFormattedHForWGS84());
                     }
                 } else if (selectedItem.equals(InputDataFileWindow.TXT_DATA_TYPE[8])) {

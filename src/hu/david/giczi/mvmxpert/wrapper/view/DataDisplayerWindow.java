@@ -113,6 +113,16 @@ public class DataDisplayerWindow {
                      displayData(dataType);
                  }
                 }
+                else if( e.getClickCount() == 2 && "h".equals(headerName) ){
+                    if( 0 == MessagePane.getYesNoOptionMessage("Magasság módosítása",
+                            "Nullázza a pontok magasságát?", INPUT_DATA_FILE_WINDOW.jFrame) ){
+                        for (Point point : TransformerController.INPUT_POINTS) {
+                            point.setH_WGS84(0d);
+                        }
+                        jFrame.setVisible(false);
+                        displayData(dataType);
+                    }
+                }
             }
             @Override
             public void mouseEntered(MouseEvent e) {
